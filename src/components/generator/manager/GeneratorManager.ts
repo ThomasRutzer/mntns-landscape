@@ -1,6 +1,6 @@
 import GlobalLight from './../../light/factory/GlobalLightFactory';
 import SceneObjectModel from './../../scene/model/SceneObjectModel';
-import { MountainFactory } from './../../mountain/index';
+import { Mountain } from './../../mountain';
 
 export default class GeneratorManager {
     private scene;
@@ -20,7 +20,7 @@ export default class GeneratorManager {
     }
 
     addMountain() {
-        this.mountain = SceneObjectModel.create('mountain', MountainFactory.create(30, 15).mesh, {y: 0, x:0});
+        this.mountain = SceneObjectModel.create('mountain', Mountain.create(30, 15).mesh, {y: 0, x:0});
         this.scene.addElement(this.mountain);
     }
 }

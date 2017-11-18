@@ -1,5 +1,5 @@
 import CustomMesh from './CustomMesh';
 
 export {
-    CustomMesh
+    CustomMesh,
 }
