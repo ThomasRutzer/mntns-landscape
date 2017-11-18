@@ -1,8 +1,9 @@
 import * as THREE from 'THREE';
+import MountainInterface from './MountainInterface';
 import { mathUtils } from '../../generics/utils';
 import { CustomMesh } from './../custom-mesh';
 
-class Mountain {
+class Mountain implements MountainInterface {
     public vectorPoints: THREE.Vector3[];
 
     public height: number;
