@@ -77,7 +77,7 @@ webpackConfig.plugins = [...webpackConfig.plugins,
   new HtmlWebpackPlugin({
     inject: true,
     template: helpers.root('/src/index.html'),
-    favicon: helpers.root('/src/favicon.ico'),
+    favicon: helpers.root('/src/fav.jpg'),
     minify: {
       removeComments: true,
       collapseWhitespace: true,
