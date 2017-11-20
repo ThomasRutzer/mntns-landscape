@@ -1,7 +1,7 @@
 import * as THREE from 'THREE';
 
 class CustomMesh {
-    static flatshadeGeometry(geom): THREE.BufferGeometry {
+    static flatshadeGeometry(geom) {
         geom.computeFaceNormals();
         geom.faces.forEach((face) => {
             face.vertexNormals = [];
@@ -10,7 +10,7 @@ class CustomMesh {
         return new THREE.BufferGeometry().fromGeometry( geom );
     }
 
-    static lathe(points,segments, color){
+    static lathe(points,segments, color) {
         // change the axis from z to y;
         let rotPoints = [];
 

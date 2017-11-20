@@ -27,8 +27,12 @@
     "test:watch": "cross-env NODE_ENV=development karma start karma.unit.js --singleRun=false --auto-watch"
   },
   "dependencies": {
+    "animejs": "^2.2.0",
     "axios": "^0.16.2",
+    "gsap": "^1.20.3",
     "inversify": "^4.3.0",
+    "lodash.clone": "^4.5.0",
+    "lodash.clonedeep": "^4.5.0",
     "reflect-metadata": "^0.1.10",
     "three": "0.73",
     "vue": "~2.4.2",
