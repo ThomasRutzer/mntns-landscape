@@ -8,7 +8,6 @@ import './components/generator';
 import './components/mountain';
 import { CreateComponent } from './components/create';
 
-
 // register the plugin
 Vue.use(VueRouter);
 

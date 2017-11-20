@@ -36,6 +36,7 @@ class Mountain implements MountainInterface {
     constructor(height: number, thickness:number) {
         this.vectorPoints = [];
 
+        // this could all be parameters
         this.height = height;
         this.thickness = thickness;
         this.color = '#ccc';
@@ -56,18 +57,20 @@ class Mountain implements MountainInterface {
             this.vectorPoints.push(new THREE.Vector3(tx,ty, tz));
             ty += this.segHeight;
         }
-
         this.vectorPoints.push(new THREE.Vector3(0, ty, 0));
+
         this.mesh = new THREE.Mesh();
         this.mesh = CustomMesh.lathe(this.vectorPoints, this.radiusSegments, this.color);
 
         let geom: any = this.mesh.geometry;
         geom.verticesNeedUpdate = true;
 
+        // store clone of intial data
         this.data = {
             geometryData: clone(this.mesh.geometry)
         };
 
+        // store class states
         this.states = {
             isShrunk: false
         };
