@@ -29,7 +29,7 @@ class Mountain implements MountainInterface {
 
     public mesh: THREE.Mesh;
 
-    static create(height, thickness) {
+    static create(height: number, thickness:number) {
         return new Mountain(height, thickness)
     }
 
@@ -92,7 +92,64 @@ class Mountain implements MountainInterface {
 
         // here will store actual
         // method implementation
-        let progressGrow = null;
+        let progressGrow = () => {
+                if (!animation) {
+                    const geom: any = this.mesh.geometry;
+
+                    geom.vertices.forEach((vector, iterator) => {
+                        vector.x = this.data.geometryData.vertices[iterator].x;
+                        vector.y = this.data.geometryData.vertices[iterator].y;
+                        vector.z = this.data.geometryData.vertices[iterator].z;
+                    });
+
+                    this.states.isShrunk = false;
+                    returnPromiseResolve();
+                }
+
+                // here will store Callback of each tween
+                // to have a neatly reminder,
+                // when all Tweens have finished
+                const allPromises: Promise<any> | any = [];
+
+                // each tweens update callback
+                const updateClb = () => {
+                    let geom: any = this.mesh.geometry;
+                    geom.verticesNeedUpdate = true;
+                };
+
+                const geom: any = this.mesh.geometry;
+
+                geom.vertices.forEach((vertice, iterator) => {
+                    // workaround for current native Promise,
+                    // to resolve it later
+                    let yAnimationCompleteClb = new Function();
+                    const yAnimationPromise = new Promise((res) =>{
+                        yAnimationCompleteClb = res;
+                    });
+
+                    let xzAnimationCompleteClb = new Function();
+                    const xzAnimationPromise = new Promise((res) =>{
+                        xzAnimationCompleteClb = res;
+                    });
+
+                    allPromises.push(yAnimationPromise);
+                    allPromises.push(xzAnimationPromise);
+
+                    TweenMax.to(vertice, 4, {
+                        x:  this.data.geometryData.vertices[iterator].x,
+                        z:  this.data.geometryData.vertices[iterator].z,
+                        onUpdate: updateClb,
+                        onComplete: xzAnimationCompleteClb});
+                    TweenMax.to(vertice, 6, {
+                        y: this.data.geometryData.vertices[iterator].y,
+                        onComplete: yAnimationCompleteClb});
+                });
+
+                Promise.all(allPromises).then(() => {
+                    this.states.isShrunk = false;
+                    returnPromiseResolve();
+                });
+            };
 
         // let´s check if we need
         // shrink first
@@ -103,65 +160,6 @@ class Mountain implements MountainInterface {
         } else {
             progressGrow();
         }
-
-        progressGrow = () => {
-            if (!animation) {
-                const geom: any = this.mesh.geometry;
-
-                geom.vertices.forEach((vector, iterator) => {
-                    vector.x = this.data.geometryData.vertices[iterator].x;
-                    vector.y = this.data.geometryData.vertices[iterator].y;
-                    vector.z = this.data.geometryData.vertices[iterator].z;
-                });
-
-                this.states.isShrunk = true;
-                returnPromiseResolve();
-            }
-
-            // here will store Callback of each tween
-            // to have a neatly reminder,
-            // when all Tweens have finished
-            const allPromises: Promise<any> | any = [];
-
-            // each tweens update callback
-            const updateClb = () => {
-                let geom: any = this.mesh.geometry;
-                geom.verticesNeedUpdate = true;
-            };
-
-            const geom: any = this.mesh.geometry;
-
-            geom.vertices.forEach((vertice, iterator) => {
-                // workaround for current native Promise,
-                // to resolve it later
-                let yAnimationCompleteClb = new Function();
-                const yAnimationPromise = new Promise((res) =>{
-                    yAnimationCompleteClb = res;
-                });
-
-                let xzAnimationCompleteClb = new Function();
-                const xzAnimationPromise = new Promise((res) =>{
-                    xzAnimationCompleteClb = res;
-                });
-
-                allPromises.push(yAnimationPromise);
-                allPromises.push(xzAnimationPromise);
-
-                TweenMax.to(vertice, 4, {
-                    x:  this.data.geometryData.vertices[iterator].x,
-                    z:  this.data.geometryData.vertices[iterator].z,
-                    onUpdate: updateClb,
-                    onComplete: xzAnimationCompleteClb});
-                TweenMax.to(vertice, 6, {
-                    y: this.data.geometryData.vertices[iterator].y,
-                    onComplete: yAnimationCompleteClb});
-            });
-
-            Promise.all(allPromises).then(() => {
-                this.states.isShrunk = false;
-                returnPromiseResolve();
-            });
-        };
 
         return returnPromise;
     }
