@@ -1,5 +1,7 @@
-import GlobalLightFactory from './factory/GlobalLightFactory';
+import GlobalLight from './factory/GlobalLightFactory';
+import DirectionalLight from './factory/DirectionalLight';
 
 export {
-    GlobalLightFactory
+    GlobalLight,
+    DirectionalLight
 }
