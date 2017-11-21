@@ -14,6 +14,7 @@ export default class SceneObjectModel implements SceneObjectModelInterface {
 
         this.position = ensurePosition(position);
         this.object = object;
+        this.object.name = id;
     }
 }
 
