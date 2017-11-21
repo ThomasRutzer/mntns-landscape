@@ -8,7 +8,7 @@ export default class SceneFactory implements SceneFactoryInterface {
     public sceneElement: THREE.Scene;
     public camera: THREE.Camera;
     public renderer: THREE.WebGLRenderer;
-    public sceneElements: THREE.Object3D[];
+    private sceneElements: SceneObjectModel[];
 
     public static create(width, height, camera, renderer?, autoUpdate?) {
         return new SceneFactory(width, height, camera, renderer, autoUpdate);
@@ -51,6 +51,9 @@ export default class SceneFactory implements SceneFactoryInterface {
         this.sceneElements = [];
     }
 
+    /**
+     * @param {SceneObjectModel} newElement
+     */
     addElement(newElement)  {
         if (newElement.constructor.name != 'SceneObjectModel') {
             throw new Error(`Element with id: ${newElement.id} is not of type SceneObjectModel`);
@@ -71,10 +74,23 @@ export default class SceneFactory implements SceneFactoryInterface {
 
             this.sceneElement.add(newElement.object);
             this.sceneElements.push(newElement);
-
         } else {
             throw new Error(`Scene already holds element with id: ${newElement.id}`);
         }
+    }
+
+    /**
+     * @param {String} id -> identifier for element, which shall be removed
+     */
+    removeElement(id: string) {
+        this.sceneElements.forEach((sceneElement, iterator) => {
+            if(sceneElement.id === id) {
+                this.sceneElements.splice(iterator, 1);
+                this.sceneElement.remove(this.sceneElement.getObjectByName(id));
+
+                return;
+            }
+        });
     }
 
     loop() {
