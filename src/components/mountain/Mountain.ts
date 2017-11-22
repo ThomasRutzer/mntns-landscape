@@ -3,7 +3,7 @@ import TweenMax from "gsap";
 
 import clone from 'lodash.clonedeep';
 import MountainInterface from './MountainInterface';
-import { mathUtils } from '../../generics/utils';
+import * as mathUtils from './../math-utils';
 import { CustomMesh } from './../custom-mesh';
 
 class Mountain implements MountainInterface {
