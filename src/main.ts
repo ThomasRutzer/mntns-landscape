@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import './sass/main.scss';
+import './main.scss';
 
 import './components/scene';
 import './components/generator';

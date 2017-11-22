@@ -1,0 +1,8 @@
+@import "./breakpoints.json";
+
+$breakpoints: (
+        'xs': $xs,
+        's': $s,
+        'm': $m,
+        'l': $l
+);
