@@ -1,4 +1,4 @@
-import { DirectionalLight, GlobalLight } from './../../light';
+import LightFactory from './../../light';
 import SceneObjectModel from './../../scene/model/SceneObjectModel';
 import { Mountain } from './../../mountain';
 
@@ -18,12 +18,12 @@ export default class GeneratorManager {
     }
 
     addGlobalLight() {
-        this.globalLight = new GlobalLight('#fff', '#fff', 0.8);
+        this.globalLight = LightFactory.create('global', '#fff', '#fff', 0.8);
         this.scene.addElement(SceneObjectModel.create('globalLight', this.globalLight.lightElement));
     }
 
     addShadowLight() {
-        this.shadowLight = new DirectionalLight('#fff', 0.5, {castShadow: true});
+        this.shadowLight = LightFactory.create('directional', '#fff', 0.5, {castShadow: true});
         this.scene.addElement(SceneObjectModel.create('shadowLight', this.shadowLight.lightElement, {x: 100, y: 150, z: 100}));
     }
 

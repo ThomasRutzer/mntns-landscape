@@ -1,7 +1,4 @@
-import GlobalLight from './factory/GlobalLightFactory';
-import DirectionalLight from './factory/DirectionalLight';
+import LightFactory from './factory/LightFactory';
 
-export {
-    GlobalLight,
-    DirectionalLight
-}
+export default LightFactory;
+

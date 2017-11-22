@@ -1,5 +1,5 @@
 import * as THREE from 'THREE';
-import LightFactoryInterface from './LightFactoryInterface';
+import LightFactoryInterface from './factory/LightFactoryInterface';
 
 export default class DirectionalLight implements LightFactoryInterface {
     public lightElement: THREE.Light;
