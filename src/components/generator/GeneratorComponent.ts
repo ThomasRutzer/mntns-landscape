@@ -13,8 +13,11 @@ import GeneratorManager from './manager/GeneratorManager';
 export class GeneratorComponent extends Vue {
     private generatorManager;
 
+    @Prop()
+    data: Object[];
+
     mounted() {
         const sceneElement: THREE.Scene =  (<any>this.$refs.sceneComponent).scene;
-        this.generatorManager = new GeneratorManager(sceneElement);
+        this.generatorManager = new GeneratorManager(sceneElement, this.data);
     }
 }

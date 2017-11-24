@@ -4,17 +4,23 @@ import { Mountain } from './../../mountain';
 
 export default class GeneratorManager {
     private scene;
-    private mountain;
+    private mountains: SceneObjectModel[];
+
+    // used to create unique id
+    private allMountainCounter = 0;
     private globalLight;
     private shadowLight;
 
-    constructor(scene) {
+    constructor(scene, data: Object[] = []) {
         this.scene = scene;
+        this.mountains = [];
 
         this.addGlobalLight();
         this.addShadowLight();
 
-        this.addMountain();
+        data.forEach((mountainData) => {
+            this.addMountain(mountainData);
+        });
     }
 
     addGlobalLight() {
@@ -27,8 +33,14 @@ export default class GeneratorManager {
         this.scene.addElement(SceneObjectModel.create('shadowLight', this.shadowLight.lightElement, {x: 100, y: 150, z: 100}));
     }
 
-    addMountain() {
-        this.mountain = SceneObjectModel.create('mountain', Mountain.create(30, 15).mesh, {y: 0, x:0});
-        this.scene.addElement(this.mountain);
+    addMountain(data) {
+        const posX = this.mountains.length === 0 ? 0 : -1 * (data.thickness);
+        const mountainModel = SceneObjectModel.create(`mountain-${this.allMountainCounter}`, Mountain.create(data.height, data.thickness).mesh, {y: 0, x: posX});
+        this.scene.addElement(mountainModel);
+
+        this.allMountainCounter++;
+        this.mountains.push(mountainModel);
+
+        console.log(this.mountains)
     }
 }
