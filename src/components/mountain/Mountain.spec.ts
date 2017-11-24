@@ -1,6 +1,8 @@
 import {expect} from 'chai';
 import {spy, assert} from 'sinon';
 import Mountain from './Mountain';
+import MountainDataModel from './MountainDataModel';
+import config from './MountainConfig';
 
 describe('Mountain', () => {
     describe('static method create()', () => {
@@ -18,6 +20,19 @@ describe('Mountain', () => {
             mnt = new Mountain(1, 1);
 
             assert.called(growSpy);
+        });
+
+        it('creates MountainDataModel from given arguments', () => {
+            let mnt:Mountain = new Mountain(1, 1);;
+
+            expect((<any>mnt).data.parameters.constructor.name).to.equal('MountainDataModel');
+        });
+
+        it('normalizes arguments based on config', () => {
+            let mnt:Mountain = new Mountain(config.parameters.height.max + 10, config.parameters.thickness.max  + 10);
+
+            expect((<any>mnt).data.parameters.thickness).to.equal(config.parameters.thickness.max);
+            expect((<any>mnt).data.parameters.height).to.equal(config.parameters.height.max);
         });
     });
 
