@@ -5,7 +5,7 @@ import { Prop } from 'vue-property-decorator';
 import * as THREE from 'THREE';
 
 import GeneratorManager from './manager/GeneratorManager';
-import Scene from './../scene/factory/SceneFactory';
+import Scene from '../scene/manager/SceneManager';
 
 @Component({
     template: require('./GeneratorComponent.html'),

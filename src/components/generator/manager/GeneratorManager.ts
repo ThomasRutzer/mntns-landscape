@@ -1,6 +1,6 @@
 import LightFactory from './../../light';
 import SceneObjectModel from './../../scene/model/SceneObjectModel';
-import Scene from './../../scene/factory/SceneFactory';
+import Scene from '../../scene/manager/SceneManager';
 import { Mountain } from './../../mountain';
 import config from './config';
 

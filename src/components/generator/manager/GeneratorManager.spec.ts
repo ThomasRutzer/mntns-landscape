@@ -1,7 +1,7 @@
 import {expect, should} from 'chai';
 import {spy, assert} from 'sinon';
 import GeneratorManager from './GeneratorManager';
-import Scene from './../../scene/factory/SceneFactory'
+import Scene from '../../scene/manager/SceneManager'
 
 describe('GeneratorManager', () => {
     let manager;

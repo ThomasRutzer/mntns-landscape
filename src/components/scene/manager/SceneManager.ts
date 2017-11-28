@@ -1,10 +1,10 @@
 import * as THREE from 'THREE';
-import SceneFactoryInterface from './SceneFactoryInterface';
+import SceneManagerInterface from './SceneManagerInterface';
 import SceneObjectModel from '../model/SceneObjectModel';
 
 import CameraFactory from '../../camera/index';
 
-export default class SceneFactory implements SceneFactoryInterface {
+export default class SceneManager implements SceneManagerInterface {
     public sceneElement: THREE.Scene;
     public camera;
     public renderer: THREE.WebGLRenderer;
@@ -13,7 +13,7 @@ export default class SceneFactory implements SceneFactoryInterface {
     private dimensions: {width: number, height: number};
 
     public static create(width, height, camera, renderer?, autoUpdate?) {
-        return new SceneFactory(width, height, camera, renderer, autoUpdate);
+        return new SceneManager(width, height, camera, renderer, autoUpdate);
     }
 
     constructor(width: number,

@@ -1,17 +1,17 @@
 import {expect} from 'chai';
 import {spy, assert} from 'sinon';
-import SceneFactory from './SceneFactory';
+import SceneManager from './SceneManager';
 import SceneObjectModel from './../model/SceneObjectModel';
 import * as THREE from 'THREE';
 
-describe('SceneFactory', () => {
+describe('SceneManager', () => {
 
     describe('constructor()', () => {
         it('calls method loop when passed argument "autoUpdate" is true', () => {
             let factory;
-            const loopMethodSpy = spy(SceneFactory.prototype, 'loop');
+            const loopMethodSpy = spy(SceneManager.prototype, 'loop');
 
-            factory = new SceneFactory(
+            factory = new SceneManager(
                 100,
                 100,
                 {type: 'perspective', fieldOfView: 60, nearPlane: 0.1, farPlane: 3000, position: {x: 0, y: 0, z: 150}},
@@ -27,7 +27,7 @@ describe('SceneFactory', () => {
         let factory = null;
 
         beforeEach(() => {
-            factory = new SceneFactory(
+            factory = new SceneManager(
                 100,
                 100,
                 {type: 'perspective', fieldOfView: 60, nearPlane: 0.1, farPlane: 3000, position: {x: 0, y: 0, z: 150}},
@@ -64,7 +64,7 @@ describe('SceneFactory', () => {
         let factory = null;
 
         beforeEach(() => {
-            factory = new SceneFactory(
+            factory = new SceneManager(
                 100,
                 100,
                 {type: 'perspective', fieldOfView: 60, nearPlane: 0.1, farPlane: 3000, position: {x: 0, y: 0, z: 150}},
@@ -92,7 +92,7 @@ describe('SceneFactory', () => {
     });
     describe('method loop()', () => {
         it('calls method render', () => {
-            let factory = new SceneFactory(
+            let factory = new SceneManager(
                     100,
                     100,
                     {type: 'perspective', fieldOfView: 60, nearPlane: 0.1, farPlane: 3000, position: {x: 0, y: 0, z: 150}},

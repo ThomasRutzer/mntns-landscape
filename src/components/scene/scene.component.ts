@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
-import SceneFactory from './factory/SceneFactory';
+import SceneFactory from './manager/SceneManager';
 
 @Component({
     template: require('./scene.component.html'),
