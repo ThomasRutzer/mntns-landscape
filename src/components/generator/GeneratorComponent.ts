@@ -5,6 +5,7 @@ import { Prop } from 'vue-property-decorator';
 import * as THREE from 'THREE';
 
 import GeneratorManager from './manager/GeneratorManager';
+import Scene from './../scene/factory/SceneFactory';
 
 @Component({
     template: require('./GeneratorComponent.html'),
@@ -17,7 +18,7 @@ export class GeneratorComponent extends Vue {
     data: Object[];
 
     mounted() {
-        const sceneElement: THREE.Scene =  (<any>this.$refs.sceneComponent).scene;
+        const sceneElement: Scene = (<any>this.$refs.sceneComponent).scene;
         this.generatorManager = new GeneratorManager(sceneElement, this.data);
     }
 }
