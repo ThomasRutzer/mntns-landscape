@@ -6,9 +6,11 @@ import CameraFactory from '../../camera/index';
 
 export default class SceneFactory implements SceneFactoryInterface {
     public sceneElement: THREE.Scene;
-    public camera: THREE.Camera;
+    public camera;
     public renderer: THREE.WebGLRenderer;
     private sceneElements: SceneObjectModel[];
+    private autoUpdate: boolean;
+    private dimensions: {width: number, height: number};
 
     public static create(width, height, camera, renderer?, autoUpdate?) {
         return new SceneFactory(width, height, camera, renderer, autoUpdate);
@@ -22,6 +24,13 @@ export default class SceneFactory implements SceneFactoryInterface {
 
         this.sceneElement = new THREE.Scene();
         this.sceneElement.fog = new THREE.Fog(0xcefaeb, 300, 1000);
+
+        this.dimensions = {
+            width: width,
+            height: height
+        };
+
+        this.autoUpdate = autoUpdate;
 
         this.camera = CameraFactory.create(
             camera.type,
@@ -39,7 +48,7 @@ export default class SceneFactory implements SceneFactoryInterface {
                 this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
         }
 
-        this.renderer.setSize(width, height);
+        this.renderer.setSize(this.dimensions.width, this.dimensions.height);
         this.renderer.shadowMap.enabled = true;
 
         if (autoUpdate) {
@@ -49,6 +58,7 @@ export default class SceneFactory implements SceneFactoryInterface {
         }
 
         this.sceneElements = [];
+        window.addEventListener('resize', () => { this.handleResize() }, false);
     }
 
     /**
@@ -100,5 +110,23 @@ export default class SceneFactory implements SceneFactoryInterface {
 
     render() {
         this.renderer.render(this.sceneElement, this.camera);
+    }
+
+    handleResize() {
+        const width = window.innerWidth >= this.dimensions.width
+            ? window.innerWidth
+            : this.dimensions.width;
+
+        const height = window.innerWidth >= this.dimensions.height
+            ? window.innerWidth
+            : this.dimensions.height;
+
+        this.camera.aspect = width / height;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(width, height);
+
+        if (!this.autoUpdate) {
+            this.render();
+        }
     }
 }
