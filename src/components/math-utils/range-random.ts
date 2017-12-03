@@ -6,7 +6,7 @@
  * @return {number} a random floating point number
  */
 export default function rangeRandom(v1, v2) {
-    var max = Math.max(v1,v2);
-    var min = (max==v1)?v2 : v1;
-    return min + Math.random()*(max-min);
+    const max = Math.max( v1, v2 );
+    const min = ( max === v1 ) ? v2 : v1;
+    return min + Math.random() * ( max - min );
 }

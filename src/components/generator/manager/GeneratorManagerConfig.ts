@@ -7,6 +7,6 @@ export default {
     // by this amount to have visuell overlapping
     overlapping: 10,
 
-    //random z-shifting range
-    shiftX: [1,10]
-}
+    // random z-shifting range
+    shiftX: [1, 10]
+};

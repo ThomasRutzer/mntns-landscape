@@ -4,4 +4,4 @@ import MountainDataModel from './MountainDataModel';
 export {
     Mountain,
     MountainDataModel
-}
+};

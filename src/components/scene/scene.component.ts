@@ -10,7 +10,7 @@ import SceneFactory from './manager/SceneManager';
 
 export class SceneComponent extends Vue {
 
-    @Prop( { default:  () => { return {width: window.innerWidth, height: window.innerHeight} }})
+    @Prop( { default:  () => { return {width: window.innerWidth, height: window.innerHeight}; }})
     size: {width: Number, height: Number};
 
     @Prop({ required: true})

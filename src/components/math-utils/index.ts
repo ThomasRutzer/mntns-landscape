@@ -6,4 +6,4 @@ export {
     rangeRandom,
     rangeRandomInt,
     inBetween,
-}
+};

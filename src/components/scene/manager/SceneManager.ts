@@ -18,7 +18,7 @@ export default class SceneManager implements SceneManagerInterface {
 
     constructor(width: number,
                 height: number,
-                camera: { type: string, position: { x,y,z }, fieldOfView: number, nearPlane: number, farPlane: number },
+                camera: { type: string, position: { x, y, z }, fieldOfView: number, nearPlane: number, farPlane: number },
                 renderer: string = 'webGL',
                 autoUpdate: boolean = true) {
 
@@ -43,7 +43,7 @@ export default class SceneManager implements SceneManagerInterface {
         this.camera.position.y = camera.position && camera.position.y || 0;
         this.camera.position.z = camera.position && camera.position.z || 0;
 
-        this.camera.lookAt(this.sceneElement.position)
+        this.camera.lookAt(this.sceneElement.position);
         switch (renderer) {
             case 'webGL':
                 this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -60,21 +60,21 @@ export default class SceneManager implements SceneManagerInterface {
         }
 
         this.sceneElements = [];
-        window.addEventListener('resize', () => { this.handleResize() }, false);
+        window.addEventListener('resize', () => { this.handleResize(); }, false);
     }
 
     /**
      * @param {SceneObjectModel} newElement
      */
     addElement(newElement)  {
-        if (newElement.constructor.name != 'SceneObjectModel') {
+        if (newElement.constructor.name !== 'SceneObjectModel') {
             throw new Error(`Element with id: ${newElement.id} is not of type SceneObjectModel`);
         }
 
         let isAlreadyIn = false;
 
         this.sceneElements.forEach((element) => {
-            if (element.id == newElement.id) {
+            if (element.id === newElement.id) {
                 isAlreadyIn = true;
             }
         });
@@ -97,7 +97,7 @@ export default class SceneManager implements SceneManagerInterface {
      */
     removeElement(id: string) {
         this.sceneElements.forEach((sceneElement, iterator) => {
-            if(sceneElement.id === id) {
+            if (sceneElement.id === id) {
                 this.sceneElements.splice(iterator, 1);
                 this.sceneElement.remove(this.sceneElement.getObjectByName(id));
 
@@ -108,7 +108,7 @@ export default class SceneManager implements SceneManagerInterface {
 
     loop() {
         this.render();
-        requestAnimationFrame(() => {this.loop()});
+        requestAnimationFrame(() => { this.loop(); });
     }
 
     render() {

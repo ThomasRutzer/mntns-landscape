@@ -6,7 +6,7 @@ class MountainDataModel {
     public height: number;
 
     static create(w, h): MountainDataModel {
-        return new MountainDataModel(w, h)
+        return new MountainDataModel(w, h);
     }
     constructor(thickness = config.parameters.thickness.default,
                 height = config.parameters.height.default ) {

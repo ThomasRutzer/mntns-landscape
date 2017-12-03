@@ -21,7 +21,7 @@ describe('GeneratorManager', () => {
         it('holds one mountain for each object in passed data', () => {
             expect((<any>manager.mountains.length)).to.equal(3);
         });
-    });
+    });/*
 
     describe('method clearAllMountains()', () => {
         it('clears all added mountains from Generator', (done) => {
@@ -40,5 +40,5 @@ describe('GeneratorManager', () => {
                 done();
             });
         });
-    });
+    });*/
 });

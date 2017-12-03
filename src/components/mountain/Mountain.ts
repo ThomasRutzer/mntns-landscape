@@ -1,5 +1,5 @@
 import * as THREE from 'THREE';
-import TweenMax from "gsap";
+import TweenMax from 'gsap';
 
 import clone from 'lodash.clonedeep';
 import MountainInterface from './MountainInterface';
@@ -14,7 +14,7 @@ class Mountain implements MountainInterface {
         geometryData: any,
         parameters: MountainDataModel,
     };
-    private states : {
+    private states: {
         isShrunk: boolean;
     };
 
@@ -32,11 +32,11 @@ class Mountain implements MountainInterface {
 
     public mesh: THREE.Mesh;
 
-    static create(height: number, thickness:number) {
-        return new Mountain(height, thickness)
+    static create(height: number, thickness: number) {
+        return new Mountain(height, thickness);
     }
 
-    constructor(height: number, thickness:number) {
+    constructor(height: number, thickness: number) {
         this.vectorPoints = [];
 
         // store class states
@@ -69,7 +69,7 @@ class Mountain implements MountainInterface {
         for (i = 0; i < this.verticalSegments; i++) {
             tx = 30 - i * 3;
             tz = mathUtils.rangeRandom(0, 2);
-            this.vectorPoints.push(new THREE.Vector3(tx,ty, tz));
+            this.vectorPoints.push( new THREE.Vector3(tx, ty, tz) );
             ty += this.segHeight;
         }
         this.vectorPoints.push(new THREE.Vector3(0, ty, 0));
@@ -91,7 +91,7 @@ class Mountain implements MountainInterface {
      * @returns {Promise<T>}
      */
     grow(animation: boolean = true): Promise<any> {
-        //create promise with resolve Callback
+        // create promise with resolve Callback
         // as method return
         let returnPromiseResolve = new Function();
         const returnPromise = new Promise((res) => {
@@ -131,12 +131,12 @@ class Mountain implements MountainInterface {
                     // workaround for current native Promise,
                     // to resolve it later
                     let yAnimationCompleteClb = new Function();
-                    const yAnimationPromise = new Promise((res) =>{
+                    const yAnimationPromise = new Promise( (res) => {
                         yAnimationCompleteClb = res;
                     });
 
                     let xzAnimationCompleteClb = new Function();
-                    const xzAnimationPromise = new Promise((res) =>{
+                    const xzAnimationPromise = new Promise( (res) => {
                         xzAnimationCompleteClb = res;
                     });
 
@@ -164,7 +164,7 @@ class Mountain implements MountainInterface {
         if (!this.states.isShrunk) {
             this.shrink().then(() => {
                 progressGrow();
-            })
+            });
         } else {
             progressGrow();
         }
@@ -177,7 +177,7 @@ class Mountain implements MountainInterface {
      * @returns {Promise<T>}
      */
     shrink(animation: boolean = false): Promise<any> {
-        //create promise with resolve Callback
+        // create promise with resolve Callback
         // as method return
         let returnPromiseResolve = new Function();
         const returnPromise = new Promise((res) => {
@@ -214,7 +214,7 @@ class Mountain implements MountainInterface {
             // workaround for current native Promise,
             // to resolve it later
             let yAnimationCompleteClb = new Function();
-            const yAnimationPromise = new Promise((res) =>{
+            const yAnimationPromise = new Promise( (res) => {
                 yAnimationCompleteClb = res;
             });
 

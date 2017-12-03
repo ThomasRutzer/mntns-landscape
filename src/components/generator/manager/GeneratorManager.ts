@@ -63,7 +63,7 @@ class GeneratorManager {
             return posX;
         }
 
-        if(this.positioning.side == 'left') {
+        if ( this.positioning.side === 'left' ) {
             posX = this.positioning.leftOffset * -1;
             this.positioning.leftOffset += (offset - GeneratorManagerConfig.overlapping);
             this.positioning.side = 'right';
@@ -84,8 +84,8 @@ class GeneratorManager {
         const allPromises = [];
         let index = null;
 
-        this.mountains.forEach((mountainElement, i) => {
-            if(mountainElement.id === mountainId) {
+        this.mountains.forEach( (mountainElement, i) => {
+            if (mountainElement.id === mountainId) {
                 allPromises.push(mountainElement.mountain.shrink(true));
                 index = i;
             }

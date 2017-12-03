@@ -102,7 +102,6 @@ webpackConfig.plugins = [...webpackConfig.plugins,
   new DefinePlugin({
     'process.env': env
   }),
-  new FaviconsWebpackPlugin(helpers.root('/src/icon.png'))
 ];
 
 module.exports = webpackConfig;
