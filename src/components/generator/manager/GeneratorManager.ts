@@ -2,7 +2,8 @@ import LightFactory from './../../light';
 import SceneObjectModel from './../../scene/model/SceneObjectModel';
 import Scene from '../../scene/manager/SceneManager';
 import { Mountain } from './../../mountain';
-import config from './config';
+import GeneratorManagerConfig from './GeneratorManagerConfig';
+import { rangeRandomInt } from './../../math-utils';
 
 class GeneratorManager {
     private scene: Scene;
@@ -18,18 +19,7 @@ class GeneratorManager {
         this.scene = scene;
         this.mountains = [];
 
-        /**
-         * handles placement of mountains to each other
-         * @type {number}side -> handles if mountain shall be placed left or right from x=0
-         * @type {number}leftOffset ->  stores thickness of all mountains on the left side
-         * @type {number}rightOffset -> stores thickness of all mountains on the right side
-         */
-        this.positioning = {
-            side: config.initialSide,
-            leftOffset: 0,
-            rightOffset: 0
-        };
-
+        this.resetPositioning();
         this.addGlobalLight();
         this.addShadowLight();
 
@@ -53,7 +43,8 @@ class GeneratorManager {
 
         const mountain = Mountain.create(data.height, data.thickness);
 
-        this.scene.addElement(SceneObjectModel.create(`mountain-${this.allMountainCounter}`, mountain.mesh, {y: 0, x: posX}));
+        this.scene.addElement(SceneObjectModel.create(`mountain-${this.allMountainCounter}`,
+            mountain.mesh, {y: 0, x: posX, z: rangeRandomInt(GeneratorManagerConfig.shiftX[0], GeneratorManagerConfig.shiftX[1])}));
 
         this.allMountainCounter++;
         this.mountains.push({
@@ -66,19 +57,19 @@ class GeneratorManager {
         let posX = 0;
 
         if (this.mountains.length === 0) {
-            this.positioning.leftOffset += (offset - config.overlapping);
-            this.positioning.rightOffset += (offset - config.overlapping);
+            this.positioning.leftOffset += (offset - GeneratorManagerConfig.overlapping);
+            this.positioning.rightOffset += (offset - GeneratorManagerConfig.overlapping);
 
             return posX;
         }
 
         if(this.positioning.side == 'left') {
             posX = this.positioning.leftOffset * -1;
-            this.positioning.leftOffset += (offset - config.overlapping);
+            this.positioning.leftOffset += (offset - GeneratorManagerConfig.overlapping);
             this.positioning.side = 'right';
         } else {
             posX = this.positioning.rightOffset;
-            this.positioning.rightOffset += (offset - config.overlapping);
+            this.positioning.rightOffset += (offset - GeneratorManagerConfig.overlapping);
             this.positioning.side = 'left';
         }
 
@@ -124,13 +115,27 @@ class GeneratorManager {
         });
 
         Promise.all(allPromises).then(() => {
-            this.mountains.length = 0;
+            this.mountains = [];
+            this.resetPositioning();
             returnPromiseResolve();
         });
 
         return returnPromise;
     }
-}
 
+    /**
+     * handles placement of mountains to each other
+     * @type {number}side -> handles if mountain shall be placed left or right from x=0
+     * @type {number}leftOffset ->  stores thickness of all mountains on the left side
+     * @type {number}rightOffset -> stores thickness of all mountains on the right side
+     */
+    private resetPositioning() {
+        this.positioning = {
+            side: GeneratorManagerConfig.initialSide,
+            leftOffset: 0,
+            rightOffset: 0
+        };
+    }
+}
 
 export default GeneratorManager;
