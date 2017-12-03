@@ -12,6 +12,10 @@ const config = {
             default: 10
         }
     },
+
+    appearance: {
+        color: '#212121'
+    }
 };
 
 export default config;

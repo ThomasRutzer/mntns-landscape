@@ -4,6 +4,7 @@ import TweenMax from "gsap";
 import clone from 'lodash.clonedeep';
 import MountainInterface from './MountainInterface';
 import MountainDataModel from './MountainDataModel';
+import MountainConfig from './MountainConfig';
 import * as mathUtils from './../math-utils';
 import { CustomMesh } from './../custom-mesh';
 
@@ -11,7 +12,7 @@ class Mountain implements MountainInterface {
     public vectorPoints: THREE.Vector3[];
     private data: {
         geometryData: any,
-        parameters: MountainDataModel
+        parameters: MountainDataModel,
     };
     private states : {
         isShrunk: boolean;
@@ -53,7 +54,7 @@ class Mountain implements MountainInterface {
         // this could all be parameters
         this.height = this.data.parameters.height;
         this.thickness = this.data.parameters.thickness;
-        this.color = '#ccc';
+        this.color = MountainConfig.appearance.color;
         this.verticalSegments = 10;
         this.radiusSegments = 8;
         this.shapeAngleStart = 0.9;
@@ -80,7 +81,7 @@ class Mountain implements MountainInterface {
         geom.verticesNeedUpdate = true;
 
         // store clone of initial geometry data
-        this.data.geometryData = clone(this.mesh.geometry)
+        this.data.geometryData = clone(this.mesh.geometry);
 
         this.grow();
     }
