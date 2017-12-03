@@ -43,9 +43,11 @@ export default class SceneManager implements SceneManagerInterface {
         this.camera.position.y = camera.position && camera.position.y || 0;
         this.camera.position.z = camera.position && camera.position.z || 0;
 
+        this.camera.lookAt(this.sceneElement.position)
         switch (renderer) {
             case 'webGL':
                 this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+                this.renderer.setClearColor( 0x000000, 0 );
         }
 
         this.renderer.setSize(this.dimensions.width, this.dimensions.height);
@@ -81,6 +83,7 @@ export default class SceneManager implements SceneManagerInterface {
 
             newElement.object.position.x = newElement.position.x;
             newElement.object.position.y = newElement.position.y;
+            newElement.object.position.z = newElement.position.z;
 
             this.sceneElement.add(newElement.object);
             this.sceneElements.push(newElement);

@@ -18,10 +18,11 @@ export default class SceneObjectModel implements SceneObjectModelInterface {
     }
 }
 
-function ensurePosition(requestedPos): {x: Number, y: Number} {
+function ensurePosition(requestedPos): {x: Number, y: Number, z: Number} {
     const position = {
         x: 0,
         y: 0,
+        z: 0,
     };
 
     if (requestedPos && typeof requestedPos.y === 'number') {
@@ -30,6 +31,10 @@ function ensurePosition(requestedPos): {x: Number, y: Number} {
 
     if (requestedPos && typeof requestedPos.x === 'number') {
         position.x = requestedPos.x;
+    }
+
+    if (requestedPos && typeof requestedPos.z === 'number') {
+        position.z = requestedPos.z;
     }
 
     return position;

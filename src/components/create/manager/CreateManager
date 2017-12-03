@@ -1,7 +1,0 @@
-export default class CreateManager {
-    private stateMachine;
-
-    constructor() {
-        this.stateMachine = null;
-    }
-}
