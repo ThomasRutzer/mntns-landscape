@@ -1,3 +1,3 @@
-import CameraFactory from './factory/CameryFactory';
+import CameraFactory from './factory/CameraFactory';
 
 export default CameraFactory;
