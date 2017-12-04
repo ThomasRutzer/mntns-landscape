@@ -10,7 +10,7 @@ class CustomMesh {
         return new THREE.BufferGeometry().fromGeometry( geom );
     }
 
-    static lathe(points, segments, color) {
+    static lathe(points: THREE.Vector3[], segments: number, color: string): THREE.Mesh {
         // change the axis from z to y;
         let rotPoints = [];
 
