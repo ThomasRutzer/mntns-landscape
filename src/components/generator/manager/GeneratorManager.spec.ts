@@ -1,7 +1,7 @@
 import {expect, should} from 'chai';
-import {spy, assert} from 'sinon';
+import {stub} from 'sinon';
 import GeneratorManager from './GeneratorManager';
-import Scene from '../../scene/manager/SceneManager'
+import Scene from '../../scene/manager/SceneManager';
 
 describe('GeneratorManager', () => {
     let manager;
@@ -13,7 +13,6 @@ describe('GeneratorManager', () => {
                 'webGL',
                 true);
 
-
         manager = new GeneratorManager(scene, data);
     });
 
@@ -21,24 +20,35 @@ describe('GeneratorManager', () => {
         it('holds one mountain for each object in passed data', () => {
             expect((<any>manager.mountains.length)).to.equal(3);
         });
-    });/*
+    });
 
-    describe('method clearAllMountains()', () => {
-        it('clears all added mountains from Generator', (done) => {
-            manager.clearAllMountains().then(() => {
-                ((<any>manager.mountains.length)).should.equal(0);
-                done();
+    describe('method clearMountain()', () => {
+        it('clears requested mountain from Generator', () => {
+            const id = `mountain-1`;
+
+            <any>manager.mountains.forEach((mnt) => {
+                stub(mnt.mountain, "shrink").callsFake(() => {
+                    return Promise.resolve();
+                });
+            });
+
+            return manager.clearMountain(id).then(() => {
+                ((<any>manager.mountains.length)).should.equal(2);
             });
         });
     });
 
-    describe('method clearMountain()', () => {
-        it('clears requested mountain from Generator', (done) => {
-            const id = `mountain-1`;
-            manager.clearMountain(id).then(() => {
-                ((<any>manager.mountains.length)).should.equal(2);
-                done();
+    describe('method clearAllMountains()', () => {
+        it('clears requested mountain from Generator', () => {
+            <any>manager.mountains.forEach((mnt) => {
+                stub(mnt.mountain, "shrink").callsFake(() => {
+                    return Promise.resolve();
+                });
+            });
+
+            return manager.clearAllMountains().then(() => {
+                ((<any>manager.mountains.length)).should.equal(0);
             });
         });
-    });*/
+    });
 });
