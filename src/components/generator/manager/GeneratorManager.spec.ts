@@ -8,7 +8,7 @@ describe('GeneratorManager', () => {
 
     beforeEach(() => {
         let data = [{thickness: 50, height: 100}, {thickness: 30, height: 50}, {thickness: 50, height: 30}],
-            scene = new Scene(100, 100,
+            scene = new Scene(
                 {type: 'perspective', fieldOfView: 60, nearPlane: 0.1, farPlane: 3000, position: {x: 0, y: 0, z: 150}},
                 'webGL',
                 true);

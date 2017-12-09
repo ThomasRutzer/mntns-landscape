@@ -1,30 +1,36 @@
 import LightFactory from './../../light';
 import SceneObjectModel from './../../scene/model/SceneObjectModel';
 import Scene from '../../scene/manager/SceneManager';
-import { Mountain } from './../../mountain';
+import {Mountain} from './../../mountain';
 import GeneratorManagerConfig from './GeneratorManagerConfig';
 import { rangeRandomInt } from './../../math-utils';
+import TextureProvider from './../../texture-provider/';
 
 class GeneratorManager {
-    private scene: Scene;
-    private mountains: {id: string, mountain: Mountain}[];
-    private positioning: {side: string, leftOffset: number, rightOffset: number};
+    private scene:Scene;
+    private mountainsData;
+    private mountains:{id:string, mountain:Mountain}[];
+    private positioning:{side:string, leftOffset:number, rightOffset:number};
 
     // used to create unique id
     private allMountainCounter = 0;
     private globalLight;
     private shadowLight;
+    private texture: THREE.Texture;
 
-    constructor(scene: Scene, data: Object[] = []) {
+    constructor(scene:Scene, mountainsData:Object[] = []) {
         this.scene = scene;
+        this.mountainsData = mountainsData;
         this.mountains = [];
 
         this.resetPositioning();
         this.addGlobalLight();
         this.addShadowLight();
 
-        data.forEach((mountainData) => {
-            this.addMountain(mountainData);
+        this.getTexture().then(() => {
+            mountainsData.forEach((mountainData) => {
+                this.addMountain(mountainData);
+            });
         });
     }
 
@@ -35,13 +41,17 @@ class GeneratorManager {
 
     addShadowLight() {
         this.shadowLight = LightFactory.create('directional', '#fff', 0.5, {castShadow: true});
-        this.scene.addElement(SceneObjectModel.create('shadowLight', this.shadowLight.lightElement, {x: 100, y: 150, z: 100}));
+        this.scene.addElement(SceneObjectModel.create('shadowLight', this.shadowLight.lightElement, {
+            x: 100,
+            y: 150,
+            z: 100
+        }));
     }
 
     addMountain(data) {
         let posX = this.determinePosition(data.thickness);
 
-        const mountain = Mountain.create(data.height, data.thickness);
+        const mountain = Mountain.create(data.height, data.thickness, this.texture);
 
         this.scene.addElement(SceneObjectModel.create(`mountain-${this.allMountainCounter}`,
             mountain.mesh, {y: 0, x: posX, z: rangeRandomInt(GeneratorManagerConfig.shiftX[0], GeneratorManagerConfig.shiftX[1])}));
@@ -74,6 +84,20 @@ class GeneratorManager {
         }
 
         return posX;
+    }
+
+    private getTexture(): Promise<any> {
+        let returnPromiseResolve = new Function();
+        const returnPromise = new Promise((res) => {
+            returnPromiseResolve = res;
+        });
+
+        TextureProvider.loadByUrl(GeneratorManagerConfig.textureUrl).then((tex) => {
+            this.texture = tex;
+            returnPromiseResolve();
+        });
+
+        return returnPromise;
     }
 
     clearMountain(mountainId): Promise<any> {

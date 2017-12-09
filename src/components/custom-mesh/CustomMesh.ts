@@ -10,7 +10,7 @@ class CustomMesh {
         return new THREE.BufferGeometry().fromGeometry( geom );
     }
 
-    static lathe(points: THREE.Vector3[], segments: number, color: string): THREE.Mesh {
+    static lathe(points: THREE.Vector3[], segments: number, texture?: THREE.Texture): THREE.Mesh {
         // change the axis from z to y;
         let rotPoints = [];
 
@@ -21,8 +21,8 @@ class CustomMesh {
         let geom = new THREE.LatheGeometry( rotPoints, segments );
         geom.applyMatrix( new THREE.Matrix4().makeRotationX( -Math.PI / 2));
 
-        const mat = new THREE.MeshLambertMaterial({
-            color: color
+        const mat = new THREE.MeshPhongMaterial({
+            map: texture
         });
         CustomMesh.flatshadeGeometry(geom);
         return new THREE.Mesh(geom, mat);

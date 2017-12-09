@@ -15,7 +15,7 @@ describe('Custom Mesh', () => {
 
     describe('static method lathe()', () => {
         it('returns THREE Mesh', () => {
-            let mesh = CustomMesh.lathe([new THREE.Vector3(1,1,1)], 2, '#fff');
+            let mesh = CustomMesh.lathe([new THREE.Vector3(1,1,1)], 2, new THREE.Texture());
 
             expect(mesh.type).to.equal('Mesh');
         });
@@ -23,7 +23,7 @@ describe('Custom Mesh', () => {
         it('turns z prop of given points into negative number to change axis from z to y', () => {
             let zCoord1, zCoord2: number;
             let geom: any;
-            let mesh = CustomMesh.lathe([new THREE.Vector3(1,8,1), new THREE.Vector3(1,8,5)], 1, '#fff');
+            let mesh = CustomMesh.lathe([new THREE.Vector3(1,8,1), new THREE.Vector3(1,8,5)], 1, new THREE.Texture());
 
             geom = mesh.geometry;
             zCoord1 = Math.round(geom.vertices[0].z);
@@ -35,7 +35,7 @@ describe('Custom Mesh', () => {
 
         it('multiplies each given point by number of given segments', () => {
             let geom: any;
-            let mesh = CustomMesh.lathe([new THREE.Vector3(1,8,1), new THREE.Vector3(1,8,5)], 4, '#fff');
+            let mesh = CustomMesh.lathe([new THREE.Vector3(1,8,1), new THREE.Vector3(1,8,5)], 4, new THREE.Texture());
 
             geom = mesh.geometry;
 

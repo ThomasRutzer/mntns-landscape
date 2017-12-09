@@ -12,8 +12,6 @@ describe('SceneManager', () => {
             const loopMethodSpy = spy(SceneManager.prototype, 'loop');
 
             factory = new SceneManager(
-                100,
-                100,
                 {type: 'perspective', fieldOfView: 60, nearPlane: 0.1, farPlane: 3000, position: {x: 0, y: 0, z: 150}},
                 'webGL',
                 true);
@@ -28,8 +26,6 @@ describe('SceneManager', () => {
 
         beforeEach(() => {
             factory = new SceneManager(
-                100,
-                100,
                 {type: 'perspective', fieldOfView: 60, nearPlane: 0.1, farPlane: 3000, position: {x: 0, y: 0, z: 150}},
                 'webGL',
                 true);
@@ -65,8 +61,6 @@ describe('SceneManager', () => {
 
         beforeEach(() => {
             factory = new SceneManager(
-                100,
-                100,
                 {type: 'perspective', fieldOfView: 60, nearPlane: 0.1, farPlane: 3000, position: {x: 0, y: 0, z: 150}},
                 'webGL',
                 true);
@@ -93,8 +87,6 @@ describe('SceneManager', () => {
     describe('method loop()', () => {
         it('calls method render', () => {
             let factory = new SceneManager(
-                    100,
-                    100,
                     {type: 'perspective', fieldOfView: 60, nearPlane: 0.1, farPlane: 3000, position: {x: 0, y: 0, z: 150}},
                     'webGL',
                     true);

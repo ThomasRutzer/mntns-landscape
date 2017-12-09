@@ -8,5 +8,7 @@ export default {
     overlapping: 10,
 
     // random z-shifting range
-    shiftX: [1, 10]
+    shiftX: [1, 10],
+
+    textureUrl: 'assets/texture.jpg'
 };

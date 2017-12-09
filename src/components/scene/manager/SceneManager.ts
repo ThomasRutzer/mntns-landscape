@@ -12,13 +12,11 @@ export default class SceneManager implements SceneManagerInterface {
     private autoUpdate: boolean;
     private dimensions: {width: number, height: number};
 
-    public static create(width, height, camera, renderer?, autoUpdate?) {
-        return new SceneManager(width, height, camera, renderer, autoUpdate);
+    public static create(camera, renderer?, autoUpdate?) {
+        return new SceneManager(camera, renderer, autoUpdate);
     }
 
-    constructor(width: number,
-                height: number,
-                camera: { type: string, position: { x, y, z }, fieldOfView: number, nearPlane: number, farPlane: number },
+    constructor(camera: { type: string, position: { x, y, z }, fieldOfView: number, nearPlane: number, farPlane: number },
                 renderer: string = 'webGL',
                 autoUpdate: boolean = true) {
 
@@ -26,8 +24,8 @@ export default class SceneManager implements SceneManagerInterface {
         this.sceneElement.fog = new THREE.Fog(0xcefaeb, 300, 1000);
 
         this.dimensions = {
-            width: width,
-            height: height
+            width: window.innerWidth,
+            height: window.innerHeight
         };
 
         this.autoUpdate = autoUpdate;
@@ -35,7 +33,7 @@ export default class SceneManager implements SceneManagerInterface {
         this.camera = CameraFactory.create(
             camera.type,
             camera.fieldOfView,
-            width / height,
+            this.dimensions.width / this.dimensions.height,
             camera.nearPlane,
             camera.farPlane).cameraElement;
 
@@ -116,17 +114,15 @@ export default class SceneManager implements SceneManagerInterface {
     }
 
     handleResize() {
-        const width = window.innerWidth >= this.dimensions.width
-            ? window.innerWidth
-            : this.dimensions.width;
 
-        const height = window.innerWidth >= this.dimensions.height
-            ? window.innerWidth
-            : this.dimensions.height;
+        this.dimensions = {
+            width: window.innerWidth,
+            height: window.innerHeight
+        };
 
-        this.camera.aspect = width / height;
+        this.camera.aspect = this.dimensions.width / this.dimensions.height;
         this.camera.updateProjectionMatrix();
-        this.renderer.setSize(width, height);
+        this.renderer.setSize(this.dimensions.width, this.dimensions.height);
 
         if (!this.autoUpdate) {
             this.render();
