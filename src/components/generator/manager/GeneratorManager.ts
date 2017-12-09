@@ -5,6 +5,8 @@ import {Mountain} from './../../mountain';
 import GeneratorManagerConfig from './GeneratorManagerConfig';
 import { rangeRandomInt } from './../../math-utils';
 import TextureProvider from './../../texture-provider/';
+import CustomMesh from './../../custom-mesh';
+import { rangeRandom } from './../../math-utils';
 
 class GeneratorManager {
     private scene:Scene;
@@ -31,7 +33,30 @@ class GeneratorManager {
             mountainsData.forEach((mountainData) => {
                 this.addMountain(mountainData);
             });
+
+            this.addFloor();
         });
+    }
+
+    addFloor(): void {
+        let floorCol = GeneratorManagerConfig.floor.color;
+        const mesh =  CustomMesh.planeMesh(1600,1600,12, floorCol);
+        const geom: any = mesh.geometry;
+
+        const vertices =  geom.vertices;
+        for (let i=0; i < vertices.length; i++){
+            let v = vertices[i];
+            v.x += rangeRandom(-10,10);
+            v.y += rangeRandom(-10,10);
+            v.z += rangeRandom(-10,10);
+        }
+
+        geom.computeFaceNormals();
+        geom.verticesNeedUpdate = true;
+        geom.colorsNeedUpdate = true;
+
+        mesh.rotation.x = -Math.PI / 2;
+        this.scene.addElement(SceneObjectModel.create('floor', mesh));
     }
 
     addGlobalLight() {

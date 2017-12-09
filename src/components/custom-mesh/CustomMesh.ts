@@ -27,6 +27,18 @@ class CustomMesh {
         CustomMesh.flatshadeGeometry(geom);
         return new THREE.Mesh(geom, mat);
     }
+
+    static planeMesh(w,d,s,color): THREE.Mesh {
+        let mat = new THREE.MeshLambertMaterial({
+            color: color
+        });
+
+        let geom = new THREE.PlaneGeometry( w, d, s, s );
+        CustomMesh.flatshadeGeometry(geom);
+        let mesh = new THREE.Mesh(geom, mat);
+
+        return mesh;
+    }
 }
 
 export default CustomMesh;

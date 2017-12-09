@@ -10,5 +10,9 @@ export default {
     // random z-shifting range
     shiftX: [1, 10],
 
-    textureUrl: 'assets/texture.jpg'
+    textureUrl: 'assets/texture.jpg',
+
+    floor: {
+        color: '#00ffff'
+    }
 };
