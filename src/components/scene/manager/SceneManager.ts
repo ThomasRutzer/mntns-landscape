@@ -1,6 +1,7 @@
 import * as THREE from 'THREE';
 import SceneManagerInterface from './SceneManagerInterface';
 import SceneObjectModel from '../model/SceneObjectModel';
+import SceneConfig from './SceneConfig';
 
 import CameraFactory from '../../camera/index';
 
@@ -17,11 +18,11 @@ export default class SceneManager implements SceneManagerInterface {
     }
 
     constructor(camera: { type: string, position: { x, y, z }, fieldOfView: number, nearPlane: number, farPlane: number },
-                renderer: string = 'webGL',
+                renderer: string = SceneConfig.renderer,
                 autoUpdate: boolean = true) {
 
         this.sceneElement = new THREE.Scene();
-        this.sceneElement.fog = new THREE.Fog(0xcefaeb, 300, 1000);
+        this.sceneElement.fog = new THREE.FogExp2(SceneConfig.fog.color, SceneConfig.fog.density);
 
         this.dimensions = {
             width: window.innerWidth,
