@@ -4,5 +4,6 @@ export default {
         density: 0.0015
     },
 
-    renderer: 'webGL'
+    renderer: 'webGL',
+    reactToMouseMove: true
 }

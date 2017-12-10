@@ -12,6 +12,7 @@ export default class SceneManager implements SceneManagerInterface {
     private sceneElements: SceneObjectModel[];
     private autoUpdate: boolean;
     private dimensions: {width: number, height: number};
+    private mouseCoords: {x:number, y: number};
 
     public static create(camera, renderer?, autoUpdate?) {
         return new SceneManager(camera, renderer, autoUpdate);
@@ -60,6 +61,12 @@ export default class SceneManager implements SceneManagerInterface {
 
         this.sceneElements = [];
         window.addEventListener('resize', () => { this.handleResize(); }, false);
+
+        if(SceneConfig.reactToMouseMove) {
+            this.mouseCoords = {x: 0, y: 0};
+
+            window.addEventListener( 'mousemove', (e) => this.onMouseMove(e), false );
+        }
     }
 
     /**
@@ -111,6 +118,13 @@ export default class SceneManager implements SceneManagerInterface {
     }
 
     render() {
+        if(SceneConfig.reactToMouseMove && this.mouseCoords) {
+            this.camera.position.x += ( this.mouseCoords.x - this.camera.position.x ) * .0001;
+            // this.camera.position.y += ( - ( this.mouseCoords.y - 200) - this.camera.position.y ) * .0008;
+
+            this.camera.lookAt( this.sceneElement.position );
+        }
+
         this.renderer.render(this.sceneElement, this.camera);
     }
 
@@ -128,5 +142,10 @@ export default class SceneManager implements SceneManagerInterface {
         if (!this.autoUpdate) {
             this.render();
         }
+    }
+
+    private onMouseMove(event) {
+        this.mouseCoords.x = ( event.clientX - window.innerWidth / 2 );
+        this.mouseCoords.y = ( event.clientY - window.innerHeight / 2 );
     }
 }
