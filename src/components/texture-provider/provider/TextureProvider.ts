@@ -6,6 +6,11 @@ let loader:any = new THREE.TextureLoader();
 
 class TextureProvider {
 
+    /**
+     * specifiec method to determine it´s an url
+     * @param url
+     * @returns {Promise<Texture>}
+     */
     static loadByUrl(url: string): Promise<any> {
         if (!url) {
             return Promise.reject(errorMessages.URL_MISSING);
@@ -15,22 +20,31 @@ class TextureProvider {
             return Promise.resolve(loadedUrlCache[url]);
         }
 
-        return load(url);
+        return TextureProvider.load(url);
     }
-}
 
-function load(url) {
-    let returnPromiseResolve = new Function();
-    const returnPromise = new Promise((res) => {
-        returnPromiseResolve = res;
-    });
+    /**
+     * general load method
+     * @param loadingRequest
+     * @returns {Promise<Texture>}
+     */
+    static load(loadingRequest) {
+        let returnPromiseResolve = new Function();
+        const returnPromise = new Promise((res) => {
+            returnPromiseResolve = res;
+        });
 
-    loader.load(url, (texture) => {
-        loadedUrlCache[url] = texture;
-        returnPromiseResolve(texture);
-    });
+        loader.load(loadingRequest, (texture) => {
+            this.addToCache(loadingRequest, texture);
+            returnPromiseResolve(texture);
+        });
 
-    return returnPromise;
+        return returnPromise;
+    }
+
+    static addToCache(id: string, texture: THREE.Texture) {
+        loadedUrlCache[id] = texture;
+    }
 }
 
 export default TextureProvider;

@@ -1,5 +1,5 @@
 import {expect, should} from 'chai';
-import {stub, spy, assert} from 'sinon';
+import {stub} from 'sinon';
 import GeneratorManager from './GeneratorManager';
 import config from './GeneratorManagerConfig';
 import Scene from '../../scene/manager/SceneManager';
