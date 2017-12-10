@@ -1,10 +1,16 @@
 import {expect, should} from 'chai';
-import {stub} from 'sinon';
+import {stub, spy, assert} from 'sinon';
 import GeneratorManager from './GeneratorManager';
+import config from './GeneratorManagerConfig';
 import Scene from '../../scene/manager/SceneManager';
 
 describe('GeneratorManager', () => {
-    let manager;
+    let manager, prototype: any = GeneratorManager.prototype;
+
+    // stub async call
+    stub(prototype, 'getTexture').callsFake(() => {
+        return Promise.resolve();
+    });
 
     beforeEach(() => {
         let data = [{thickness: 50, height: 100}, {thickness: 30, height: 50}, {thickness: 50, height: 30}],
@@ -13,12 +19,45 @@ describe('GeneratorManager', () => {
                 'webGL',
                 true);
 
+
         manager = new GeneratorManager(scene, data);
     });
 
     describe('constructor()', () => {
-        it('holds one mountain for each object in passed data', () => {
-            expect((<any>manager.mountains.length)).to.equal(3);
+        it('holds floor after construction', () => {
+            let counter = 0;
+
+            <any>manager.scene.sceneElements.filter((element) => {
+                if(element.id === 'floor') {
+                    counter++;
+                }
+            });
+
+            expect(counter).to.equal(1);
+        });
+
+        it('holds globalLight after construction', () => {
+            let counter = 0;
+
+            <any>manager.scene.sceneElements.filter((element) => {
+                if(element.id === 'globalLight') {
+                    counter++;
+                }
+            });
+
+            expect(counter).to.equal(1);
+        });
+
+        it('holds shadowLight after construction', () => {
+            let counter = 0;
+
+            <any>manager.scene.sceneElements.filter((element) => {
+                if(element.id === 'shadowLight') {
+                    counter++;
+                }
+            });
+
+            expect(counter).to.equal(1);
         });
     });
 
@@ -39,7 +78,7 @@ describe('GeneratorManager', () => {
     });
 
     describe('method clearAllMountains()', () => {
-        it('clears requested mountain from Generator', () => {
+        it('clears all mountain from Generator', () => {
             <any>manager.mountains.forEach((mnt) => {
                 stub(mnt.mountain, "shrink").callsFake(() => {
                     return Promise.resolve();

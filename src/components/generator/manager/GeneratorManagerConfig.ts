@@ -14,5 +14,23 @@ export default {
 
     floor: {
         color: '#00ffff'
+    },
+
+    shadowLight: {
+        position: {
+            x: 100,
+            y: 150,
+            z: 100
+        },
+        type: 'directional',
+        color: '#fff',
+        density: 0.5
+    },
+
+    globalLight: {
+        type: 'global',
+        secondaryColor: '#fff',
+        primaryColor: '#fff',
+        density: 0.8
     }
 };
