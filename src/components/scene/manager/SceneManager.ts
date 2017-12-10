@@ -1,4 +1,5 @@
 import * as THREE from 'THREE';
+
 import SceneManagerInterface from './SceneManagerInterface';
 import SceneObjectModel from '../model/SceneObjectModel';
 import SceneConfig from './SceneConfig';
@@ -13,6 +14,7 @@ export default class SceneManager implements SceneManagerInterface {
     private autoUpdate: boolean;
     private dimensions: {width: number, height: number};
     private mouseCoords: {x:number, y: number};
+    private mouseIsMoving: boolean = false;
 
     public static create(camera, renderer?, autoUpdate?) {
         return new SceneManager(camera, renderer, autoUpdate);
@@ -118,11 +120,12 @@ export default class SceneManager implements SceneManagerInterface {
     }
 
     render() {
-        if(SceneConfig.reactToMouseMove && this.mouseCoords) {
-            this.camera.position.x += ( this.mouseCoords.x - this.camera.position.x ) * .0001;
-            // this.camera.position.y += ( - ( this.mouseCoords.y - 200) - this.camera.position.y ) * .0008;
+        if(SceneConfig.reactToMouseMove && this.mouseIsMoving) {
+            this.camera.position.x += ( this.mouseCoords.x - this.camera.position.x ) * .001;
 
             this.camera.lookAt( this.sceneElement.position );
+
+            this.mouseIsMoving = false;
         }
 
         this.renderer.render(this.sceneElement, this.camera);
@@ -147,5 +150,9 @@ export default class SceneManager implements SceneManagerInterface {
     private onMouseMove(event) {
         this.mouseCoords.x = ( event.clientX - window.innerWidth / 2 );
         this.mouseCoords.y = ( event.clientY - window.innerHeight / 2 );
+
+        this.mouseIsMoving = true;
     }
+
+
 }
