@@ -259,5 +259,9 @@ class Mountain implements MountainInterface {
 
         return returnPromise;
     }
+
+    public clicked() {
+        console.log('clicked');
+    }
 }
 export default Mountain;

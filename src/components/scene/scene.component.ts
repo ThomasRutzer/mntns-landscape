@@ -1,14 +1,22 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
 
 import SceneManager from './manager/SceneManager';
+import sceneEvents from './sceneEvents';
+import {Prop, Emit} from "vue-property-decorator";
+
 
 @Component({
     template: require('./scene.component.html'),
 })
 
 export class SceneComponent extends Vue {
+
+    @Emit(sceneEvents.INTERSECTION)
+    intersections(data){
+        return data;
+    }
+
     @Prop({ required: true})
     camera: { type: string, position: Object, fieldOfView: number, nearPlane: number, farPlane: number };
 
@@ -20,8 +28,17 @@ export class SceneComponent extends Vue {
 
     mounted() {
         const container: HTMLElement = document.getElementById('scene');
-         container.appendChild(this.scene.renderer.domElement);
+        container.appendChild(this.scene.renderer.domElement);
+
+        this.registerForSceneChanges();
     }
+
+    registerForSceneChanges(): void {
+        this.scene.registerForChanges().subscribe(({type, data}) => {
+            this.intersections(data);
+        });
+    }
+
 }
 
 

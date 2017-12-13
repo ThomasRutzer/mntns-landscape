@@ -1,20 +1,26 @@
 import * as THREE from 'THREE';
-
+import {Subject} from 'rxjs/Subject';
 import SceneManagerInterface from './SceneManagerInterface';
 import SceneObjectModel from '../model/SceneObjectModel';
 import SceneConfig from './SceneConfig';
+import SceneChangeObservables from './SceneChangeObservables';
 
 import CameraFactory from '../../camera/index';
+
+let raycaster = new THREE.Raycaster();
+let unprojectedCoords = new THREE.Vector2();
 
 export default class SceneManager implements SceneManagerInterface {
     public sceneElement: THREE.Scene;
     public camera;
     public renderer: THREE.WebGLRenderer;
+
     private sceneElements: SceneObjectModel[];
     private autoUpdate: boolean;
     private dimensions: {width: number, height: number};
     private mouseCoords: {x:number, y: number};
     private mouseIsMoving: boolean = false;
+    private changeObservable = new Subject<Object>();
 
     public static create(camera, renderer?, autoUpdate?) {
         return new SceneManager(camera, renderer, autoUpdate);
@@ -62,19 +68,21 @@ export default class SceneManager implements SceneManagerInterface {
         }
 
         this.sceneElements = [];
-        window.addEventListener('resize', () => { this.handleResize(); }, false);
+        this.addListener();
+    }
 
-        if(SceneConfig.reactToMouseMove) {
-            this.mouseCoords = {x: 0, y: 0};
-
-            window.addEventListener( 'mousemove', (e) => this.onMouseMove(e), false );
-        }
+    /**
+     * public Observable, other components can subscribe
+     * @returns {Subject<Object>}
+     */
+    public registerForChanges(): Subject<Object> {
+        return this.changeObservable;
     }
 
     /**
      * @param {SceneObjectModel} newElement
      */
-    addElement(newElement)  {
+    public addElement(newElement)  {
         if (newElement.constructor.name !== 'SceneObjectModel') {
             throw new Error(`Element with id: ${newElement.id} is not of type SceneObjectModel`);
         }
@@ -103,7 +111,7 @@ export default class SceneManager implements SceneManagerInterface {
     /**
      * @param {String} id -> identifier for element, which shall be removed
      */
-    removeElement(id: string) {
+    public removeElement(id: string) {
         this.sceneElements.forEach((sceneElement, iterator) => {
             if (sceneElement.id === id) {
                 this.sceneElements.splice(iterator, 1);
@@ -114,12 +122,76 @@ export default class SceneManager implements SceneManagerInterface {
         });
     }
 
-    loop() {
+    private addListener(): void {
+        window.addEventListener('resize', () => { this.handleResize(); }, false);
+
+        if(SceneConfig.reactToMouseMove) {
+            this.mouseCoords = {x: 0, y: 0};
+
+            window.addEventListener( 'mousemove', (e) => this.onMouseMove(e), false );
+        }
+
+        if(SceneConfig.observeIntsections) {
+            document.addEventListener('mousedown', (e) => {
+                this.findIntersections({x: e.clientX, y: e.clientY});
+            }, false);
+
+            document.addEventListener('touchstart', (e) => {
+
+                let eventCoords = {
+                    x: e.touches[0].clientX,
+                    y: e.touches[0].clientY,
+                };
+
+                this.findIntersections( eventCoords );
+            }, false)
+        }
+    }
+
+    /**
+     * callback for mousedown / touchstart events, when intersections are observed
+     * @param { Object } coords
+     */
+    private findIntersections(coords: {x: number, y: number}): void {
+
+        unprojectedCoords.x = ( coords.x / this.renderer.domElement.clientWidth ) * 2 - 1;
+        unprojectedCoords.y = - ( coords.y / this.renderer.domElement.clientHeight ) * 2 + 1;
+
+        raycaster.setFromCamera( unprojectedCoords, this.camera );
+
+        let objects: THREE.Object3D[] = [];
+
+        this.sceneElements.map((elem) => {
+            if( elem.object.type === 'Mesh') {
+                objects.push(elem.object);
+           }
+        });
+
+        let intersects = raycaster.intersectObjects( objects );
+
+        if ( intersects.length > 0 ) {
+
+            let intersectsNames = intersects.map((intersection) => {
+               return intersection.object.name;
+            });
+
+            this.broadcastChanges(SceneChangeObservables.INTERSECTIONS, intersectsNames);
+        }
+    }
+
+    private broadcastChanges(type: string, data: any): void {
+        this.changeObservable.next({
+            type: type,
+            data: data
+        });
+    }
+
+    private loop() {
         this.render();
         requestAnimationFrame(() => { this.loop(); });
     }
 
-    render() {
+    private render() {
         if(SceneConfig.reactToMouseMove && this.mouseIsMoving) {
             this.camera.position.x += ( this.mouseCoords.x - this.camera.position.x ) * .001;
 
@@ -131,7 +203,7 @@ export default class SceneManager implements SceneManagerInterface {
         this.renderer.render(this.sceneElement, this.camera);
     }
 
-    handleResize() {
+    private handleResize() {
 
         this.dimensions = {
             width: window.innerWidth,
@@ -153,6 +225,4 @@ export default class SceneManager implements SceneManagerInterface {
 
         this.mouseIsMoving = true;
     }
-
-
 }

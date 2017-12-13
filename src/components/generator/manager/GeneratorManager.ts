@@ -13,7 +13,7 @@ class GeneratorManager {
     private scene:Scene;
     private mountainsData;
     private mountains:{id:string, mountain:Mountain}[];
-    private positioning:{side:string, leftOffset:number, rightOffset:number};
+    private positioning:{side: string, leftOffset: number, rightOffset: number};
 
     // used to create unique id
     private allMountainCounter = 0;
@@ -78,17 +78,30 @@ class GeneratorManager {
 
     addMountain(data): void {
         let posX = this.determinePosition(data.thickness);
+        const currentId = this.allMountainCounter;
 
         const mountain = Mountain.create(data.height, data.thickness, this.texture);
 
-        this.scene.addElement(SceneObjectModel.create(`mountain-${this.allMountainCounter}`,
+        this.scene.addElement(SceneObjectModel.create(`mountain-${currentId}`,
             mountain.mesh, {y: 0, x: posX, z: rangeRandomInt(GeneratorManagerConfig.shiftX[0], GeneratorManagerConfig.shiftX[1])}));
 
         this.allMountainCounter++;
         this.mountains.push({
-            id: `mountain-${this.allMountainCounter}`,
+            id: `mountain-${currentId}`,
             mountain: mountain
         });
+    }
+
+    public findMountainById(id: string): Mountain | null {
+        let foundMnt: Mountain = null;
+
+        this.mountains.forEach((mnt) => {
+            if (mnt.id === id) {
+                foundMnt = mnt.mountain;
+            }
+        });
+
+        return foundMnt;
     }
 
     clearMountain(mountainId): Promise<any> {

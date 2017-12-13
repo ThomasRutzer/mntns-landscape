@@ -35,9 +35,7 @@ class CustomMesh {
 
         let geom = new THREE.PlaneGeometry( w, d, s, s );
         CustomMesh.flatshadeGeometry(geom);
-        let mesh = new THREE.Mesh(geom, mat);
-
-        return mesh;
+        return  new THREE.Mesh(geom, mat);
     }
 }
 

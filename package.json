@@ -33,14 +33,16 @@
     "lodash.clonedeep": "^4.5.0",
     "node-sass-json-importer": "^3.0.2",
     "reflect-metadata": "^0.1.10",
+    "rxjs": "^5.5.5",
     "three": "0.73",
     "vue": "~2.4.2",
     "vue-class-component": "~5.0.2",
-    "vue-property-decorator": "~5.2.1"
+    "vue-property-decorator": "^6.0.0"
   },
   "devDependencies": {
     "@types/mocha": "~2.2.42",
     "@types/node": "~8.0.24",
+    "@types/rx": "^4.1.1",
     "@types/sinon": "~2.3.3",
     "@types/three": "^0.84.26",
     "autoprefixer": "^7.1.2",

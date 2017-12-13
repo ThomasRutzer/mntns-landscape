@@ -9,7 +9,7 @@ describe('SceneManager', () => {
     describe('constructor()', () => {
         it('calls method loop when passed argument "autoUpdate" is true', () => {
             let factory;
-            const loopMethodSpy = spy(SceneManager.prototype, 'loop');
+            const loopMethodSpy = spy(<any>SceneManager.prototype, 'loop');
 
             factory = new SceneManager(
                 {type: 'perspective', fieldOfView: 60, nearPlane: 0.1, farPlane: 3000, position: {x: 0, y: 0, z: 150}},
@@ -91,9 +91,10 @@ describe('SceneManager', () => {
                     'webGL',
                     true);
 
-            const renderMethodSpy = spy(factory, 'render');
+            const renderMethodSpy = spy(<any>factory, 'render');
+            const loopSpy = spy(<any>factory, 'loop');
 
-            factory.loop();
+            loopSpy();
             assert.called(renderMethodSpy);
         });
     });
