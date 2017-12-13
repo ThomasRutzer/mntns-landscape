@@ -9,7 +9,7 @@ import * as mathUtils from './../math-utils';
 import { CustomMesh } from './../custom-mesh';
 
 class Mountain implements MountainInterface {
-    public vectorPoints: THREE.Vector3[];
+    private vectorPoints: THREE.Vector3[];
     private data: {
         geometryData: any,
         parameters: MountainDataModel,
@@ -18,17 +18,17 @@ class Mountain implements MountainInterface {
         isShrunk: boolean;
     };
 
-    public height: number;
-    public thickness: number;
-    public color: string;
+    private height: number;
+    private thickness: number;
+    private color: string;
 
-    public radiusSegments: number;
-    public verticalSegments: number;
-    public shapeAngleStart: number;
-    public shapeAngle: number;
-    public shapeAmplitude: number;
-    public freq: number;
-    public segHeight: number;
+    private radiusSegments: number;
+    private verticalSegments: number;
+    private shapeAngleStart: number;
+    private shapeAngle: number;
+    private shapeAmplitude: number;
+    private freq: number;
+    private segHeight: number;
 
     public mesh: THREE.Mesh;
 
@@ -55,10 +55,10 @@ class Mountain implements MountainInterface {
         this.height = this.data.parameters.height;
         this.thickness = this.data.parameters.thickness;
         this.color = MountainConfig.appearance.color;
-        this.verticalSegments = 10;
-        this.radiusSegments = 8;
-        this.shapeAngleStart = 0.9;
-        this.shapeAmplitude = 45;
+        this.verticalSegments = MountainConfig.parameters.verticalSegments.default;
+        this.radiusSegments = MountainConfig.parameters.radiusSegments.default;
+        this.shapeAngleStart = MountainConfig.parameters.shapeAngleStart.default;
+        this.shapeAmplitude = MountainConfig.parameters.shapeAmplitude.default;
         this.shapeAngle = Math.PI - this.shapeAngleStart;
         this.freq = this.shapeAngle / this.verticalSegments;
         this.segHeight = (this.height / this.verticalSegments);
@@ -75,15 +75,14 @@ class Mountain implements MountainInterface {
         this.vectorPoints.push(new THREE.Vector3(0, ty, 0));
 
         this.mesh = new THREE.Mesh();
-
         this.mesh = CustomMesh.lathe(this.vectorPoints, this.radiusSegments, texture);
 
         let geom: any = this.mesh.geometry;
-        geom.verticesNeedUpdate = true;
         geom.uvsNeedUpdate = true;
 
         // store clone of initial geometry data
         this.data.geometryData = clone(this.mesh.geometry);
+
         this.grow();
     }
 
@@ -175,9 +174,10 @@ class Mountain implements MountainInterface {
 
     /**
      * @param {boolean} animation -> whether animate or shrink instantly
+     * @param {boolean} invisible -> if true, will set material invisible (transparant / opacity 0) and reverts this when complete
      * @returns {Promise<T>}
      */
-    shrink(animation: boolean = false): Promise<any> {
+    shrink(animation: boolean = true, invisible: boolean = true): Promise<any> {
         // create promise with resolve Callback
         // as method return
         let returnPromiseResolve = new Function();
@@ -185,16 +185,37 @@ class Mountain implements MountainInterface {
             returnPromiseResolve = res;
         });
 
+        const revertVisibility = () => {
+            if (!invisible) {
+                return;
+            }
+
+            let material: any = this.mesh.material;
+            material.transparent = false;
+            material.opacity = 1;
+        };
+
+        // bug fix! invisible but animated shrink
+        // otherwise raycaster does not intersect object
+        if (invisible) {
+            let material: any = this.mesh.material;
+            material.transparent = true;
+            material.opacity = 0;
+        }
+
         if (!animation) {
             const geom: any = this.mesh.geometry;
 
-            geom.vertices.forEach((vector, iterator) => {
+            geom.vertices.forEach((vector) => {
                 vector.x = 0;
                 vector.y = 0;
                 vector.z = 0;
+
+                geom.verticesNeedUpdate = true;
             });
 
             this.states.isShrunk = true;
+            revertVisibility();
             returnPromiseResolve();
         }
 
@@ -232,9 +253,9 @@ class Mountain implements MountainInterface {
 
         Promise.all(allPromises).then(() => {
             this.states.isShrunk = true;
+            revertVisibility();
             returnPromiseResolve();
         });
-
 
         return returnPromise;
     }
