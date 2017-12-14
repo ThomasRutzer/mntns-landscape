@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {spy, assert} from 'sinon';
+import {spy, assert, stub} from 'sinon';
 import SceneManager from './SceneManager';
 import SceneObjectModel from './../model/SceneObjectModel';
 import * as THREE from 'THREE';
@@ -91,10 +91,9 @@ describe('SceneManager', () => {
                     'webGL',
                     true);
 
-            const renderMethodSpy = spy(<any>factory, 'render');
-            const loopSpy = spy(<any>factory, 'loop');
-
-            loopSpy();
+            const renderMethodSpy = spy(<any>SceneManager.prototype, 'render');
+            const prototype = <any>factory;
+            prototype.loop();
             assert.called(renderMethodSpy);
         });
     });

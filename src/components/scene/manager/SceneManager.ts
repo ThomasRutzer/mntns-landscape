@@ -1,10 +1,10 @@
 import * as THREE from 'THREE';
 import {Subject} from 'rxjs/Subject';
+
 import SceneManagerInterface from './SceneManagerInterface';
 import SceneObjectModel from '../model/SceneObjectModel';
 import SceneConfig from './SceneConfig';
 import SceneChangeObservables from './SceneChangeObservables';
-
 import CameraFactory from '../../camera/index';
 
 let raycaster = new THREE.Raycaster();
@@ -122,6 +122,9 @@ export default class SceneManager implements SceneManagerInterface {
         });
     }
 
+    /**
+     * adds several window event listener
+     */
     private addListener(): void {
         window.addEventListener('resize', () => { this.handleResize(); }, false);
 
@@ -179,6 +182,11 @@ export default class SceneManager implements SceneManagerInterface {
         }
     }
 
+    /**
+     *
+     * @param {string} type -> type identifier of broadcast
+     * @param data
+     */
     private broadcastChanges(type: string, data: any): void {
         this.changeObservable.next({
             type: type,
@@ -186,12 +194,18 @@ export default class SceneManager implements SceneManagerInterface {
         });
     }
 
+    /**
+     * create a loop to render scene, based on browser RAF
+     */
     private loop() {
         this.render();
         requestAnimationFrame(() => { this.loop(); });
     }
 
-    private render() {
+    /**
+     * rendering of scene
+     */
+    private render(): void {
         if(SceneConfig.reactToMouseMove && this.mouseIsMoving) {
             this.camera.position.x += ( this.mouseCoords.x - this.camera.position.x ) * .001;
 
@@ -203,7 +217,10 @@ export default class SceneManager implements SceneManagerInterface {
         this.renderer.render(this.sceneElement, this.camera);
     }
 
-    private handleResize() {
+    /**
+     * resize  handler
+     */
+    private handleResize(): void {
 
         this.dimensions = {
             width: window.innerWidth,
@@ -219,6 +236,10 @@ export default class SceneManager implements SceneManagerInterface {
         }
     }
 
+    /**
+     * store mouse coords on each move
+     * @param {Event} event -> mouse event
+     */
     private onMouseMove(event) {
         this.mouseCoords.x = ( event.clientX - window.innerWidth / 2 );
         this.mouseCoords.y = ( event.clientY - window.innerHeight / 2 );
