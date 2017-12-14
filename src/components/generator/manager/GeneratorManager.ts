@@ -7,8 +7,9 @@ import { rangeRandomInt } from './../../math-utils';
 import TextureProvider from './../../texture-provider/';
 import CustomMesh from './../../custom-mesh';
 import { rangeRandom } from './../../math-utils';
+import GeneratorManagerInterface from "./GeneratorManagerInterface";
 
-class GeneratorManager {
+class GeneratorManager implements GeneratorManagerInterface {
     private config: any = GeneratorManagerConfig;
     private scene:Scene;
     private mountainsData;
@@ -20,7 +21,7 @@ class GeneratorManager {
 
     private globalLight;
     private shadowLight;
-    private texture: THREE.Texture;
+    private mountainTexture: THREE.Texture;
 
     constructor(scene:Scene, mountainsData:Object[] = []) {
         this.scene = scene;
@@ -34,53 +35,14 @@ class GeneratorManager {
         this.createMountains();
     }
 
-    addFloor(): void {
-        const mesh =  CustomMesh.planeMesh(1600,1600,12, GeneratorManagerConfig.floor.color);
-        const geom: any = mesh.geometry;
-
-        const vertices =  geom.vertices;
-        for (let i=0; i < vertices.length; i++){
-            let v = vertices[i];
-            v.x += rangeRandom(-10,10);
-            v.y += rangeRandom(-10,10);
-            v.z += rangeRandom(-10,10);
-        }
-
-        geom.computeFaceNormals();
-        geom.verticesNeedUpdate = true;
-        geom.colorsNeedUpdate = true;
-
-        mesh.rotation.x = -Math.PI / 2;
-        this.scene.addElement(SceneObjectModel.create('floor', mesh));
-    }
-
-    addGlobalLight(): void {
-        this.globalLight = LightFactory.create(this.config.globalLight.type, this.config.globalLight.primaryColor, this.config.globalLight.secondaryColor, this.config.globalLight.density);
-        this.scene.addElement(SceneObjectModel.create('globalLight', this.globalLight.lightElement));
-    }
-
-    addShadowLight(): void {
-        this.shadowLight = LightFactory.create(this.config.shadowLight.type, this.config.shadowLight.color, this.config.shadowLight.density, {castShadow: true});
-        this.scene.addElement(SceneObjectModel.create('shadowLight', this.shadowLight.lightElement, {
-            x: this.config.shadowLight.x,
-            y: this.config.shadowLight.y,
-            z: this.config.shadowLight.z
-        }));
-    }
-
-    createMountains(): void {
-        this.getTexture().then(() => {
-            this.mountainsData.forEach((mountainData) => {
-                this.addMountain(mountainData);
-            });
-        });
-    }
-
-    addMountain(data): void {
+    /**
+     * @param data -> data to construct Mountain with
+     */
+    public addMountain(data: any): void {
         let posX = this.determinePosition(data.thickness);
         const currentId = this.allMountainCounter;
 
-        const mountain = Mountain.create(data.height, data.thickness, data.link, this.texture);
+        const mountain = Mountain.create(data.height, data.thickness, data.link, this.mountainTexture);
 
         this.scene.addElement(SceneObjectModel.create(`mountain-${currentId}`,
             mountain.mesh, {y: 0, x: posX, z: rangeRandomInt(GeneratorManagerConfig.shiftX[0], GeneratorManagerConfig.shiftX[1])}));
@@ -92,19 +54,37 @@ class GeneratorManager {
         });
     }
 
-    public findMountainById(id: string): Mountain | null {
-        let foundMnt: Mountain = null;
+    /**
+     * @returns {Promise<T>}
+     */
+    public clearAllMountains(): Promise<any> {
+        let returnPromiseResolve = new Function();
+        const returnPromise = new Promise((res) => {
+            returnPromiseResolve = res;
+        });
+        const allPromises = [];
 
-        this.mountains.forEach((mnt) => {
-            if (mnt.id === id) {
-                foundMnt = mnt.mountain;
-            }
+        this.mountains.forEach((mountainElement, index) => {
+
+            allPromises.push(mountainElement.mountain.shrink(true));
+            this.scene.removeElement(mountainElement.id);
+
         });
 
-        return foundMnt;
+        Promise.all(allPromises).then(() => {
+            this.mountains = [];
+            this.resetPositioning();
+            returnPromiseResolve();
+        });
+
+        return returnPromise;
     }
 
-    clearMountain(mountainId): Promise<any> {
+    /**
+     * @param mountainId
+     * @returns {Promise<T>}
+     */
+    public clearMountain(mountainId: string): Promise<any> {
         let returnPromiseResolve = new Function();
         const returnPromise = new Promise((res) => {
             returnPromiseResolve = res;
@@ -128,30 +108,70 @@ class GeneratorManager {
         return returnPromise;
     }
 
-    clearAllMountains(): Promise<any> {
-        let returnPromiseResolve = new Function();
-        const returnPromise = new Promise((res) => {
-            returnPromiseResolve = res;
-        });
-        const allPromises = [];
+    public findMountainById(id: string): {id: number, mountain: Mountain} | null {
+        let foundMnt = null;
 
-        this.mountains.forEach((mountainElement, index) => {
-
-            allPromises.push(mountainElement.mountain.shrink(true));
-            this.scene.removeElement(mountainElement.id);
-
+        this.mountains.forEach((mnt) => {
+            if (mnt.id === id) {
+                foundMnt = mnt;
+            }
         });
 
-        Promise.all(allPromises).then(() => {
-            this.mountains = [];
-            this.resetPositioning();
-            returnPromiseResolve();
-        });
-
-        return returnPromise;
+        return foundMnt;
     }
 
-    private determinePosition(offset): number {
+    private addFloor(): void {
+        const mesh =  CustomMesh.planeMesh(1600,1600,12, GeneratorManagerConfig.floor.color);
+        const geom: any = mesh.geometry;
+
+        const vertices =  geom.vertices;
+        for (let i=0; i < vertices.length; i++){
+            let v = vertices[i];
+            v.x += rangeRandom(-10,10);
+            v.y += rangeRandom(-10,10);
+            v.z += rangeRandom(-10,10);
+        }
+
+        geom.computeFaceNormals();
+        geom.verticesNeedUpdate = true;
+        geom.colorsNeedUpdate = true;
+
+        mesh.rotation.x = -Math.PI / 2;
+        this.scene.addElement(SceneObjectModel.create('floor', mesh));
+    }
+
+    private addGlobalLight(): void {
+        this.globalLight = LightFactory.create(this.config.globalLight.type, this.config.globalLight.primaryColor, this.config.globalLight.secondaryColor, this.config.globalLight.density);
+        this.scene.addElement(SceneObjectModel.create('globalLight', this.globalLight.lightElement));
+    }
+
+
+    private addShadowLight(): void {
+        this.shadowLight = LightFactory.create(this.config.shadowLight.type, this.config.shadowLight.color, this.config.shadowLight.density, {castShadow: true});
+        this.scene.addElement(SceneObjectModel.create('shadowLight', this.shadowLight.lightElement, {
+            x: this.config.shadowLight.x,
+            y: this.config.shadowLight.y,
+            z: this.config.shadowLight.z
+        }));
+    }
+
+    /**
+     * loads texture and then creates mountains from Array
+     */
+    private createMountains(): void {
+        this.getTexture().then(() => {
+            this.mountainsData.forEach((mountainData) => {
+                this.addMountain(mountainData);
+            });
+        });
+    }
+
+    /**
+     *
+     * @param {number} offset
+     * @returns {number}
+     */
+    private determinePosition(offset: number): number {
         let posX = 0;
 
         if (this.mountains.length === 0) {
@@ -187,7 +207,7 @@ class GeneratorManager {
         });
 
         TextureProvider.loadByUrl(GeneratorManagerConfig.textureUrl).then((tex) => {
-            this.texture = tex;
+            this.mountainTexture = tex;
             returnPromiseResolve();
         });
 

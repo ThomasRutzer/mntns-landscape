@@ -38,6 +38,6 @@ export class GeneratorComponent extends Vue {
             return name.includes('mountain');
         });
 
-        this.generatorManager.findMountainById(mnts[0]).clicked();
+        this.generatorManager.findMountainById(mnts[0]).mountain.clicked();
     }
 }

@@ -61,6 +61,22 @@ describe('GeneratorManager', () => {
         });
     });
 
+    describe('method findMountainById()', () => {
+       it('returns requested mountain if available', () => {
+           const id = 'mountain-0';
+           let result = <any>manager.findMountainById(id);
+
+           expect(result.id).to.equal(id);
+       });
+
+        it('returns null when requested mountain is not available', () => {
+            const id = 'mountain-5';
+            let result = <any>manager.findMountainById(id);
+
+            expect(result).to.equal(null);
+        })
+    });
+
     describe('method clearMountain()', () => {
         it('clears requested mountain from Generator', () => {
             const id = `mountain-1`;
