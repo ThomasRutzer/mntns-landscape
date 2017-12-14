@@ -80,7 +80,7 @@ class GeneratorManager {
         let posX = this.determinePosition(data.thickness);
         const currentId = this.allMountainCounter;
 
-        const mountain = Mountain.create(data.height, data.thickness, this.texture);
+        const mountain = Mountain.create(data.height, data.thickness, data.link, this.texture);
 
         this.scene.addElement(SceneObjectModel.create(`mountain-${currentId}`,
             mountain.mesh, {y: 0, x: posX, z: rangeRandomInt(GeneratorManagerConfig.shiftX[0], GeneratorManagerConfig.shiftX[1])}));

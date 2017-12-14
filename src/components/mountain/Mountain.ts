@@ -30,19 +30,23 @@ class Mountain implements MountainInterface {
     private freq: number;
     private segHeight: number;
 
+    private link: string;
+
     public mesh: THREE.Mesh;
 
-    static create(height: number, thickness: number, texture?: THREE.Texture) {
-        return new Mountain(height, thickness, texture);
+    static create(height: number, thickness: number, link?: string, texture?: THREE.Texture) {
+        return new Mountain(height, thickness, link, texture);
     }
 
-    constructor(height: number, thickness: number, texture?: THREE.Texture) {
+    constructor(height: number, thickness: number, link?: string, texture?: THREE.Texture) {
         this.vectorPoints = [];
 
         // store class states
         this.states = {
             isShrunk: false
         };
+
+        this.link = link || null;
 
         // create internal object for all data
         this.data = {
@@ -261,7 +265,9 @@ class Mountain implements MountainInterface {
     }
 
     public clicked() {
-        console.log('clicked');
+        if (this.link) {
+            window.open(this.link);
+        }
     }
 }
 export default Mountain;
