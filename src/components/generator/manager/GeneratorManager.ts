@@ -108,6 +108,10 @@ class GeneratorManager implements GeneratorManagerInterface {
         return returnPromise;
     }
 
+    /**
+     * @param {string} id -> search predict
+     * @returns {{id: number, mountain: Mountain} | null}
+     */
     public findMountainById(id: string): {id: number, mountain: Mountain} | null {
         let foundMnt = null;
 
@@ -121,10 +125,16 @@ class GeneratorManager implements GeneratorManagerInterface {
     }
 
     private addFloor(): void {
-        const mesh =  CustomMesh.planeMesh(1600,1600,12, GeneratorManagerConfig.floor.color);
+        const mesh =  CustomMesh.planeMesh(
+            GeneratorManagerConfig.floor.dimensions.width,
+            GeneratorManagerConfig.floor.dimensions.height,
+            GeneratorManagerConfig.floor.dimensions.depth,
+            GeneratorManagerConfig.floor.color);
         const geom: any = mesh.geometry;
 
         const vertices =  geom.vertices;
+
+        // create random ofsfets
         for (let i=0; i < vertices.length; i++){
             let v = vertices[i];
             v.x += rangeRandom(-10,10);

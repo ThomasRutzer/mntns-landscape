@@ -13,7 +13,12 @@ export default {
     textureUrl: 'assets/texture.jpg',
 
     floor: {
-        color: '#00ffff'
+        color: '#00ffff',
+        dimensions: {
+            width: 1600,
+            height: 1600,
+            depth: 12
+        }
     },
 
     shadowLight: {
