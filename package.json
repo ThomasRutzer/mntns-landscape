@@ -29,6 +29,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "gsap": "^1.20.3",
+    "inversify": "^4.6.1",
     "lodash.clone": "^4.5.0",
     "lodash.clonedeep": "^4.5.0",
     "node-sass-json-importer": "^3.0.2",
