@@ -1,3 +1,6 @@
+import { injectable, inject } from "inversify";
+import "reflect-metadata";
+
 import LightFactory from './../../light';
 import SceneObjectModel from './../../scene/model/SceneObjectModel';
 import Scene from '../../scene/manager/SceneManager';
@@ -9,6 +12,7 @@ import CustomMesh from './../../custom-mesh';
 import { rangeRandom } from './../../math-utils';
 import GeneratorManagerInterface from "./GeneratorManagerInterface";
 
+@injectable()
 class GeneratorManager implements GeneratorManagerInterface {
     private config: any = GeneratorManagerConfig;
     private scene:Scene;
@@ -159,9 +163,9 @@ class GeneratorManager implements GeneratorManagerInterface {
     private addShadowLight(): void {
         this.shadowLight = LightFactory.create(this.config.shadowLight.type, this.config.shadowLight.color, this.config.shadowLight.density, {castShadow: true});
         this.scene.addElement(SceneObjectModel.create('shadowLight', this.shadowLight.lightElement, {
-            x: this.config.shadowLight.x,
-            y: this.config.shadowLight.y,
-            z: this.config.shadowLight.z
+            x: this.config.shadowLight.position.x,
+            y: this.config.shadowLight.position.y,
+            z: this.config.shadowLight.position.z
         }));
     }
 
