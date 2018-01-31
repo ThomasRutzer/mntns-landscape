@@ -28,7 +28,9 @@ export class SceneComponent extends Vue {
 
     mounted() {
         const container: HTMLElement = document.getElementById('scene');
-        container.appendChild(this.scene.renderer.domElement);
+        const parent = container.parentNode;
+
+        parent.replaceChild(this.scene.renderer.domElement, container);
 
         this.registerForSceneChanges();
     }
