@@ -8,28 +8,28 @@ export default {
     overlapping: 10,
 
     // random z-shifting range
-    shiftX: [1, 10],
+    shiftX: [1, 400],
 
     textureUrl: 'assets/texture.jpg',
 
     floor: {
-        color: '#00ffff',
+        color: '#353535',
         dimensions: {
-            width: 1600,
-            height: 1600,
-            depth: 12
+            width: 3200,
+            height: 3200,
+            depth: 36
         }
     },
 
     shadowLight: {
         position: {
-            x: 100,
-            y: 150,
+            x: -100,
+            y: 120,
             z: 100
         },
         type: 'directional',
         color: '#fff',
-        density: 0.5
+        density: 0.3
     },
 
     globalLight: {

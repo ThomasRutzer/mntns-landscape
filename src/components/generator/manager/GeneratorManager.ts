@@ -7,7 +7,6 @@ import Scene from '../../scene/manager/SceneManager';
 import {Mountain} from './../../mountain';
 import GeneratorManagerConfig from './GeneratorManagerConfig';
 import { rangeRandomInt } from './../../math-utils';
-import TextureProvider from './../../texture-provider/';
 import CustomMesh from './../../custom-mesh';
 import { rangeRandom } from './../../math-utils';
 import GeneratorManagerInterface from "./GeneratorManagerInterface";
@@ -25,7 +24,6 @@ class GeneratorManager implements GeneratorManagerInterface {
 
     private globalLight;
     private shadowLight;
-    private mountainTexture: THREE.Texture;
 
     constructor(scene:Scene, mountainsData:Object[] = []) {
         this.scene = scene;
@@ -43,10 +41,10 @@ class GeneratorManager implements GeneratorManagerInterface {
      * @param data -> data to construct Mountain with
      */
     public addMountain(data: any): void {
-        let posX = this.determinePosition(data.thickness);
+        let posX = data.xPos;
         const currentId = this.allMountainCounter;
 
-        const mountain = Mountain.create(data.height, data.thickness, data.link, this.mountainTexture);
+        const mountain = Mountain.create(data.height, data.thickness, data.link);
 
         this.scene.addElement(SceneObjectModel.create(`mountain-${currentId}`,
             mountain.mesh, {y: 0, x: posX, z: rangeRandomInt(GeneratorManagerConfig.shiftX[0], GeneratorManagerConfig.shiftX[1])}));
@@ -170,13 +168,11 @@ class GeneratorManager implements GeneratorManagerInterface {
     }
 
     /**
-     * loads texture and then creates mountains from Array
+     * creates mountains from Array
      */
     private createMountains(): void {
-        this.getTexture().then(() => {
-            this.mountainsData.forEach((mountainData) => {
-                this.addMountain(mountainData);
-            });
+        this.mountainsData.forEach((mountainData) => {
+            this.addMountain(mountainData);
         });
     }
 
@@ -206,26 +202,6 @@ class GeneratorManager implements GeneratorManagerInterface {
         }
 
         return posX;
-    }
-
-    /**
-     * loads texture for all mountain objects. TextureProvider caches
-     * already loaded files.
-     *
-     * @returns {Promise<T>}
-     */
-    private getTexture(): Promise<any> {
-        let returnPromiseResolve = new Function();
-        const returnPromise = new Promise((res) => {
-            returnPromiseResolve = res;
-        });
-
-        TextureProvider.loadByUrl(GeneratorManagerConfig.textureUrl).then((tex) => {
-            this.mountainTexture = tex;
-            returnPromiseResolve();
-        });
-
-        return returnPromise;
     }
 
     /**
