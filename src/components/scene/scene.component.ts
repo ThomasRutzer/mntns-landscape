@@ -5,7 +5,6 @@ import SceneManager from './manager/SceneManager';
 import sceneEvents from './sceneEvents';
 import {Prop, Emit} from "vue-property-decorator";
 
-
 @Component({
     template: require('./scene.component.html'),
 })

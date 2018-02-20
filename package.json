@@ -34,7 +34,7 @@
     "reflect-metadata": "^0.1.10",
     "rxjs": "^5.5.5",
     "three": "0.73",
-    "vue": "~2.4.2",
+    "vue": "~2.5.13",
     "vue-class-component": "~5.0.2",
     "vue-property-decorator": "^6.0.0"
   },
