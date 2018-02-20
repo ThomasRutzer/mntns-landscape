@@ -1,4 +1,4 @@
-import * as THREE from 'THREE';
+import * as THREE from 'three';
 import {Subject} from 'rxjs/Subject';
 
 import SceneManagerInterface from './SceneManagerInterface';
@@ -47,11 +47,15 @@ export default class SceneManager implements SceneManagerInterface {
             camera.nearPlane,
             camera.farPlane).cameraElement;
 
-        this.camera.position.x = camera.position && camera.position.x || 0;
-        this.camera.position.y = camera.position && camera.position.y || 0;
-        this.camera.position.z = camera.position && camera.position.z || 0;
+        //@todo make this parametrical
+        this.camera.position.x =  -400;
+        this.camera.position.y = 200;
+        this.camera.position.z = 250;
+
+
 
         this.camera.lookAt(this.sceneElement.position);
+
         switch (renderer) {
             case 'webGL':
                 this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -68,7 +72,8 @@ export default class SceneManager implements SceneManagerInterface {
         }
 
         this.sceneElements = [];
-        this.addListener();
+
+        //this.addListener();
     }
 
     /**

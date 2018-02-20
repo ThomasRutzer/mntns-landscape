@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import {spy, assert, stub} from 'sinon';
 import SceneManager from './SceneManager';
 import SceneObjectModel from './../model/SceneObjectModel';
-import * as THREE from 'THREE';
+import * as THREE from 'three';
 
 describe('SceneManager', () => {
 

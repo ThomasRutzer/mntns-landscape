@@ -1,7 +1,7 @@
 export default {
     fog: {
-        color: 0xefd1b5,
-        density: 0.0015
+        color: 0x020202,
+        density: 0.003
     },
 
     renderer: 'webGL',
