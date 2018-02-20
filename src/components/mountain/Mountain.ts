@@ -1,4 +1,4 @@
-import * as THREE from 'THREE';
+import * as THREE from 'three';
 import TweenMax from 'gsap';
 
 import clone from 'lodash.clonedeep';
@@ -34,11 +34,11 @@ class Mountain implements MountainInterface {
 
     public mesh: THREE.Mesh;
 
-    static create(height: number, thickness: number, link?: string, texture?: THREE.Texture) {
-        return new Mountain(height, thickness, link, texture);
+    static create(height: number, thickness: number, link?: string) {
+        return new Mountain(height, thickness, link);
     }
 
-    constructor(height: number, thickness: number, link?: string, texture?: THREE.Texture) {
+    constructor(height: number, thickness: number, link?: string) {
         this.vectorPoints = [];
 
         // store class states
@@ -60,7 +60,7 @@ class Mountain implements MountainInterface {
         this.thickness = this.data.parameters.thickness;
         this.color = MountainConfig.appearance.color;
         this.verticalSegments = MountainConfig.parameters.verticalSegments.default;
-        this.radiusSegments = MountainConfig.parameters.radiusSegments.default;
+        this.radiusSegments = mathUtils.rangeRandomInt(MountainConfig.parameters.radiusSegments.min, MountainConfig.parameters.radiusSegments.max);
         this.shapeAngleStart = MountainConfig.parameters.shapeAngleStart.default;
         this.shapeAmplitude = MountainConfig.parameters.shapeAmplitude.default;
         this.shapeAngle = Math.PI - this.shapeAngleStart;
@@ -79,7 +79,7 @@ class Mountain implements MountainInterface {
         this.vectorPoints.push(new THREE.Vector3(0, ty, 0));
 
         this.mesh = new THREE.Mesh();
-        this.mesh = CustomMesh.lathe(this.vectorPoints, this.radiusSegments, texture);
+        this.mesh = CustomMesh.lathe(this.vectorPoints, this.radiusSegments);
 
         let geom: any = this.mesh.geometry;
         geom.uvsNeedUpdate = true;

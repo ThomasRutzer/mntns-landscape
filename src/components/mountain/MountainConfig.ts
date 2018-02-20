@@ -8,20 +8,20 @@ const config = {
 
         thickness: {
             min: 5,
-            max: 20,
+            max: 40,
             default: 10
         },
 
         verticalSegments: {
-            min: 2,
+            min: 4,
             max: 10,
             default: 10
         },
 
         radiusSegments: {
-            min: 2,
-            max: 10,
-            default: 8
+            min: 3,
+            max: 5,
+            default: 5
         },
 
         shapeAngleStart: {
@@ -38,7 +38,7 @@ const config = {
     },
 
     appearance: {
-        color: '#212121'
+        color: "#353535"
     }
 };
 
