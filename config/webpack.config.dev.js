@@ -2,7 +2,6 @@ const helpers = require('./helpers'),
       webpackConfig = require('./webpack.config.base'),
       HtmlWebpackPlugin = require('html-webpack-plugin'),
       DefinePlugin = require('webpack/lib/DefinePlugin'),
-      jsonImporter = require('node-sass-json-importer'),
       env = require('../environment/dev.env');
 
 webpackConfig.module.rules = [...webpackConfig.module.rules,
@@ -19,10 +18,6 @@ webpackConfig.module.rules = [...webpackConfig.module.rules,
       },
       {
         loader: 'sass-loader',
-        // Apply the JSON importer via sass-loader's options.
-        options: {
-          importer: jsonImporter,
-        },
       },
     ]
   },
