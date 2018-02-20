@@ -73,7 +73,7 @@ export default class SceneManager implements SceneManagerInterface {
 
         this.sceneElements = [];
 
-        //this.addListener();
+        this.addListener();
     }
 
     /**
