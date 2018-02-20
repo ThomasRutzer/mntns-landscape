@@ -1,4 +1,4 @@
-import * as THREE from 'THREE';
+import * as THREE from 'three';
 
 class CustomMesh {
     static flatshadeGeometry(geom) {
@@ -10,7 +10,7 @@ class CustomMesh {
         return new THREE.BufferGeometry().fromGeometry( geom );
     }
 
-    static lathe(points: THREE.Vector3[], segments: number, texture?: THREE.Texture): THREE.Mesh {
+    static lathe(points: THREE.Vector3[], segments: number, color?: string): THREE.Mesh {
         // change the axis from z to y;
         let rotPoints = [];
 
@@ -22,9 +22,9 @@ class CustomMesh {
         geom.applyMatrix( new THREE.Matrix4().makeRotationX( -Math.PI / 2));
 
         const mat = new THREE.MeshPhongMaterial({
-            map: texture
-        });
+            color: color, vertexColors: THREE.VertexColors });
         CustomMesh.flatshadeGeometry(geom);
+
         return new THREE.Mesh(geom, mat);
     }
 

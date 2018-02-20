@@ -1,6 +1,6 @@
 import {expect, should} from 'chai';
 import CustomMesh from './CustomMesh';
-import * as THREE from 'THREE';
+import * as THREE from 'three';
 import {Geometry} from "three";
 import {BufferGeometry} from "three";
 
