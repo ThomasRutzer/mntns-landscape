@@ -1,4 +1,4 @@
-import * as THREE from 'THREE';
+import * as THREE from 'three';
 import LightFactoryInterface from './factory/LightFactoryInterface';
 
 export default class DirectionalLight implements LightFactoryInterface {
