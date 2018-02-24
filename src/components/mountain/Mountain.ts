@@ -14,6 +14,7 @@ class Mountain implements MountainInterface {
         geometryData: any,
         parameters: MountainDataModel,
     };
+
     private states: {
         isShrunk: boolean;
     };
@@ -57,7 +58,7 @@ class Mountain implements MountainInterface {
 
         // this could all be parameters
         this.height = this.data.parameters.height;
-        this.thickness = this.data.parameters.thickness;
+        this.thickness = MountainConfig.parameters.thickness.default;
         this.color = MountainConfig.appearance.color;
         this.verticalSegments = MountainConfig.parameters.verticalSegments.default;
         this.radiusSegments = mathUtils.rangeRandomInt(MountainConfig.parameters.radiusSegments.min, MountainConfig.parameters.radiusSegments.max);

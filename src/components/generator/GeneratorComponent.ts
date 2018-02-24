@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop, Watch } from 'vue-property-decorator';
+import { Prop, Watch, Emit } from 'vue-property-decorator';
 
 import GeneratorManager from './manager/GeneratorManager';
 import Scene from '../scene/manager/SceneManager';
+import { sceneEvents } from './../scene';
 
 @Component({
     template: require('./GeneratorComponent.html'),
@@ -11,6 +12,11 @@ import Scene from '../scene/manager/SceneManager';
 
 export class GeneratorComponent extends Vue {
     private generatorManager: GeneratorManager;
+
+    @Emit(sceneEvents.INTERSECTION)
+    intersections(data){
+        return data;
+    }
 
     @Prop()
     data: Object[];
@@ -38,6 +44,6 @@ export class GeneratorComponent extends Vue {
             return name.includes('mountain');
         });
 
-        this.generatorManager.findMountainById(mnts[0]).mountain.clicked();
+        this.intersections(mnts[0]);
     }
 }
