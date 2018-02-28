@@ -4,7 +4,7 @@ import "reflect-metadata";
 import LightFactory from './../../light';
 import SceneObjectModel from './../../scene/model/SceneObjectModel';
 import Scene from '../../scene/manager/SceneManager';
-import {Mountain} from './../../mountain';
+import { MountainFactory, Mountain } from './../../mountain';
 import GeneratorManagerConfig from './GeneratorManagerConfig';
 import { rangeRandomInt } from './../../math-utils';
 import CustomMesh from './../../custom-mesh';
@@ -16,7 +16,7 @@ class GeneratorManager implements GeneratorManagerInterface {
     private config: any = GeneratorManagerConfig;
     private scene:Scene;
     private mountainsData;
-    private mountains:{id:string, mountain:Mountain}[];
+    private mountains:Mountain[];
     private positioning:{side: string, leftOffset: number, rightOffset: number};
 
     // used to create unique id
@@ -42,18 +42,14 @@ class GeneratorManager implements GeneratorManagerInterface {
      */
     public addMountain(data: any): void {
         let posX = data.xPos;
-        const currentId = this.allMountainCounter;
 
-        const mountain = Mountain.create(data.height, data.thickness, data.link);
+        const mountain = MountainFactory.create(data.id, data.height, data.thickness);
 
-        this.scene.addElement(SceneObjectModel.create(`mountain-${currentId}`,
+        this.scene.addElement(SceneObjectModel.create(data.id,
             mountain.mesh, {y: 0, x: posX, z: rangeRandomInt(GeneratorManagerConfig.shiftX[0], GeneratorManagerConfig.shiftX[1])}));
 
         this.allMountainCounter++;
-        this.mountains.push({
-            id: `mountain-${currentId}`,
-            mountain: mountain
-        });
+        this.mountains.push(mountain);
     }
 
     /**
@@ -68,7 +64,7 @@ class GeneratorManager implements GeneratorManagerInterface {
 
         this.mountains.forEach((mountainElement, index) => {
 
-            allPromises.push(mountainElement.mountain.shrink(true));
+            allPromises.push(mountainElement.shrink(true));
             this.scene.removeElement(mountainElement.id);
 
         });
@@ -96,7 +92,7 @@ class GeneratorManager implements GeneratorManagerInterface {
 
         this.mountains.forEach( (mountainElement, i) => {
             if (mountainElement.id === mountainId) {
-                allPromises.push(mountainElement.mountain.shrink(true));
+                allPromises.push(mountainElement.shrink(true));
                 index = i;
             }
         });
@@ -114,7 +110,7 @@ class GeneratorManager implements GeneratorManagerInterface {
      * @param {string} id -> search predict
      * @returns {{id: number, mountain: Mountain} | null}
      */
-    public findMountainById(id: string): {id: number, mountain: Mountain} | null {
+    public findMountainById(id: string): Mountain | null {
         let foundMnt = null;
 
         this.mountains.forEach((mnt) => {

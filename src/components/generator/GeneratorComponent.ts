@@ -36,14 +36,11 @@ export class GeneratorComponent extends Vue {
     }
 
     /**
-     * callback for corresponding SceneComponent Event. See @ GeneratorComponent template
-     * @param { String[] } intersectedObjectsNames -> names of intersected by raycaster
+     * callback for intersection event
+     * @param { Object } data
      */
-    onIntersection(intersectedObjectsNames) {
-        let mnts = intersectedObjectsNames.filter((name) => {
-            return name.includes('mountain');
-        });
-
-        this.intersections(mnts[0]);
+    onIntersection(data) {
+        console.log(data);
+        this.intersections(data);
     }
 }

@@ -4,7 +4,7 @@ interface GeneratorManagerInterface {
     addMountain(data: any): void;
     clearAllMountains(): Promise<any>
     clearMountain(mountainId: string): Promise<any>;
-    findMountainById(id: string): {id: number, mountain: Mountain} | null
+    findMountainById(id: string): Mountain | null
 }
 
 export default GeneratorManagerInterface;
