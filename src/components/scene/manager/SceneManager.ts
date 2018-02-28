@@ -183,7 +183,11 @@ export default class SceneManager implements SceneManagerInterface {
                return intersection.object.name;
             });
 
-            this.broadcastChanges(SceneChangeObservables.INTERSECTIONS, intersectsNames);
+            this.broadcastChanges(SceneChangeObservables.INTERSECTIONS, {
+                objectId: intersectsNames[0],
+                mouseX: coords.x,
+                mouseY: coords.y,
+            });
         }
     }
 
