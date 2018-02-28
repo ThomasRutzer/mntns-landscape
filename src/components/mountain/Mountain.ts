@@ -9,6 +9,9 @@ import * as mathUtils from './../math-utils';
 import { CustomMesh } from './../custom-mesh';
 
 class Mountain implements MountainInterface {
+    public id: string;
+    public mesh: THREE.Mesh;
+
     private vectorPoints: THREE.Vector3[];
     private data: {
         geometryData: any,
@@ -31,23 +34,14 @@ class Mountain implements MountainInterface {
     private freq: number;
     private segHeight: number;
 
-    private link: string;
-
-    public mesh: THREE.Mesh;
-
-    static create(height: number, thickness: number, link?: string) {
-        return new Mountain(height, thickness, link);
-    }
-
-    constructor(height: number, thickness: number, link?: string) {
+    constructor(id: string, height: number, thickness: number) {
+        this.id = id;
         this.vectorPoints = [];
 
         // store class states
         this.states = {
             isShrunk: false
         };
-
-        this.link = link || null;
 
         // create internal object for all data
         this.data = {
@@ -265,10 +259,5 @@ class Mountain implements MountainInterface {
         return returnPromise;
     }
 
-    public clicked() {
-        if (this.link) {
-            window.open(this.link);
-        }
-    }
 }
 export default Mountain;
