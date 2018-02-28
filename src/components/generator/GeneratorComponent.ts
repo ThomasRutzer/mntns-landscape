@@ -21,6 +21,9 @@ export class GeneratorComponent extends Vue {
     @Prop()
     data: Object[];
 
+    @Prop({default: true})
+    activated: boolean;
+
     // todo test with changing data
     @Watch('data')
     async onDataChanged(val: Object[], oldVal: Object[]) {
@@ -40,7 +43,10 @@ export class GeneratorComponent extends Vue {
      * @param { Object } data
      */
     onIntersection(data) {
-        console.log(data);
+        if (!this.activated) {
+            return;
+        }
+
         this.intersections(data);
     }
 }
