@@ -4,6 +4,6 @@ import { GeneratorManager } from "./../generator";
 import GeneratorManagerInterface from "./../generator/manager/GeneratorManagerInterface";
 
 const DIContainer = new Container();
-DIContainer.bind<GeneratorManagerInterface>(TYPES.GeneratorManager).to(GeneratorManager);
+// DIContainer.bind<GeneratorManagerInterface>(TYPES.GeneratorManager).to(GeneratorManager);
 
 export { DIContainer };
