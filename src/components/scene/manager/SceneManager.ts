@@ -140,8 +140,13 @@ export default class SceneManager implements SceneManagerInterface {
         }
 
         if(SceneConfig.observeIntsections) {
+
+            document.addEventListener('mousemove', (e) => {
+                this.findIntersections({x: e.clientX, y: e.clientY}, 'mousemove');
+            }, );
+
             document.addEventListener('mousedown', (e) => {
-                this.findIntersections({x: e.clientX, y: e.clientY});
+                this.findIntersections({x: e.clientX, y: e.clientY}, 'mousedown');
             }, false);
 
             document.addEventListener('touchstart', (e) => {
@@ -151,7 +156,7 @@ export default class SceneManager implements SceneManagerInterface {
                     y: e.touches[0].clientY,
                 };
 
-                this.findIntersections( eventCoords );
+                this.findIntersections( eventCoords, 'touchstart' );
             }, false)
         }
     }
@@ -159,8 +164,9 @@ export default class SceneManager implements SceneManagerInterface {
     /**
      * callback for mousedown / touchstart events, when intersections are observed
      * @param { Object } coords
+     * @param { String } eventType
      */
-    private findIntersections(coords: {x: number, y: number}): void {
+    private findIntersections(coords: {x: number, y: number}, eventType: string): void {
 
         unprojectedCoords.x = ( coords.x / this.renderer.domElement.clientWidth ) * 2 - 1;
         unprojectedCoords.y = - ( coords.y / this.renderer.domElement.clientHeight ) * 2 + 1;
@@ -185,8 +191,11 @@ export default class SceneManager implements SceneManagerInterface {
 
             this.broadcastChanges(SceneChangeObservables.INTERSECTIONS, {
                 objectId: intersectsNames[0],
-                mouseX: coords.x,
-                mouseY: coords.y,
+                event: {
+                    x: coords.x,
+                    y: coords.y,
+                    type: eventType
+                }
             });
         }
     }

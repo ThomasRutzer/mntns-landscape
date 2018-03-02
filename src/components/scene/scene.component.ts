@@ -39,7 +39,6 @@ export class SceneComponent extends Vue {
             this.intersections(data);
         });
     }
-
 }
 
 
