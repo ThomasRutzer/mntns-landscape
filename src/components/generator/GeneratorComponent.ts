@@ -46,7 +46,6 @@ export class GeneratorComponent extends Vue {
         if (!this.activated) {
             return;
         }
-        console.log(data);
         this.intersections(data);
     }
 }

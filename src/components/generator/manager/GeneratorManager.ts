@@ -173,34 +173,6 @@ class GeneratorManager implements GeneratorManagerInterface {
     }
 
     /**
-     *
-     * @param {number} offset
-     * @returns {number}
-     */
-    private determinePosition(offset: number): number {
-        let posX = 0;
-
-        if (this.mountains.length === 0) {
-            this.positioning.leftOffset += (offset - GeneratorManagerConfig.overlapping);
-            this.positioning.rightOffset += (offset - GeneratorManagerConfig.overlapping);
-
-            return posX;
-        }
-
-        if ( this.positioning.side === 'left' ) {
-            posX = this.positioning.leftOffset * -1;
-            this.positioning.leftOffset += (offset - GeneratorManagerConfig.overlapping);
-            this.positioning.side = 'right';
-        } else {
-            posX = this.positioning.rightOffset;
-            this.positioning.rightOffset += (offset - GeneratorManagerConfig.overlapping);
-            this.positioning.side = 'left';
-        }
-
-        return posX;
-    }
-
-    /**
      * handles placement of mountains to each other
      * @type {number}side -> handles if mountain shall be placed left or right from x=0
      * @type {number}leftOffset ->  stores thickness of all mountains on the left side

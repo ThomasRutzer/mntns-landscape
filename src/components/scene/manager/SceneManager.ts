@@ -1,10 +1,9 @@
 import * as THREE from 'three';
-import {Subject} from 'rxjs/Subject';
+import store, { mutationTypes } from  './../../../store';
 
 import SceneManagerInterface from './SceneManagerInterface';
 import SceneObjectModel from '../model/SceneObjectModel';
 import SceneConfig from './SceneConfig';
-import SceneChangeObservables from './SceneChangeObservables';
 import CameraFactory from '../../camera/index';
 
 let raycaster = new THREE.Raycaster();
@@ -20,8 +19,8 @@ export default class SceneManager implements SceneManagerInterface {
     private dimensions: {width: number, height: number};
     private mouseCoords: {x:number, y: number};
     private mouseIsMoving: boolean = false;
-    private changeObservable = new Subject<Object>();
 
+    // @todo: register factory here
     public static create(camera, renderer?, autoUpdate?) {
         return new SceneManager(camera, renderer, autoUpdate);
     }
@@ -74,14 +73,6 @@ export default class SceneManager implements SceneManagerInterface {
         this.sceneElements = [];
 
         this.addListener();
-    }
-
-    /**
-     * public Observable, other components can subscribe
-     * @returns {Subject<Object>}
-     */
-    public registerForChanges(): Subject<Object> {
-        return this.changeObservable;
     }
 
     /**
@@ -189,7 +180,7 @@ export default class SceneManager implements SceneManagerInterface {
                return intersection.object.name;
             });
 
-            this.broadcastChanges(SceneChangeObservables.INTERSECTIONS, {
+            this.broadcastChanges({
                 objectId: intersectsNames[0],
                 event: {
                     x: coords.x,
@@ -205,11 +196,13 @@ export default class SceneManager implements SceneManagerInterface {
      * @param {string} type -> type identifier of broadcast
      * @param data
      */
-    private broadcastChanges(type: string, data: any): void {
-        this.changeObservable.next({
-            type: type,
-            data: data
-        });
+    private broadcastChanges(data: any): void {
+        if (data) {
+            store.commit(mutationTypes.SAVE_INTERSECTED_OBJECT, data);
+
+        } else {
+            store.commit(mutationTypes.DELETE_INTERSECTED_OBJECT);
+        }
     }
 
     /**

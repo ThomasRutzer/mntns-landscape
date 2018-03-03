@@ -3,13 +3,18 @@ import Component from 'vue-class-component';
 
 import SceneManager from './manager/SceneManager';
 import sceneEvents from './sceneEvents';
-import {Prop, Emit} from "vue-property-decorator";
+import {Prop, Emit, Watch} from "vue-property-decorator";
 
 @Component({
     template: require('./scene.component.html'),
 })
 
 export class SceneComponent extends Vue {
+
+    @Watch('$store.state.scene.intersectedObject')
+    watchHandler() {
+        this.intersections(this.$store.state.scene.intersectedObject)
+    }
 
     @Emit(sceneEvents.INTERSECTION)
     intersections(data){
@@ -30,14 +35,6 @@ export class SceneComponent extends Vue {
         const parent = container.parentNode;
 
         parent.replaceChild(this.scene.renderer.domElement, container);
-
-        this.registerForSceneChanges();
-    }
-
-    registerForSceneChanges(): void {
-        this.scene.registerForChanges().subscribe(({type, data}) => {
-            this.intersections(data);
-        });
     }
 }
 

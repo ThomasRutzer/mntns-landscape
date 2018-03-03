@@ -1,7 +1,4 @@
-import {Subject} from "rxjs/Rx";
-
 interface SceneFactoryInterface {
-    registerForChanges() : Subject<Object>
     sceneElement: THREE.Scene;
     camera: THREE.Camera;
     renderer: THREE.Renderer;
