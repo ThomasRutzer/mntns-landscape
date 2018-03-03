@@ -1,7 +1,8 @@
 const state = {
 
     scene: {
-        intersectedObject: null
+        intersectedObject: null,
+        activated: false
     }
 
 };

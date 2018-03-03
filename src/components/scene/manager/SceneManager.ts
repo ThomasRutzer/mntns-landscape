@@ -1,5 +1,7 @@
 import * as THREE from 'three';
-import store, { mutationTypes } from  './../../../store';
+import TweenMax from 'gsap';
+import Power2 from 'gsap';
+import store, {mutationTypes} from './../../../store';
 
 import SceneManagerInterface from './SceneManagerInterface';
 import SceneObjectModel from '../model/SceneObjectModel';
@@ -16,8 +18,8 @@ export default class SceneManager implements SceneManagerInterface {
 
     private sceneElements: SceneObjectModel[];
     private autoUpdate: boolean;
-    private dimensions: {width: number, height: number};
-    private mouseCoords: {x:number, y: number};
+    private dimensions: { width: number, height: number };
+    private mouseCoords: { x: number, y: number };
     private mouseIsMoving: boolean = false;
 
     // @todo: register factory here
@@ -47,18 +49,16 @@ export default class SceneManager implements SceneManagerInterface {
             camera.farPlane).cameraElement;
 
         //@todo make this parametrical
-        this.camera.position.x =  -400;
+        this.camera.position.x = -400;
         this.camera.position.y = 200;
         this.camera.position.z = 250;
-
-
 
         this.camera.lookAt(this.sceneElement.position);
 
         switch (renderer) {
             case 'webGL':
-                this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-                this.renderer.setClearColor( 0x000000, 0 );
+                this.renderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
+                this.renderer.setClearColor(0x000000, 0);
         }
 
         this.renderer.setSize(this.dimensions.width, this.dimensions.height);
@@ -78,7 +78,7 @@ export default class SceneManager implements SceneManagerInterface {
     /**
      * @param {SceneObjectModel} newElement
      */
-    public addElement(newElement)  {
+    public addElement(newElement) {
         if (newElement.constructor.name !== 'SceneObjectModel') {
             throw new Error(`Element with id: ${newElement.id} is not of type SceneObjectModel`);
         }
@@ -122,19 +122,21 @@ export default class SceneManager implements SceneManagerInterface {
      * adds several window event listener
      */
     private addListener(): void {
-        window.addEventListener('resize', () => { this.handleResize(); }, false);
+        window.addEventListener('resize', () => {
+            this.handleResize();
+        }, false);
 
-        if(SceneConfig.reactToMouseMove) {
+        if (SceneConfig.reactToMouseMove) {
             this.mouseCoords = {x: 0, y: 0};
 
-            window.addEventListener( 'mousemove', (e) => this.onMouseMove(e), false );
+            window.addEventListener('mousemove', (e) => this.onMouseMove(e), false);
         }
 
-        if(SceneConfig.observeIntsections) {
+        if (SceneConfig.observeIntsections) {
 
             document.addEventListener('mousemove', (e) => {
                 this.findIntersections({x: e.clientX, y: e.clientY}, 'mousemove');
-            }, );
+            },);
 
             document.addEventListener('mousedown', (e) => {
                 this.findIntersections({x: e.clientX, y: e.clientY}, 'mousedown');
@@ -147,7 +149,7 @@ export default class SceneManager implements SceneManagerInterface {
                     y: e.touches[0].clientY,
                 };
 
-                this.findIntersections( eventCoords, 'touchstart' );
+                this.findIntersections(eventCoords, 'touchstart');
             }, false)
         }
     }
@@ -157,27 +159,31 @@ export default class SceneManager implements SceneManagerInterface {
      * @param { Object } coords
      * @param { String } eventType
      */
-    private findIntersections(coords: {x: number, y: number}, eventType: string): void {
+    private findIntersections(coords: { x: number, y: number }, eventType: string): void {
+
+        if (!store.state.scene.activated ) {
+            return;
+        }
 
         unprojectedCoords.x = ( coords.x / this.renderer.domElement.clientWidth ) * 2 - 1;
-        unprojectedCoords.y = - ( coords.y / this.renderer.domElement.clientHeight ) * 2 + 1;
+        unprojectedCoords.y = -( coords.y / this.renderer.domElement.clientHeight ) * 2 + 1;
 
-        raycaster.setFromCamera( unprojectedCoords, this.camera );
+        raycaster.setFromCamera(unprojectedCoords, this.camera);
 
         let objects: THREE.Object3D[] = [];
 
         this.sceneElements.map((elem) => {
-            if( elem.object.type === 'Mesh') {
+            if (elem.object.type === 'Mesh') {
                 objects.push(elem.object);
-           }
+            }
         });
 
-        let intersects = raycaster.intersectObjects( objects );
+        let intersects = raycaster.intersectObjects(objects);
 
-        if ( intersects.length > 0 ) {
+        if (intersects.length > 0) {
 
             let intersectsNames = intersects.map((intersection) => {
-               return intersection.object.name;
+                return intersection.object.name;
             });
 
             this.broadcastChanges({
@@ -210,19 +216,31 @@ export default class SceneManager implements SceneManagerInterface {
      */
     private loop() {
         this.render();
-        requestAnimationFrame(() => { this.loop(); });
+        requestAnimationFrame(() => {
+            this.loop();
+        });
     }
 
     /**
      * rendering of scene
      */
     private render(): void {
-        if(SceneConfig.reactToMouseMove && this.mouseIsMoving) {
-            this.camera.position.x += ( this.mouseCoords.x - this.camera.position.x ) * .001;
+        //@todo: improve camera movement
+        if (store.state.scene.activated &&
+            SceneConfig.reactToMouseMove &&
+            this.mouseIsMoving) {
+            const cameraPositionX = this.camera.position.x += ( this.mouseCoords.x - this.camera.position.x ) * .001;
 
-            this.camera.lookAt( this.sceneElement.position );
-
-            this.mouseIsMoving = false;
+            TweenMax.to(this.camera.position, 1, {
+                x: cameraPositionX,
+                ease: Power2.easeOut,
+                onStart: () => {
+                    this.camera.lookAt(this.sceneElement.position);
+                },
+                onComplete: () => {
+                    this.mouseIsMoving = false;
+                }
+            });
         }
 
         this.renderer.render(this.sceneElement, this.camera);
@@ -254,7 +272,6 @@ export default class SceneManager implements SceneManagerInterface {
     private onMouseMove(event) {
         this.mouseCoords.x = ( event.clientX - window.innerWidth / 2 );
         this.mouseCoords.y = ( event.clientY - window.innerHeight / 2 );
-
         this.mouseIsMoving = true;
     }
 }

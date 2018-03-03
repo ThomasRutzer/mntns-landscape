@@ -5,6 +5,6 @@ export default {
     },
 
     renderer: 'webGL',
-    reactToMouseMove: false,
+    reactToMouseMove: true,
     observeIntsections: true,
 }

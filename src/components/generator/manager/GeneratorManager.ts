@@ -17,7 +17,7 @@ class GeneratorManager implements GeneratorManagerInterface {
     private scene:Scene;
     private mountainsData;
     private mountains:Mountain[];
-    private positioning:{side: string, leftOffset: number, rightOffset: number};
+    private positioning:{leftOffset: number, rightOffset: number};
 
     // used to create unique id
     private allMountainCounter = 0;
@@ -174,13 +174,11 @@ class GeneratorManager implements GeneratorManagerInterface {
 
     /**
      * handles placement of mountains to each other
-     * @type {number}side -> handles if mountain shall be placed left or right from x=0
      * @type {number}leftOffset ->  stores thickness of all mountains on the left side
      * @type {number}rightOffset -> stores thickness of all mountains on the right side
      */
     private resetPositioning() {
         this.positioning = {
-            side: GeneratorManagerConfig.initialSide,
             leftOffset: 0,
             rightOffset: 0
         };

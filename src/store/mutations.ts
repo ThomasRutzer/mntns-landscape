@@ -8,6 +8,14 @@ const mutations = {
     [types.DELETE_INTERSECTED_OBJECT](state) {
         state.scene.intersectedObject = null;
     },
+
+    [types.ACTIVATE_SCENE](state) {
+        state.scene.activated = true;
+    },
+
+    [types.DEACTIVATE_SCENE](state) {
+        state.scene.activated = false;
+    }
 };
 
 export default mutations;

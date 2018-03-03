@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Watch, Emit } from 'vue-property-decorator';
 
+import { mutationTypes } from './../../store';
+
 import GeneratorManager from './manager/GeneratorManager';
 import Scene from '../scene/manager/SceneManager';
 import { sceneEvents } from './../scene';
@@ -33,9 +35,20 @@ export class GeneratorComponent extends Vue {
         });
     }
 
+    @Watch('activated')
+    updateActivation() {
+        if(!this.activated) {
+            this.$store.commit(mutationTypes.DEACTIVATE_SCENE);
+        } else {
+            this.$store.commit(mutationTypes.ACTIVATE_SCENE);
+        }
+    }
+
     mounted() {
         const sceneElement: Scene = (<any>this.$refs.sceneComponent).scene;
         this.generatorManager = new GeneratorManager(sceneElement, this.data);
+
+        this.updateActivation();
     }
 
     /**
@@ -43,9 +56,6 @@ export class GeneratorComponent extends Vue {
      * @param { Object } data
      */
     onIntersection(data) {
-        if (!this.activated) {
-            return;
-        }
         this.intersections(data);
     }
 }
