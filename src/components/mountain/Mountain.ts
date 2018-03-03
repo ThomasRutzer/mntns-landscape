@@ -74,7 +74,7 @@ class Mountain implements MountainInterface {
         this.vectorPoints.push(new THREE.Vector3(0, ty, 0));
 
         this.mesh = new THREE.Mesh();
-        this.mesh = CustomMesh.lathe(this.vectorPoints, this.radiusSegments);
+        this.mesh = CustomMesh.lathe(this.vectorPoints, this.radiusSegments, MountainConfig.appearance.color);
 
         let geom: any = this.mesh.geometry;
         geom.uvsNeedUpdate = true;

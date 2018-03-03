@@ -22,7 +22,10 @@ class CustomMesh {
         geom.applyMatrix( new THREE.Matrix4().makeRotationX( -Math.PI / 2));
 
         const mat = new THREE.MeshPhongMaterial({
-            color: color, vertexColors: THREE.VertexColors });
+            color: color,
+            vertexColors: THREE.VertexColors
+        });
+
         CustomMesh.flatshadeGeometry(geom);
 
         return new THREE.Mesh(geom, mat);
