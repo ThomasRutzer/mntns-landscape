@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 
-import SceneManager from './manager/SceneManager';
 import sceneEvents from './sceneEvents';
 import {Prop, Emit, Watch} from "vue-property-decorator";
+import SceneManagerFactory from "./manager/SceneManagerFactory";
 
 @Component({
     template: require('./scene.component.html'),
@@ -27,7 +27,7 @@ export class SceneComponent extends Vue {
     private scene;
 
     created() {
-        this.scene =  SceneManager.create(this.camera);
+        this.scene = SceneManagerFactory.create(this.camera);
     }
 
     mounted() {

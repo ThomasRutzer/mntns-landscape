@@ -22,11 +22,6 @@ export default class SceneManager implements SceneManagerInterface {
     private mouseCoords: { x: number, y: number };
     private mouseIsMoving: boolean = false;
 
-    // @todo: register factory here
-    public static create(camera, renderer?, autoUpdate?) {
-        return new SceneManager(camera, renderer, autoUpdate);
-    }
-
     constructor(camera: { type: string, position: { x, y, z }, fieldOfView: number, nearPlane: number, farPlane: number },
                 renderer: string = SceneConfig.renderer,
                 autoUpdate: boolean = true) {
@@ -48,10 +43,9 @@ export default class SceneManager implements SceneManagerInterface {
             camera.nearPlane,
             camera.farPlane).cameraElement;
 
-        //@todo make this parametrical
-        this.camera.position.x = -400;
-        this.camera.position.y = 200;
-        this.camera.position.z = 250;
+        this.camera.position.x = camera.position && camera.position.x;
+        this.camera.position.y = camera.position && camera.position.y;
+        this.camera.position.z = camera.position && camera.position.z;
 
         this.camera.lookAt(this.sceneElement.position);
 

@@ -1,4 +1,10 @@
 <scene ref="sceneComponent"
        @intersection="onIntersection($event)"
-       :camera="{type: 'perspective', fieldOfView: 60, nearPlane: 0.1, farPlane: 3000, position: {x: 0, y: 50, z: 0}}">
+       :camera="{
+            type: 'perspective',
+            fieldOfView: 60,
+            nearPlane: 0.1,
+            farPlane: 3000,
+            position: {x: -400, y: 200, z: 250}
+       }">
 </scene>
