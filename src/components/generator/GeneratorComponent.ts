@@ -16,7 +16,7 @@ export class GeneratorComponent extends Vue {
     private generatorManager: GeneratorManager;
 
     @Emit(sceneEvents.INTERSECTION)
-    intersections(data){
+    emitIntersections(data){
         return data;
     }
 
@@ -56,6 +56,6 @@ export class GeneratorComponent extends Vue {
      * @param { Object } data
      */
     onIntersection(data) {
-        this.intersections(data);
+        this.emitIntersections(data);
     }
 }
