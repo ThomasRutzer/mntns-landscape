@@ -1,7 +1,7 @@
 import {expect, should} from 'chai';
 import {stub} from 'sinon';
 import GeneratorManager from './GeneratorManager';
-import config from './GeneratorManagerConfig';
+import config from '../generatorManagerConfig';
 import Scene from '../../scene/manager/SceneManager';
 
 describe('GeneratorManager', () => {

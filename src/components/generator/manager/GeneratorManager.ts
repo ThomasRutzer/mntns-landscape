@@ -1,11 +1,12 @@
 import { injectable, inject } from "inversify";
 import "reflect-metadata";
 
+import { inBetween } from './../../math-utils';
 import LightFactory from './../../light';
 import SceneObjectModel from './../../scene/model/SceneObjectModel';
-import Scene from '../../scene/manager/SceneManager';
+import SceneManager from '../../scene/manager/SceneManager';
 import { MountainFactory, Mountain } from './../../mountain';
-import GeneratorManagerConfig from './GeneratorManagerConfig';
+import GeneratorManagerConfig, {default as generatorManagerConfig} from '../generatorManagerConfig';
 import { rangeRandomInt } from './../../math-utils';
 import CustomMesh from './../../custom-mesh';
 import { rangeRandom } from './../../math-utils';
@@ -14,19 +15,16 @@ import GeneratorManagerInterface from "./GeneratorManagerInterface";
 @injectable()
 class GeneratorManager implements GeneratorManagerInterface {
     private config: any = GeneratorManagerConfig;
-    private scene:Scene;
+    private sceneManager: SceneManager;
     private mountainsData;
     private mountains:Mountain[];
     private positioning:{leftOffset: number, rightOffset: number};
 
-    // used to create unique id
-    private allMountainCounter = 0;
-
     private globalLight;
     private shadowLight;
 
-    constructor(scene:Scene, mountainsData:Object[] = []) {
-        this.scene = scene;
+    constructor(sceneManager:SceneManager, mountainsData:Object[] = []) {
+        this.sceneManager = sceneManager;
         this.mountainsData = mountainsData;
         this.mountains = [];
 
@@ -41,14 +39,22 @@ class GeneratorManager implements GeneratorManagerInterface {
      * @param data -> data to construct Mountain with
      */
     public addMountain(data: any): void {
-        let posX = data.xPos;
-
         const mountain = MountainFactory.create(data.id, data.height, data.thickness);
+        const pos = {
+            x: inBetween(data.x, generatorManagerConfig.layout.position.x.min, generatorManagerConfig.layout.position.x.max),
+            z: inBetween(data.z, generatorManagerConfig.layout.position.z.min, generatorManagerConfig.layout.position.z.max)
+        };
 
-        this.scene.addElement(SceneObjectModel.create(data.id,
-            mountain.mesh, {y: 0, x: posX, z: rangeRandomInt(GeneratorManagerConfig.shiftX[0], GeneratorManagerConfig.shiftX[1])}));
+        this.sceneManager.addElement(SceneObjectModel.create(
+            data.id,
+            mountain.mesh,
+           {
+                x: pos.x,
+                z: pos.z,
+                y: 0
+            }
+        ));
 
-        this.allMountainCounter++;
         this.mountains.push(mountain);
     }
 
@@ -65,7 +71,7 @@ class GeneratorManager implements GeneratorManagerInterface {
         this.mountains.forEach((mountainElement, index) => {
 
             allPromises.push(mountainElement.shrink(true));
-            this.scene.removeElement(mountainElement.id);
+            this.sceneManager.removeElement(mountainElement.id);
 
         });
 
@@ -98,7 +104,7 @@ class GeneratorManager implements GeneratorManagerInterface {
         });
 
         Promise.all(allPromises).then(() => {
-            this.scene.removeElement(mountainId);
+            this.sceneManager.removeElement(mountainId);
             this.mountains.splice(index, 1);
             returnPromiseResolve();
         });
@@ -132,12 +138,11 @@ class GeneratorManager implements GeneratorManagerInterface {
 
         const vertices =  geom.vertices;
 
-        // create random ofsfets
         for (let i=0; i < vertices.length; i++){
             let v = vertices[i];
-            v.x += rangeRandom(-10,10);
-            v.y += rangeRandom(-10,10);
-            v.z += rangeRandom(-10,10);
+            v.x += rangeRandom(-GeneratorManagerConfig.floor.randomShift,GeneratorManagerConfig.floor.randomShift);
+            v.y += rangeRandom(-GeneratorManagerConfig.floor.randomShift,GeneratorManagerConfig.floor.randomShift);
+            v.z += rangeRandom(-GeneratorManagerConfig.floor.randomShift,GeneratorManagerConfig.floor.randomShift);
         }
 
         geom.computeFaceNormals();
@@ -145,18 +150,18 @@ class GeneratorManager implements GeneratorManagerInterface {
         geom.colorsNeedUpdate = true;
 
         mesh.rotation.x = -Math.PI / 2;
-        this.scene.addElement(SceneObjectModel.create('floor', mesh));
+        this.sceneManager.addElement(SceneObjectModel.create('floor', mesh));
     }
 
     private addGlobalLight(): void {
         this.globalLight = LightFactory.create(this.config.globalLight.type, this.config.globalLight.primaryColor, this.config.globalLight.secondaryColor, this.config.globalLight.density);
-        this.scene.addElement(SceneObjectModel.create('globalLight', this.globalLight.lightElement));
+        this.sceneManager.addElement(SceneObjectModel.create('globalLight', this.globalLight.lightElement));
     }
 
 
     private addShadowLight(): void {
         this.shadowLight = LightFactory.create(this.config.shadowLight.type, this.config.shadowLight.color, this.config.shadowLight.density, {castShadow: true});
-        this.scene.addElement(SceneObjectModel.create('shadowLight', this.shadowLight.lightElement, {
+        this.sceneManager.addElement(SceneObjectModel.create('shadowLight', this.shadowLight.lightElement, {
             x: this.config.shadowLight.position.x,
             y: this.config.shadowLight.position.y,
             z: this.config.shadowLight.position.z

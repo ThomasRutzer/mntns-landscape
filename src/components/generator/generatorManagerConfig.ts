@@ -1,10 +1,25 @@
 export default {
-    // each offset will be substracted
-    // by this amount to have visuell overlapping
-    overlapping: 10,
-
     // random z-shifting range
     shiftX: [1, 400],
+
+    layout: {
+        position: {
+            x: {
+               min: -110,
+               max: 110
+            },
+
+            y: {
+                min: 0,
+                max: 0
+            },
+
+            z: {
+                min: 1,
+                max: 400
+            }
+        }
+    },
 
     floor: {
         color: '#353535',
@@ -12,7 +27,10 @@ export default {
             width: 3200,
             height: 3200,
             depth: 36
-        }
+        },
+
+        // value for random heights
+        randomShift: 10,
     },
 
     shadowLight: {
