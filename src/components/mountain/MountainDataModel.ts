@@ -1,5 +1,5 @@
 import { inBetween } from './../math-utils';
-import config from './MountainConfig';
+import config from './mountainConfig';
 
 class MountainDataModel {
     public thickness: number;

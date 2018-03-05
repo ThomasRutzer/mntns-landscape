@@ -38,7 +38,7 @@ const config = {
     },
 
     appearance: {
-        color: "#353535"
+        color: "#2e2d2d"
     }
 };
 

@@ -1,20 +1,14 @@
-import { injectable, inject } from "inversify";
-import "reflect-metadata";
-
 import { inBetween } from './../../math-utils';
 import LightFactory from './../../light';
 import SceneObjectModel from './../../scene/model/SceneObjectModel';
 import SceneManager from '../../scene/manager/SceneManager';
 import { MountainFactory, Mountain } from './../../mountain';
-import GeneratorManagerConfig, {default as generatorManagerConfig} from '../generatorManagerConfig';
-import { rangeRandomInt } from './../../math-utils';
+import generatorManagerConfig from '../generatorManagerConfig';
 import CustomMesh from './../../custom-mesh';
 import { rangeRandom } from './../../math-utils';
 import GeneratorManagerInterface from "./GeneratorManagerInterface";
 
-@injectable()
 class GeneratorManager implements GeneratorManagerInterface {
-    private config: any = GeneratorManagerConfig;
     private sceneManager: SceneManager;
     private mountainsData;
     private mountains:Mountain[];
@@ -130,19 +124,19 @@ class GeneratorManager implements GeneratorManagerInterface {
 
     private addFloor(): void {
         const mesh =  CustomMesh.planeMesh(
-            GeneratorManagerConfig.floor.dimensions.width,
-            GeneratorManagerConfig.floor.dimensions.height,
-            GeneratorManagerConfig.floor.dimensions.depth,
-            GeneratorManagerConfig.floor.color);
+            generatorManagerConfig.floor.dimensions.width,
+            generatorManagerConfig.floor.dimensions.height,
+            generatorManagerConfig.floor.dimensions.depth,
+            generatorManagerConfig.floor.color);
         const geom: any = mesh.geometry;
 
         const vertices =  geom.vertices;
 
         for (let i=0; i < vertices.length; i++){
             let v = vertices[i];
-            v.x += rangeRandom(-GeneratorManagerConfig.floor.randomShift,GeneratorManagerConfig.floor.randomShift);
-            v.y += rangeRandom(-GeneratorManagerConfig.floor.randomShift,GeneratorManagerConfig.floor.randomShift);
-            v.z += rangeRandom(-GeneratorManagerConfig.floor.randomShift,GeneratorManagerConfig.floor.randomShift);
+            v.x += rangeRandom(-generatorManagerConfig.floor.randomShift,generatorManagerConfig.floor.randomShift);
+            v.y += rangeRandom(-generatorManagerConfig.floor.randomShift,generatorManagerConfig.floor.randomShift);
+            v.z += rangeRandom(-generatorManagerConfig.floor.randomShift,generatorManagerConfig.floor.randomShift);
         }
 
         geom.computeFaceNormals();
@@ -154,17 +148,17 @@ class GeneratorManager implements GeneratorManagerInterface {
     }
 
     private addGlobalLight(): void {
-        this.globalLight = LightFactory.create(this.config.globalLight.type, this.config.globalLight.primaryColor, this.config.globalLight.secondaryColor, this.config.globalLight.density);
+        this.globalLight = LightFactory.create(generatorManagerConfig.globalLight.type, generatorManagerConfig.globalLight.primaryColor, generatorManagerConfig.globalLight.secondaryColor, generatorManagerConfig.globalLight.density);
         this.sceneManager.addElement(SceneObjectModel.create('globalLight', this.globalLight.lightElement));
     }
 
 
     private addShadowLight(): void {
-        this.shadowLight = LightFactory.create(this.config.shadowLight.type, this.config.shadowLight.color, this.config.shadowLight.density, {castShadow: true});
+        this.shadowLight = LightFactory.create(generatorManagerConfig.shadowLight.type, generatorManagerConfig.shadowLight.color, generatorManagerConfig.shadowLight.density, {castShadow: true});
         this.sceneManager.addElement(SceneObjectModel.create('shadowLight', this.shadowLight.lightElement, {
-            x: this.config.shadowLight.position.x,
-            y: this.config.shadowLight.position.y,
-            z: this.config.shadowLight.position.z
+            x: generatorManagerConfig.shadowLight.position.x,
+            y: generatorManagerConfig.shadowLight.position.y,
+            z: generatorManagerConfig.shadowLight.position.z
         }));
     }
 

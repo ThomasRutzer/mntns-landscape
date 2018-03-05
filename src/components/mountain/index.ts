@@ -1,7 +1,7 @@
 import Mountain from './Mountain';
 import MountainFactory from './MountainFactory';
 import MountainDataModel from './MountainDataModel';
-import MountainConfig from './MountainConfig';
+import MountainConfig from './mountainConfig';
 
 export {
     Mountain,

@@ -22,7 +22,7 @@ export default {
     },
 
     floor: {
-        color: '#353535',
+        color: '#2e2d2d',
         dimensions: {
             width: 3200,
             height: 3200,
@@ -41,13 +41,13 @@ export default {
         },
         type: 'directional',
         color: '#fff',
-        density: 0.3
+        density: 0.6
     },
 
     globalLight: {
         type: 'global',
         secondaryColor: '#fff',
         primaryColor: '#fff',
-        density: 0.8
+        density: 0.9
     }
 };

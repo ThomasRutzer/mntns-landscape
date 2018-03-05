@@ -4,7 +4,7 @@ import TweenMax from 'gsap';
 import clone from 'lodash.clonedeep';
 import MountainInterface from './MountainInterface';
 import MountainDataModel from './MountainDataModel';
-import MountainConfig from './MountainConfig';
+import MountainConfig from './mountainConfig';
 import * as mathUtils from './../math-utils';
 import { CustomMesh } from './../custom-mesh';
 
@@ -97,8 +97,7 @@ class Mountain implements MountainInterface {
             returnPromiseResolve = res;
         });
 
-        // here will store actual
-        // method implementation
+        // store actual grow method
         let progressGrow = () => {
                 if (!animation) {
                     const geom: any = this.mesh.geometry;

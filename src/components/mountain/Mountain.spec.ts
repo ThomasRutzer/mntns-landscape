@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import {spy, assert} from 'sinon';
 import Mountain from './Mountain';
 import MountainDataModel from './MountainDataModel';
-import config from './MountainConfig';
+import config from './mountainConfig';
 
 describe('Mountain', () => {
     describe('static method create()', () => {
