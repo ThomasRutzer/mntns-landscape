@@ -5,7 +5,7 @@ import store, {mutationTypes} from './../../../store';
 
 import SceneManagerInterface from './SceneManagerInterface';
 import SceneObjectModel from '../model/SceneObjectModel';
-import SceneConfig from './SceneConfig';
+import SceneConfig from '../sceneConfig';
 import CameraFactory from '../../camera/index';
 
 let raycaster = new THREE.Raycaster();
@@ -199,7 +199,6 @@ export default class SceneManager implements SceneManagerInterface {
     private broadcastChanges(data: any): void {
         if (data) {
             store.commit(mutationTypes.SAVE_INTERSECTED_OBJECT, data);
-
         } else {
             store.commit(mutationTypes.DELETE_INTERSECTED_OBJECT);
         }
