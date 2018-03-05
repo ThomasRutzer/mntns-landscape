@@ -45,7 +45,7 @@ export class GeneratorComponent extends Vue {
     }
 
     mounted() {
-        const sceneElement: Scene = (<any>this.$refs.sceneComponent).scene;
+        const sceneElement: Scene = (<any>this.$refs.sceneComponent).sceneManager;
         this.generatorManager = new GeneratorManager(sceneElement, this.data);
 
         this.updateActivation();

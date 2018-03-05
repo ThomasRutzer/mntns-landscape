@@ -3,7 +3,7 @@ import Component from 'vue-class-component';
 
 import sceneEvents from './sceneEvents';
 import {Prop, Emit, Watch} from "vue-property-decorator";
-import SceneManagerFactory from "./manager/SceneManagerFactory";
+import SceneManager from "./manager/SceneManager";
 
 @Component({
     template: require('./scene.component.html'),
@@ -22,19 +22,19 @@ export class SceneComponent extends Vue {
     }
 
     @Prop({ required: true})
-    camera: { type: string, position: Object, fieldOfView: number, nearPlane: number, farPlane: number };
+    camera: { type: string, position: {x: number, y: number, z:number}, fieldOfView: number, nearPlane: number, farPlane: number };
 
-    private scene;
+    private sceneManager;
 
     created() {
-        this.scene = SceneManagerFactory.create(this.camera);
+        this.sceneManager = new SceneManager(this.camera);
     }
 
     mounted() {
         const container: HTMLElement = document.getElementById('scene');
         const parent = container.parentNode;
 
-        parent.replaceChild(this.scene.renderer.domElement, container);
+        parent.replaceChild(this.sceneManager.renderer.domElement, container);
     }
 }
 

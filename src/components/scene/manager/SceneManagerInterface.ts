@@ -1,4 +1,4 @@
-interface SceneFactoryInterface {
+interface SceneManagerInterface {
     sceneElement: THREE.Scene;
     camera: THREE.Camera;
     renderer: THREE.Renderer;
@@ -8,5 +8,5 @@ interface SceneFactoryInterface {
     removeElement(id: string): void
 }
 
-export default SceneFactoryInterface;
+export default SceneManagerInterface;
 
