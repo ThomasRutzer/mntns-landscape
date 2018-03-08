@@ -1,12 +1,13 @@
 import * as THREE from 'three';
 import TweenMax from 'gsap';
 import Power2 from 'gsap';
-import store, {mutationTypes} from './../../../store';
+import EventBus from './../../event-bus';
 
 import SceneManagerInterface from './SceneManagerInterface';
 import SceneObjectModel from '../model/SceneObjectModel';
 import SceneConfig from '../sceneConfig';
 import CameraFactory from '../../camera/index';
+import sceneEvents from "../sceneEvents";
 
 let raycaster = new THREE.Raycaster();
 let unprojectedCoords = new THREE.Vector2();
@@ -154,11 +155,6 @@ export default class SceneManager implements SceneManagerInterface {
      * @param { String } eventType
      */
     private findIntersections(coords: { x: number, y: number }, eventType: string): void {
-
-        if (!store.state.scene.activated ) {
-            return;
-        }
-
         unprojectedCoords.x = ( coords.x / this.renderer.domElement.clientWidth ) * 2 - 1;
         unprojectedCoords.y = -( coords.y / this.renderer.domElement.clientHeight ) * 2 + 1;
 
@@ -197,11 +193,7 @@ export default class SceneManager implements SceneManagerInterface {
      * @param data
      */
     private broadcastChanges(data: any): void {
-        if (data) {
-            store.commit(mutationTypes.SAVE_INTERSECTED_OBJECT, data);
-        } else {
-            store.commit(mutationTypes.DELETE_INTERSECTED_OBJECT);
-        }
+        EventBus.$emit(sceneEvents.INTERSECTION, data);
     }
 
     /**
@@ -219,8 +211,7 @@ export default class SceneManager implements SceneManagerInterface {
      */
     private render(): void {
         //@todo: improve camera movement
-        if (store.state.scene.activated &&
-            SceneConfig.reactToMouseMove &&
+        if (SceneConfig.reactToMouseMove &&
             this.mouseIsMoving) {
             const cameraPositionX = this.camera.position.x += ( this.mouseCoords.x - this.camera.position.x ) * .001;
 

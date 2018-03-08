@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 
+import EventBus from './../event-bus';
+
 import sceneEvents from './sceneEvents';
 import {Prop, Emit, Watch} from "vue-property-decorator";
 import SceneManager from "./manager/SceneManager";
@@ -11,18 +13,13 @@ import SceneManager from "./manager/SceneManager";
 
 export class SceneComponent extends Vue {
 
-    @Watch('$store.state.scene.intersectedObject')
-    watchHandler() {
-        this.intersections(this.$store.state.scene.intersectedObject)
-    }
-
     @Emit(sceneEvents.INTERSECTION)
     intersections(data){
         return data;
     }
 
     @Prop({ required: true})
-    camera: { type: string, position: {x: number, y: number, z:number}, fieldOfView: number, nearPlane: number, farPlane: number };
+    camera: { type: string, position: {x: number, y: number, z: number}, fieldOfView: number, nearPlane: number, farPlane: number };
 
     private sceneManager;
 
@@ -35,6 +32,10 @@ export class SceneComponent extends Vue {
         const parent = container.parentNode;
 
         parent.replaceChild(this.sceneManager.renderer.domElement, container);
+
+        EventBus.$on(sceneEvents.INTERSECTION, (data) => {
+            this.intersections(data);
+        })
     }
 }
 
