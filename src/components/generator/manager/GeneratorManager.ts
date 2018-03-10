@@ -12,7 +12,6 @@ class GeneratorManager implements GeneratorManagerInterface {
     private sceneManager: SceneManager;
     private mountainsData;
     private mountains:Mountain[];
-    private positioning:{leftOffset: number, rightOffset: number};
 
     private globalLight;
     private shadowLight;
@@ -22,7 +21,6 @@ class GeneratorManager implements GeneratorManagerInterface {
         this.mountainsData = mountainsData;
         this.mountains = [];
 
-        this.resetPositioning();
         this.addGlobalLight();
         this.addShadowLight();
         this.addFloor();
@@ -55,55 +53,29 @@ class GeneratorManager implements GeneratorManagerInterface {
     /**
      * @returns {Promise<T>}
      */
-    public clearAllMountains(): Promise<any> {
-        let returnPromiseResolve = new Function();
-        const returnPromise = new Promise((res) => {
-            returnPromiseResolve = res;
-        });
-        const allPromises = [];
-
-        this.mountains.forEach((mountainElement, index) => {
-
-            allPromises.push(mountainElement.shrink(true, false));
-            this.sceneManager.removeElement(mountainElement.id);
-
+    public async clearAllMountains(): Promise<any> {
+       this.mountains.forEach(async (mountainElement, index) => {
+            await this.clearMountain(mountainElement.id, true);
         });
 
-        Promise.all(allPromises).then(() => {
-            this.mountains = [];
-            this.resetPositioning();
-            returnPromiseResolve();
-        });
-
-        return returnPromise;
+        this.mountains = [];
+        return Promise.resolve();
     }
 
     /**
      * @param mountainId
      * @returns {Promise<T>}
      */
-    public clearMountain(mountainId: string): Promise<any> {
-        let returnPromiseResolve = new Function();
-        const returnPromise = new Promise((res) => {
-            returnPromiseResolve = res;
-        });
-        const allPromises = [];
-        let index = null;
-
-        this.mountains.forEach( (mountainElement, i) => {
+    public async clearMountain(mountainId: string, animation: boolean = false): Promise<any> {
+        this.mountains.map( async (mountainElement, i) => {
             if (mountainElement.id === mountainId) {
-                allPromises.push(mountainElement.shrink(true));
-                index = i;
+                animation ? await mountainElement.shrink(true, false) : Promise.resolve();
+                this.mountains.splice(i, 1);
+                this.sceneManager.removeElement(mountainId);
             }
         });
 
-        Promise.all(allPromises).then(() => {
-            this.sceneManager.removeElement(mountainId);
-            this.mountains.splice(index, 1);
-            returnPromiseResolve();
-        });
-
-        return returnPromise;
+        return Promise.resolve();
     }
 
     /**
@@ -169,18 +141,6 @@ class GeneratorManager implements GeneratorManagerInterface {
         this.mountainsData.forEach((mountainData) => {
             this.addMountain(mountainData);
         });
-    }
-
-    /**
-     * handles placement of mountains to each other
-     * @type {number}leftOffset ->  stores thickness of all mountains on the left side
-     * @type {number}rightOffset -> stores thickness of all mountains on the right side
-     */
-    private resetPositioning() {
-        this.positioning = {
-            leftOffset: 0,
-            rightOffset: 0
-        };
     }
 }
 

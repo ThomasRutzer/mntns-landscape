@@ -54,8 +54,6 @@ export class GeneratorComponent extends Vue {
     onIntersection(data) {
         if (!this.activated) return;
 
-        console.log(data);
-
         this.emitIntersections(data);
     }
 }
