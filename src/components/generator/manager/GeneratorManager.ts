@@ -64,7 +64,7 @@ class GeneratorManager implements GeneratorManagerInterface {
 
         this.mountains.forEach((mountainElement, index) => {
 
-            allPromises.push(mountainElement.shrink(true));
+            allPromises.push(mountainElement.shrink(true, false));
             this.sceneManager.removeElement(mountainElement.id);
 
         });
