@@ -160,7 +160,7 @@ class Mountain implements MountainInterface {
         // let´s check if we need
         // shrink first
         if (!this.states.isShrunk) {
-            this.shrink(false, true).then(() => {
+            this.shrink().then(() => {
                 progressGrow();
             });
         } else {
@@ -173,9 +173,10 @@ class Mountain implements MountainInterface {
     /**
      * @param {boolean} animation -> whether animate or shrink instantly
      * @param {boolean} invisible -> if true, will set material invisible (transparant / opacity 0) and reverts this when complete
+     * (otherwise, intersection on animated THREE objects is buggy)
      * @returns {Promise<T>}
      */
-    async shrink(animation: boolean = true, invisible: boolean = false): Promise<any> {
+    async shrink(animation: boolean = true, invisible: boolean = true): Promise<any> {
         // create promise with resolve Callback
         // as method return
         let returnPromiseResolve = new Function();
