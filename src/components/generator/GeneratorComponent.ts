@@ -26,7 +26,6 @@ export class GeneratorComponent extends Vue {
     @Prop({default: true})
     activated: boolean;
 
-    // todo test with changing data
     @Watch('data')
     async onDataChanged(val: Object[], oldVal: Object[]) {
         await this.generatorManager.clearAllMountains();

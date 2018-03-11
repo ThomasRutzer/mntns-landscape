@@ -51,23 +51,24 @@ class GeneratorManager implements GeneratorManagerInterface {
     }
 
     /**
+     * @param {boolean} animation whether shrink animation or not
      * @returns {Promise<T>}
      */
-    public async clearAllMountains(): Promise<any> {
-       this.mountains.forEach(async (mountainElement, index) => {
-            await this.clearMountain(mountainElement.id, true);
+    public async clearAllMountains(animation: boolean = true) {
+        this.mountains.forEach(async (mountainElement, index) => {
+            animation ? await mountainElement.shrink(true, false) : Promise.resolve();
+            this.sceneManager.removeElement(mountainElement.id);
         });
 
         this.mountains = [];
-        return Promise.resolve();
     }
 
     /**
      * @param {string} mountainId
-     * @param {boolean} animation
+     * @param {boolean} animation whether shrink animation or not
      * @returns {Promise<T>}
      */
-    public async clearMountain(mountainId: string, animation: boolean = false): Promise<any> {
+    public async clearMountain(mountainId: string, animation: boolean = false) {
         this.mountains.map( async (mountainElement, i) => {
             if (mountainElement.id === mountainId) {
                 animation ? await mountainElement.shrink(true, false) : Promise.resolve();
@@ -76,8 +77,6 @@ class GeneratorManager implements GeneratorManagerInterface {
                 this.sceneManager.removeElement(mountainId);
             }
         });
-
-        return Promise.resolve();
     }
 
     /**

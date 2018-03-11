@@ -1,9 +1,9 @@
 import Mountain from '../../mountain/Mountain';
 
 interface GeneratorManagerInterface {
-    addMountain(data: any): void;
-    clearAllMountains(): Promise<any>
-    clearMountain(mountainId: string): Promise<any>;
+    addMountain(data: any);
+    clearAllMountains();
+    clearMountain(mountainId: string);
     findMountainById(id: string): Mountain | null
 }
 
