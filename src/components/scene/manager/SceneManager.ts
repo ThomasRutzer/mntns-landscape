@@ -111,6 +111,8 @@ export default class SceneManager implements SceneManagerInterface {
                 return;
             }
         });
+
+        console.log(this.sceneElements)
     }
 
     /**
