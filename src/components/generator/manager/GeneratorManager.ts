@@ -63,15 +63,16 @@ class GeneratorManager implements GeneratorManagerInterface {
     }
 
     /**
-     * @param mountainId
+     * @param {string} mountainId
+     * @param {boolean} animation
      * @returns {Promise<T>}
      */
     public async clearMountain(mountainId: string, animation: boolean = false): Promise<any> {
         this.mountains.map( async (mountainElement, i) => {
             if (mountainElement.id === mountainId) {
-                animation ? await mountainElement.shrink(true, false) : Promise.resolve();
                 this.mountains.splice(i, 1);
                 this.sceneManager.removeElement(mountainId);
+                animation ? await mountainElement.shrink(true, false) : Promise.resolve();
             }
         });
 
