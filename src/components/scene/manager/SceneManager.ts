@@ -212,14 +212,15 @@ export default class SceneManager implements SceneManagerInterface {
      * rendering of scene
      */
     private render(): void {
-        //@todo: improve camera movement
         if (SceneConfig.reactToMouseMove &&
             this.mouseIsMoving) {
-            const cameraPositionX = this.camera.position.x += ( this.mouseCoords.x - this.camera.position.x ) * .001;
 
-            TweenMax.to(this.camera.position, 1, {
+            const cameraPositionX = this.camera.position.x + ( this.mouseCoords.x - this.camera.position.x ) * .001;
+            const cameraPositionZ = this.camera.position.z + ( this.mouseCoords.y - this.camera.position.z ) * .001;
+
+            TweenMax.to(this.camera.position, 0.2, {
                 x: cameraPositionX,
-                ease: Power2.easeOut,
+                z: cameraPositionZ,
                 onStart: () => {
                     this.camera.lookAt(this.sceneElement.position);
                 },

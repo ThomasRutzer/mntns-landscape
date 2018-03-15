@@ -5,8 +5,8 @@ export default {
     layout: {
         position: {
             x: {
-               min: -110,
-               max: 110
+               min: -300,
+               max: 300
             },
 
             y: {
@@ -15,7 +15,7 @@ export default {
             },
 
             z: {
-                min: 1,
+                min: -300,
                 max: 400
             }
         }

@@ -5,6 +5,10 @@ export default {
     },
 
     renderer: 'webGL',
-    reactToMouseMove: false,
+    reactToMouseMove: true,
+    reactToMouseMoveOpts: {
+        zMaxMovement: 50,
+        xMaxMovement: 50
+    },
     observeIntsections: true,
 }

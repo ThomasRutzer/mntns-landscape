@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 interface SceneManagerInterface {
     sceneElement: THREE.Scene;
     camera: THREE.Camera;
