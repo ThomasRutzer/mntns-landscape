@@ -22,7 +22,6 @@ class SceneMousemoveManager implements SceneMousemoveManagerInterface {
         };
 
         this.reactiveAreaSize = this.calcReactiveAreaSize(options.reactiveAreaSize);
-
         this.addListener();
     }
 
