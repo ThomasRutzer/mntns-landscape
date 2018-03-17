@@ -5,10 +5,19 @@ export default {
     },
 
     renderer: 'webGL',
+
     reactToMouseMove: true,
-    reactToMouseMoveOpts: {
-        zMaxMovement: 50,
-        xMaxMovement: 50
+    reactToMouseMoveOptions: {
+
+        /**
+         * defines ( in percentage ) the size of each side (
+         * ( top / bottom, right / left)
+         * of viewport, which triggers camera movement
+         * @type Number
+         */
+        reactiveArea: 25,
+
+        zoomThreshold: 50
     },
     observeIntsections: true,
 }

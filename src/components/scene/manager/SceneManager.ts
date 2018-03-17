@@ -1,11 +1,13 @@
 import * as THREE from 'three';
-import TweenMax from 'gsap';
-import Power2 from 'gsap';
 import EventBus from './../../event-bus';
 
 import SceneManagerInterface from './SceneManagerInterface';
 import SceneObjectModel from '../model/SceneObjectModel';
-import SceneConfig from '../sceneConfig';
+
+import SceneMousemoveManager from './SceneMousemoveManager';
+import SceneMousemoveManagerInterface from "./SceneMousemoveManagerInterface";
+
+import sceneConfig from '../sceneConfig';
 import CameraFactory from '../../camera/index';
 import sceneEvents from "../sceneEvents";
 
@@ -20,15 +22,15 @@ export default class SceneManager implements SceneManagerInterface {
     private sceneElements: SceneObjectModel[];
     private autoUpdate: boolean;
     private dimensions: { width: number, height: number };
-    private mouseCoords: { x: number, y: number };
-    private mouseIsMoving: boolean = false;
+
+    private mousemoveManager: SceneMousemoveManagerInterface;
 
     constructor(camera: { type: string, position: { x, y, z }, fieldOfView: number, nearPlane: number, farPlane: number },
-                renderer: string = SceneConfig.renderer,
+                renderer: string = sceneConfig.renderer,
                 autoUpdate: boolean = true) {
 
         this.sceneElement = new THREE.Scene();
-        this.sceneElement.fog = new THREE.FogExp2(SceneConfig.fog.color, SceneConfig.fog.density);
+        this.sceneElement.fog = new THREE.FogExp2(sceneConfig.fog.color, sceneConfig.fog.density);
 
         this.dimensions = {
             width: window.innerWidth,
@@ -59,6 +61,18 @@ export default class SceneManager implements SceneManagerInterface {
         this.renderer.setSize(this.dimensions.width, this.dimensions.height);
         this.renderer.shadowMap.enabled = true;
 
+
+        if (sceneConfig.reactToMouseMove) {
+            this.mousemoveManager = new SceneMousemoveManager(
+                this.sceneElement,
+                this.camera,
+                {
+                    reactiveAreaSize: sceneConfig.reactToMouseMoveOptions.reactiveArea,
+                    zoomThreshold: sceneConfig.reactToMouseMoveOptions.zoomThreshold
+                }
+            );
+        }
+
         if (autoUpdate) {
             this.loop();
         } else {
@@ -68,6 +82,7 @@ export default class SceneManager implements SceneManagerInterface {
         this.sceneElements = [];
 
         this.addListener();
+
     }
 
     /**
@@ -111,8 +126,6 @@ export default class SceneManager implements SceneManagerInterface {
                 return;
             }
         });
-
-        console.log(this.sceneElements)
     }
 
     /**
@@ -123,13 +136,7 @@ export default class SceneManager implements SceneManagerInterface {
             this.handleResize();
         }, false);
 
-        if (SceneConfig.reactToMouseMove) {
-            this.mouseCoords = {x: 0, y: 0};
-
-            window.addEventListener('mousemove', (e) => this.onMouseMove(e), false);
-        }
-
-        if (SceneConfig.observeIntsections) {
+        if (sceneConfig.observeIntsections) {
 
             document.addEventListener('mousemove', (e) => {
                 this.findIntersections({x: e.clientX, y: e.clientY}, 'mousemove');
@@ -191,8 +198,7 @@ export default class SceneManager implements SceneManagerInterface {
 
     /**
      *
-     * @param {string} type -> type identifier of broadcast
-     * @param data
+     * @param { object } data
      */
     private broadcastChanges(data: any): void {
         EventBus.$emit(sceneEvents.INTERSECTION, data);
@@ -212,22 +218,8 @@ export default class SceneManager implements SceneManagerInterface {
      * rendering of scene
      */
     private render(): void {
-        if (SceneConfig.reactToMouseMove &&
-            this.mouseIsMoving) {
-
-            const cameraPositionX = this.camera.position.x + ( this.mouseCoords.x - this.camera.position.x ) * .001;
-            const cameraPositionZ = this.camera.position.z + ( this.mouseCoords.y - this.camera.position.z ) * .001;
-
-            TweenMax.to(this.camera.position, 0.2, {
-                x: cameraPositionX,
-                z: cameraPositionZ,
-                onStart: () => {
-                    this.camera.lookAt(this.sceneElement.position);
-                },
-                onComplete: () => {
-                    this.mouseIsMoving = false;
-                }
-            });
+        if (sceneConfig.reactToMouseMove) {
+            this.mousemoveManager.onRender();
         }
 
         this.renderer.render(this.sceneElement, this.camera);
@@ -252,13 +244,4 @@ export default class SceneManager implements SceneManagerInterface {
         }
     }
 
-    /**
-     * store mouse coords on each move
-     * @param {Event} event -> mouse event
-     */
-    private onMouseMove(event) {
-        this.mouseCoords.x = ( event.clientX - window.innerWidth / 2 );
-        this.mouseCoords.y = ( event.clientY - window.innerHeight / 2 );
-        this.mouseIsMoving = true;
-    }
 }
