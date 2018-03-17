@@ -1,11 +1,10 @@
-import { inBetween } from './../../math-utils';
+import { inBetween, rangeRandom } from './../../math-utils';
 import LightFactory from './../../light';
 import SceneObjectModel from './../../scene/model/SceneObjectModel';
 import SceneManager from '../../scene/manager/SceneManager';
 import { MountainFactory, Mountain } from './../../mountain';
 import generatorManagerConfig from '../generatorManagerConfig';
 import CustomMesh from './../../custom-mesh';
-import { rangeRandom } from './../../math-utils';
 import GeneratorManagerInterface from "./GeneratorManagerInterface";
 
 class GeneratorManager implements GeneratorManagerInterface {
@@ -16,7 +15,7 @@ class GeneratorManager implements GeneratorManagerInterface {
     private globalLight;
     private shadowLight;
 
-    constructor(sceneManager:SceneManager, mountainsData:Object[] = []) {
+    constructor(sceneManager: SceneManager, mountainsData:Object[] = []) {
         this.sceneManager = sceneManager;
         this.mountainsData = mountainsData;
         this.mountains = [];
@@ -66,7 +65,6 @@ class GeneratorManager implements GeneratorManagerInterface {
     /**
      * @param {string} mountainId
      * @param {boolean} animation whether shrink animation or not
-     * @returns {Promise<T>}
      */
     public async clearMountain(mountainId: string, animation: boolean = false) {
         this.mountains.map( async (mountainElement, i) => {
