@@ -6,6 +6,12 @@ export default {
 
     renderer: 'webGL',
 
+    particles: true,
+    particlesOptions: {
+        count: 256,
+        color: '#B2BEB5'
+    },
+
     reactToMouseMove: true,
     reactToMouseMoveOptions: {
 

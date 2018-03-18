@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {stub} from 'sinon';
-import SceneMousemoveManager from './SceneMousemoveManager';
 import {expect} from 'chai';
+import SceneMousemoveManager from './SceneMousemoveManager';
 
 describe('SceneMousemoveManager', () => {
 
@@ -42,7 +42,7 @@ describe('SceneMousemoveManager', () => {
             };
 
             const result = manager.checkCameraHorizontal();
-            expect(result).to.equal(51.2);
+            expect(result).to.equal(48.8);
         });
 
         it('returns current camera position, when are not hitting reactive areas', () => {

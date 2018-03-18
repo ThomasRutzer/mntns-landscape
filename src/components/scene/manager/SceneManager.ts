@@ -7,6 +7,9 @@ import SceneObjectModel from '../model/SceneObjectModel';
 import SceneMousemoveManager from './SceneMousemoveManager';
 import SceneMousemoveManagerInterface from "./SceneMousemoveManagerInterface";
 
+import SceneParticlesManager from './SceneParticlesManager';
+import SceneParticlesManagerInterface from './SceneParticlesManagerInterface';
+
 import sceneConfig from '../sceneConfig';
 import CameraFactory from '../../camera/index';
 import sceneEvents from "../sceneEvents";
@@ -24,6 +27,7 @@ export default class SceneManager implements SceneManagerInterface {
     private dimensions: { width: number, height: number };
 
     private mousemoveManager: SceneMousemoveManagerInterface;
+    private particlesManager: SceneParticlesManagerInterface;
 
     constructor(camera: { type: string, position: { x, y, z }, fieldOfView: number, nearPlane: number, farPlane: number },
                 renderer: string = sceneConfig.renderer,
@@ -71,6 +75,11 @@ export default class SceneManager implements SceneManagerInterface {
                     zoomThreshold: sceneConfig.reactToMouseMoveOptions.zoomThreshold
                 }
             );
+        }
+
+        if(sceneConfig.particles) {
+            this.particlesManager = new SceneParticlesManager(sceneConfig.particlesOptions.count, sceneConfig.particlesOptions.color)
+            this.sceneElement.add(this.particlesManager.particlesGroup)
         }
 
         if (autoUpdate) {
@@ -220,6 +229,10 @@ export default class SceneManager implements SceneManagerInterface {
     private render(): void {
         if (sceneConfig.reactToMouseMove) {
             this.mousemoveManager.onRender();
+        }
+
+        if(sceneConfig.particles) {
+            this.particlesManager.onRender();
         }
 
         this.renderer.render(this.sceneElement, this.camera);

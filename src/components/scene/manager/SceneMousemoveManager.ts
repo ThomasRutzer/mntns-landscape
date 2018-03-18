@@ -45,7 +45,7 @@ class SceneMousemoveManager implements SceneMousemoveManagerInterface {
         if (this.mouseCoords.y > this.reactiveAreaSize.top && this.mouseCoords.y < this.reactiveAreaSize.bottom) {
             return this.camera.position.x;
         }
-        const direction = this.mouseCoords.y > 0 ? 1 : -1;
+        const direction = this.mouseCoords.y > 0 ? -1 : 1;
 
         const noTween = direction == -1
             ? this.camera.position.x < this.options.cameraInitialPos.x - this.options.zoomThreshold
