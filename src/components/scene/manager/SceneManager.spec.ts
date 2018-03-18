@@ -84,6 +84,7 @@ describe('SceneManager', () => {
             expect((<any>manager).sceneElement.getObjectByName(elementId)).to.be.undefined;
         });
     });
+
     describe('method loop()', () => {
         it('calls method render', () => {
             let manager = new SceneManager(

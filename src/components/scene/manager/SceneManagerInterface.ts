@@ -7,7 +7,8 @@ interface SceneManagerInterface {
     addElement(element: any,
                position: {x: Number, y: Number})
         : void
-    removeElement(id: string): void
+    removeElement(id: string): void;
+    getElements();
 }
 
 export default SceneManagerInterface;

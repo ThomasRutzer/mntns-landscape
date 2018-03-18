@@ -1,8 +1,10 @@
 import * as THREE from 'three';
-import EventBus from './../../event-bus';
 
 import SceneManagerInterface from './SceneManagerInterface';
 import SceneObjectModel from '../model/SceneObjectModel';
+
+import SceneIntersectionObserver from './SceneIntersectionObserver';
+import SceneIntersectionObserverInterface from './SceneIntersectionObserverInterface';
 
 import SceneMousemoveManager from './SceneMousemoveManager';
 import SceneMousemoveManagerInterface from "./SceneMousemoveManagerInterface";
@@ -12,10 +14,6 @@ import SceneParticlesManagerInterface from './SceneParticlesManagerInterface';
 
 import sceneConfig from '../sceneConfig';
 import CameraFactory from '../../camera/index';
-import sceneEvents from "../sceneEvents";
-
-let raycaster = new THREE.Raycaster();
-let unprojectedCoords = new THREE.Vector2();
 
 export default class SceneManager implements SceneManagerInterface {
     public sceneElement: THREE.Scene;
@@ -28,6 +26,7 @@ export default class SceneManager implements SceneManagerInterface {
 
     private mousemoveManager: SceneMousemoveManagerInterface;
     private particlesManager: SceneParticlesManagerInterface;
+    private intersectionObserver: SceneIntersectionObserverInterface;
 
     constructor(camera: { type: string, position: { x, y, z }, fieldOfView: number, nearPlane: number, farPlane: number },
                 renderer: string = sceneConfig.renderer,
@@ -35,6 +34,7 @@ export default class SceneManager implements SceneManagerInterface {
 
         this.sceneElement = new THREE.Scene();
         this.sceneElement.fog = new THREE.FogExp2(sceneConfig.fog.color, sceneConfig.fog.density);
+        this.sceneElements = [];
 
         this.dimensions = {
             width: window.innerWidth,
@@ -65,7 +65,6 @@ export default class SceneManager implements SceneManagerInterface {
         this.renderer.setSize(this.dimensions.width, this.dimensions.height);
         this.renderer.shadowMap.enabled = true;
 
-
         if (sceneConfig.reactToMouseMove) {
             this.mousemoveManager = new SceneMousemoveManager(
                 this.sceneElement,
@@ -82,16 +81,17 @@ export default class SceneManager implements SceneManagerInterface {
             this.sceneElement.add(this.particlesManager.particlesGroup)
         }
 
+        if(sceneConfig.observeIntsections) {
+            this.intersectionObserver = new SceneIntersectionObserver(this.sceneElements, this.camera, this.renderer);
+        }
+
         if (autoUpdate) {
             this.loop();
         } else {
             this.render();
         }
 
-        this.sceneElements = [];
-
         this.addListener();
-
     }
 
     /**
@@ -137,80 +137,18 @@ export default class SceneManager implements SceneManagerInterface {
         });
     }
 
+    public getElements() {
+        return this.sceneElements;
+    }
+
     /**
-     * adds several window event listener
+     * adds several window ev
+     * ent listener
      */
     private addListener(): void {
         window.addEventListener('resize', () => {
             this.handleResize();
         }, false);
-
-        if (sceneConfig.observeIntsections) {
-
-            document.addEventListener('mousemove', (e) => {
-                this.findIntersections({x: e.clientX, y: e.clientY}, 'mousemove');
-            },);
-
-            document.addEventListener('mousedown', (e) => {
-                this.findIntersections({x: e.clientX, y: e.clientY}, 'mousedown');
-            }, false);
-
-            document.addEventListener('touchstart', (e) => {
-
-                let eventCoords = {
-                    x: e.touches[0].clientX,
-                    y: e.touches[0].clientY,
-                };
-
-                this.findIntersections(eventCoords, 'touchstart');
-            }, false)
-        }
-    }
-
-    /**
-     * callback for mousedown / touchstart events, when intersections are observed
-     * @param { Object } coords
-     * @param { String } eventType
-     */
-    private findIntersections(coords: { x: number, y: number }, eventType: string): void {
-        unprojectedCoords.x = ( coords.x / this.renderer.domElement.clientWidth ) * 2 - 1;
-        unprojectedCoords.y = -( coords.y / this.renderer.domElement.clientHeight ) * 2 + 1;
-
-        raycaster.setFromCamera(unprojectedCoords, this.camera);
-
-        let objects: THREE.Object3D[] = [];
-
-        this.sceneElements.map((elem) => {
-            if (elem.object.type === 'Mesh') {
-                objects.push(elem.object);
-            }
-        });
-
-        let intersects = raycaster.intersectObjects(objects);
-
-        if (intersects.length > 0) {
-
-            let intersectsNames = intersects.map((intersection) => {
-                return intersection.object.name;
-            });
-
-            this.broadcastChanges({
-                objectId: intersectsNames[0],
-                event: {
-                    x: coords.x,
-                    y: coords.y,
-                    type: eventType
-                }
-            });
-        }
-    }
-
-    /**
-     *
-     * @param { object } data
-     */
-    private broadcastChanges(data: any): void {
-        EventBus.$emit(sceneEvents.INTERSECTION, data);
     }
 
     /**
