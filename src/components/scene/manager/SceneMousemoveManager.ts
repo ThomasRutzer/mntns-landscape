@@ -3,6 +3,25 @@ import clone from 'lodash.clonedeep';
 
 import SceneMousemoveManagerInterface from "./SceneMousemoveManagerInterface";
 
+/**
+ * Manager to control camera to current mouse move
+ * Param reactiveAreaSize sets size of reactive area on each side
+ * in percentage of current viewport width.
+ *
+ *
+ * Viewport:
+ *                      + reactive area: top    +
+ *                      -------------------------
+ *                      |                       |
+ *                      |                       |
+ * reactive area: left  |                       | reactive area: right
+ *                      |                       |
+ *                      |                       |
+ *                      |                       |
+ *                      -------------------------
+ *                      + reactive area: bottom +
+ *
+ */
 class SceneMousemoveManager implements SceneMousemoveManagerInterface {
     private mouseCoords: { x: number, y: number } = {x: 0, y: 0};
     private camera: THREE.Camera;
@@ -10,6 +29,12 @@ class SceneMousemoveManager implements SceneMousemoveManagerInterface {
     private reactiveAreaSize: { top: number, bottom: number, left: number, right: number };
     private options;
 
+    /**
+     * @param {THREE.Scene} scene
+     * @param {THREE.Camera} camera
+     * @param {{reactiveAreaSize: number; zoomThreshold: number}} options where threshold is max zoom of camera concerning
+     * its initial position
+     */
     constructor(scene: THREE.Scene,
                 camera: THREE.Camera,
                 options: { reactiveAreaSize: number, zoomThreshold: number }) {
