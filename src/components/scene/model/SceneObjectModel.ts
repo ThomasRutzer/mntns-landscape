@@ -1,14 +1,28 @@
+import * as THREE from 'three';
 import SceneObjectModelInterface from './SceneObjectModelInferface';
 
 export default class SceneObjectModel implements SceneObjectModelInterface {
     public id: String;
-    public position: Object;
+    public position: {x: number, y: number, z: number};
     public object: THREE.Object3D;
 
+    /**
+     * @todo: move to own Factory Class
+     * @param id
+     * @param object
+     * @param {{}} position
+     * @return {SceneObjectModel}
+     */
     static create(id, object, position = {}) {
         return new SceneObjectModel(id, object, position);
     }
 
+    /**
+     *
+     * @param {String} id
+     * @param {THREE.Object3D} object
+     * @param {Object} position
+     */
     constructor(id, object, position) {
         this.id = id;
 
@@ -18,7 +32,7 @@ export default class SceneObjectModel implements SceneObjectModelInterface {
     }
 }
 
-function ensurePosition(requestedPos): {x: Number, y: Number, z: Number} {
+function ensurePosition(requestedPos): {x: number, y: number, z: number} {
     const position = {
         x: 0,
         y: 0,

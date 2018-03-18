@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import EventBus from './../../event-bus';
 import sceneEvents from "../sceneEvents";
 import SceneObjectModel from '../model/SceneObjectModel';
+import SceneIntersectionModel from '../model/SceneIntersectionModel';
 
 let raycaster = new THREE.Raycaster();
 let unprojectedCoords = new THREE.Vector2();
@@ -67,14 +68,16 @@ class SceneIntersectionObserver {
                 return intersection.object.name;
             });
 
-            this.broadcastChanges({
-                objectId: intersectsNames[0],
-                event: {
+            this.broadcastChanges(SceneIntersectionModel.create(
+                intersectsNames[0],
+                // @todo: replace with proper pos values
+                {x: 0, y:0, z: 0},
+                {
                     x: coords.x,
                     y: coords.y,
                     type: eventType
                 }
-            });
+            ));
         }
     }
 
@@ -82,7 +85,7 @@ class SceneIntersectionObserver {
      *
      * @param { object } data
      */
-    private broadcastChanges(data: any): void {
+    private broadcastChanges(data: SceneIntersectionModel): void {
         EventBus.$emit(sceneEvents.INTERSECTION, data);
     }
 }

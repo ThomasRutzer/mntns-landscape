@@ -4,7 +4,7 @@ import { Prop, Watch, Emit } from 'vue-property-decorator';
 import GeneratorManager from './manager/GeneratorManager';
 import generatorEvents from './generatorEvents';
 import Scene from '../scene/manager/SceneManager';
-import { sceneEvents } from './../scene';
+import { sceneEvents, SceneIntersectionModel } from './../scene';
 
 import EventBus from './../event-bus';
 
@@ -16,7 +16,7 @@ export class GeneratorComponent extends Vue {
     private generatorManager: GeneratorManager;
 
     @Emit(sceneEvents.INTERSECTION)
-    emitIntersections(data){
+    emitIntersections(data: SceneIntersectionModel): SceneIntersectionModel {
         return data;
     }
 
@@ -50,7 +50,7 @@ export class GeneratorComponent extends Vue {
      * callback for intersection event
      * @param { Object } data
      */
-    onIntersection(data) {
+    onIntersection(data: SceneIntersectionModel) {
         if (!this.activated) return;
 
         this.emitIntersections(data);
