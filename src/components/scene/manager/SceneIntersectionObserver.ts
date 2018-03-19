@@ -72,7 +72,7 @@ class SceneIntersectionObserver {
 
         if (intersects.length > 0) {
             this.broadcastChanges(SceneIntersectionModel.create(
-                intersects[0].object.id.toString(),
+                intersects[0].object.name.toString(),
                 intersects[0].object,
                 {
                     x: coords.x,
