@@ -1,13 +1,14 @@
 import * as THREE from 'three';
+import SceneIntersectionModelInterface from "./SceneIntersectionModelInferface";
 
 /**
  * model class of intersections. Passed as data of
  * corresponding events
  */
-class SceneIntersectionModel {
-    private id: string;
-    private object: THREE.Object3D;
-    private event: { x: number, y: number, type: string};
+class SceneIntersectionModel implements SceneIntersectionModelInterface {
+    public id: string;
+    public object: THREE.Object3D;
+    public event: { x: number, y: number, type: string};
 
     static create(id: string,
                   object: THREE.Object3D,
