@@ -7,6 +7,13 @@ import SceneIntersectionModel from '../model/SceneIntersectionModel';
 let raycaster = new THREE.Raycaster();
 let unprojectedCoords = new THREE.Vector2();
 
+/**
+ * intersects mouse or touch events with existing 3D Objects at
+ * given Scene.
+ *
+ * Uses eventBus, where event data matches
+ * SceneIntersectionModel, to emit first intersected object
+ */
 class SceneIntersectionObserver {
     private sceneElements: SceneObjectModel[];
     private camera: THREE.Camera;
@@ -42,7 +49,8 @@ class SceneIntersectionObserver {
     }
 
     /**
-     * callback for mousedown / touchstart events, when intersections are observed
+     * Where intersections are observed.
+     * callback for mousedown / touchstart events
      * @param { Object } coords
      * @param { String } eventType
      */
@@ -63,15 +71,9 @@ class SceneIntersectionObserver {
         let intersects = raycaster.intersectObjects(objects);
 
         if (intersects.length > 0) {
-
-            let intersectsNames = intersects.map((intersection) => {
-                return intersection.object.name;
-            });
-
             this.broadcastChanges(SceneIntersectionModel.create(
-                intersectsNames[0],
-                // @todo: replace with proper pos values
-                {x: 0, y:0, z: 0},
+                intersects[0].object.id.toString(),
+                intersects[0].object,
                 {
                     x: coords.x,
                     y: coords.y,

@@ -1,20 +1,22 @@
+import * as THREE from 'three';
+
 /**
  * model class of intersections. Passed as data of
  * corresponding events
  */
 class SceneIntersectionModel {
     private id: string;
-    private position: {x: number, y: number, z: number};
+    private object: THREE.Object3D;
     private event: { x: number, y: number, type: string};
 
     static create(id: string,
-                  position: { x: number, y: number, z: number},
+                  object: THREE.Object3D,
                   event: { x: number, y: number, type: string}) {
-        return new SceneIntersectionModel(id, position, event);
+        return new SceneIntersectionModel(id, object, event);
     }
 
     constructor(id: string,
-                position: { x: number, y: number, z: number},
+                object: THREE.Object3D,
                 event: { x: number, y: number, type: string}) {
         /**
          * id of intersected Object
@@ -23,13 +25,12 @@ class SceneIntersectionModel {
         this.id = id;
 
         /**
-         * position of intersected Object
-         * @namespace
-         * @property {number} x coordinate x of object at Scene
-         * @property {number} x coordinate y of object at Scene
-         * @property {number} x coordinate z of object at Scene
+         * intersected Object
+         * @note see https://threejs.org/docs/#api/core/Object3D for
+         * detailed object definitions
          */
-        this.position = position;
+        this.object = object;
+
 
         /**
          * event, which triggered interception

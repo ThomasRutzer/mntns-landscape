@@ -32,7 +32,11 @@ class SceneMousemoveManager implements SceneMousemoveManagerInterface {
     /**
      * @param {THREE.Scene} scene
      * @param {THREE.Camera} camera
-     * @param {{reactiveAreaSize: number; zoomThreshold: number}} options where threshold is max zoom of camera concerning
+     *
+     * @param {object} options
+     * @namespace
+     * @param {number} options.reactiveAreaSize
+     * @param {number} options.zoomThreshold is max zoom of camera concerning
      * its initial position
      */
     constructor(scene: THREE.Scene,
