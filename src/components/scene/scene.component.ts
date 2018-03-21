@@ -5,8 +5,8 @@ import EventBus from './../event-bus';
 
 import sceneEvents from './sceneEvents';
 import SceneIntersectionModel from './model/SceneIntersectionModel';
-import {Prop, Emit} from "vue-property-decorator";
-import SceneManager from "./manager/SceneManager";
+import {Prop, Emit} from 'vue-property-decorator';
+import SceneManager from './manager/SceneManager';
 
 @Component({
     template: require('./scene.component.html'),
@@ -15,7 +15,7 @@ import SceneManager from "./manager/SceneManager";
 export class SceneComponent extends Vue {
 
     @Emit(sceneEvents.INTERSECTION)
-    intersections(data: SceneIntersectionModel): SceneIntersectionModel{
+    intersections(data: SceneIntersectionModel): SceneIntersectionModel {
         return data;
     }
 
@@ -36,7 +36,7 @@ export class SceneComponent extends Vue {
 
         EventBus.$on(sceneEvents.INTERSECTION, (data: SceneIntersectionModel) => {
             this.intersections(data);
-        })
+        });
     }
 }
 

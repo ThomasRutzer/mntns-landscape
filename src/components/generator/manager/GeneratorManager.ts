@@ -5,17 +5,17 @@ import SceneManager from '../../scene/manager/SceneManager';
 import { MountainFactory, Mountain } from './../../mountain';
 import generatorManagerConfig from '../generatorManagerConfig';
 import CustomMesh from './../../custom-mesh';
-import GeneratorManagerInterface from "./GeneratorManagerInterface";
+import GeneratorManagerInterface from './GeneratorManagerInterface';
 
 class GeneratorManager implements GeneratorManagerInterface {
     private sceneManager: SceneManager;
     private mountainsData;
-    private mountains:Mountain[];
+    private mountains: Mountain[];
 
     private globalLight;
     private shadowLight;
 
-    constructor(sceneManager: SceneManager, mountainsData:Object[] = []) {
+    constructor(sceneManager: SceneManager, mountainsData: Object[] = []) {
         this.sceneManager = sceneManager;
         this.mountainsData = mountainsData;
         this.mountains = [];
@@ -103,11 +103,11 @@ class GeneratorManager implements GeneratorManagerInterface {
 
         const vertices =  geom.vertices;
 
-        for (let i=0; i < vertices.length; i++){
+        for (let i = 0; i < vertices.length; i++){
             let v = vertices[i];
-            v.x += rangeRandom(-generatorManagerConfig.floor.randomShift,generatorManagerConfig.floor.randomShift);
-            v.y += rangeRandom(-generatorManagerConfig.floor.randomShift,generatorManagerConfig.floor.randomShift);
-            v.z += rangeRandom(-generatorManagerConfig.floor.randomShift,generatorManagerConfig.floor.randomShift);
+            v.x += rangeRandom(-generatorManagerConfig.floor.randomShift, generatorManagerConfig.floor.randomShift);
+            v.y += rangeRandom(-generatorManagerConfig.floor.randomShift, generatorManagerConfig.floor.randomShift);
+            v.z += rangeRandom(-generatorManagerConfig.floor.randomShift, generatorManagerConfig.floor.randomShift);
         }
 
         geom.computeFaceNormals();

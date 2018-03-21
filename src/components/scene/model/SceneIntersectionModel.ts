@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import SceneIntersectionModelInterface from "./SceneIntersectionModelInferface";
+import SceneIntersectionModelInterface from './SceneIntersectionModelInferface';
 
 /**
  * model class of intersections. Passed as data of

@@ -1,4 +1,4 @@
-import Vue, * as VueTypes from "vue";
+import Vue, * as VueTypes from 'vue';
 import { SinonSpy } from 'sinon';
 import merge from 'lodash.merge';
 import { ILogger } from './log';
