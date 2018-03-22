@@ -31,7 +31,7 @@ class CustomMesh {
         return new THREE.Mesh(geom, mat);
     }
 
-    static planeMesh(w,d,s,color): THREE.Mesh {
+    static planeMesh( w, d, s, color): THREE.Mesh {
         let mat = new THREE.MeshLambertMaterial({
             color: color
         });

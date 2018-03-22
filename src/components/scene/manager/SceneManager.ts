@@ -7,7 +7,7 @@ import SceneIntersectionObserver from './SceneIntersectionObserver';
 import SceneIntersectionObserverInterface from './SceneIntersectionObserverInterface';
 
 import SceneMousemoveManager from './SceneMousemoveManager';
-import SceneMousemoveManagerInterface from "./SceneMousemoveManagerInterface";
+import SceneMousemoveManagerInterface from './SceneMousemoveManagerInterface';
 
 import SceneParticlesManager from './SceneParticlesManager';
 import SceneParticlesManagerInterface from './SceneParticlesManagerInterface';
@@ -76,12 +76,12 @@ export default class SceneManager implements SceneManagerInterface {
             );
         }
 
-        if(sceneConfig.particles) {
-            this.particlesManager = new SceneParticlesManager(sceneConfig.particlesOptions.count, sceneConfig.particlesOptions.color)
-            this.sceneElement.add(this.particlesManager.particlesGroup)
+        if (sceneConfig.particles) {
+            this.particlesManager = new SceneParticlesManager(sceneConfig.particlesOptions.count, sceneConfig.particlesOptions.color);
+            this.sceneElement.add(this.particlesManager.particlesGroup);
         }
 
-        if(sceneConfig.observeIntsections) {
+        if (sceneConfig.observeIntsections) {
             this.intersectionObserver = new SceneIntersectionObserver(this.sceneElements, this.camera, this.renderer);
         }
 
@@ -169,7 +169,7 @@ export default class SceneManager implements SceneManagerInterface {
             this.mousemoveManager.onRender();
         }
 
-        if(sceneConfig.particles) {
+        if (sceneConfig.particles) {
             this.particlesManager.onRender();
         }
 

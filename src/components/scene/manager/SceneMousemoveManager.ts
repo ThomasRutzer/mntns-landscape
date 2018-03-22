@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import clone from 'lodash.clonedeep';
 
-import SceneMousemoveManagerInterface from "./SceneMousemoveManagerInterface";
+import SceneMousemoveManagerInterface from './SceneMousemoveManagerInterface';
 
 /**
  * Manager to control camera to current mouse move
@@ -76,7 +76,7 @@ class SceneMousemoveManager implements SceneMousemoveManagerInterface {
         }
         const direction = this.mouseCoords.y > 0 ? -1 : 1;
 
-        const noTween = direction == -1
+        const noTween = direction === -1
             ? this.camera.position.x < this.options.cameraInitialPos.x - this.options.zoomThreshold
             : this.camera.position.x > this.options.cameraInitialPos.x + this.options.zoomThreshold;
 
@@ -94,7 +94,7 @@ class SceneMousemoveManager implements SceneMousemoveManagerInterface {
 
         const direction = this.mouseCoords.x > 0 ? 1 : -1;
 
-        const noTween = direction == -1
+        const noTween = direction === -1
             ? this.camera.position.z < this.options.cameraInitialPos.z - this.options.zoomThreshold
             : this.camera.position.z > this.options.cameraInitialPos.z + this.options.zoomThreshold;
 
@@ -144,7 +144,7 @@ class SceneMousemoveManager implements SceneMousemoveManagerInterface {
             bottom: horizontal,
             left: -vertical,
             right: vertical
-        }
+        };
     }
 }
 

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import SceneParticlesManagerInterface from "./SceneParticlesManagerInterface";
+import SceneParticlesManagerInterface from './SceneParticlesManagerInterface';
 import * as mathUtils from './../../math-utils';
 
 class SceneParticlesManager implements SceneParticlesManagerInterface {
@@ -17,7 +17,7 @@ class SceneParticlesManager implements SceneParticlesManagerInterface {
 
     private createParticles(count, color) {
         for (let i = 0; i < count; i++) {
-            let geometry = new THREE.SphereBufferGeometry(mathUtils.rangeRandom(0.5,1));
+            let geometry = new THREE.SphereBufferGeometry(mathUtils.rangeRandom(0.5, 1));
 
             let material = new THREE.MeshBasicMaterial({
                 color: color,

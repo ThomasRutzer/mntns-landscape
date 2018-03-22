@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import EventBus from './../../event-bus';
-import sceneEvents from "../sceneEvents";
+import sceneEvents from '../sceneEvents';
 import SceneObjectModel from '../model/SceneObjectModel';
 import SceneIntersectionModel from '../model/SceneIntersectionModel';
 
@@ -31,7 +31,7 @@ class SceneIntersectionObserver {
 
         document.addEventListener('mousemove', (e) => {
             this.findIntersections({x: e.clientX, y: e.clientY}, 'mousemove');
-        },);
+        }, false);
 
         document.addEventListener('mousedown', (e) => {
             this.findIntersections({x: e.clientX, y: e.clientY}, 'mousedown');
@@ -45,7 +45,7 @@ class SceneIntersectionObserver {
             };
 
             this.findIntersections(eventCoords, 'touchstart');
-        }, false)
+        }, false);
     }
 
     /**

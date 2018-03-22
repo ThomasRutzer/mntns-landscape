@@ -4,7 +4,7 @@ import merge from 'lodash.merge';
 import { ILogger } from './log';
 
 export interface IComponents {
-  [key: string]: VueTypes.Component;
+  [key: string]: VueTypes.ComponentOptions<any>;
 }
 
 export class ComponentTest {

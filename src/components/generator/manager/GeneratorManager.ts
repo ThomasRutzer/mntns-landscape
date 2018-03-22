@@ -103,7 +103,7 @@ class GeneratorManager implements GeneratorManagerInterface {
 
         const vertices =  geom.vertices;
 
-        for (let i = 0; i < vertices.length; i++){
+        for (let i = 0; i < vertices.length; i++) {
             let v = vertices[i];
             v.x += rangeRandom(-generatorManagerConfig.floor.randomShift, generatorManagerConfig.floor.randomShift);
             v.y += rangeRandom(-generatorManagerConfig.floor.randomShift, generatorManagerConfig.floor.randomShift);
