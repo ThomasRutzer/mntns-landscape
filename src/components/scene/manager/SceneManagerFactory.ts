@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import SceneManager from './SceneManager';
 import sceneConfig from './../sceneConfig';
 import { CameraManager } from '../../camera';
-import SceneParticlesManager from './SceneParticlesManager';
-import SceneParticlesManagerInterface from './SceneParticlesManagerInterface';
+import SceneParticlesManager from '../particles-manager/SceneParticlesManager';
+import SceneParticlesManagerInterface from '../particles-manager/SceneParticlesManagerInterface';
 import SceneIntersectionObserverInterface from '../intersection-observer/SceneIntersectionObserverInterface';
 import SceneIntersectionObserver from '../intersection-observer/SceneIntersectionObserver';
 

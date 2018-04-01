@@ -9,8 +9,8 @@ import SceneIntersectionObserverInterface from '../intersection-observer/SceneIn
 import SceneMousemoveManager from '../mousemove-manager/SceneMousemoveManager';
 import SceneMousemoveManagerInterface from '../mousemove-manager/SceneMousemoveManagerInterface';
 
-import SceneParticlesManager from './SceneParticlesManager';
-import SceneParticlesManagerInterface from './SceneParticlesManagerInterface';
+import SceneParticlesManager from '../particles-manager/SceneParticlesManager';
+import SceneParticlesManagerInterface from '../particles-manager/SceneParticlesManagerInterface';
 
 import { CameraManagerInterface } from './../../camera';
 

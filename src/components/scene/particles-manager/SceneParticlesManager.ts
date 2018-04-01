@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import SceneParticlesManagerInterface from './SceneParticlesManagerInterface';
-import * as mathUtils from './../../math-utils';
+import * as mathUtils from '../../math-utils';
 
 class SceneParticlesManager implements SceneParticlesManagerInterface {
     public particlesGroup: THREE.Group;
