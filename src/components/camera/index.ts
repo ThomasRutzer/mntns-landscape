@@ -1,3 +1,7 @@
 import CameraFactory from './factory/CameraFactory';
+import CameraManager from './manager/CameraManager';
 
-export default CameraFactory;
+export {
+    CameraFactory,
+    CameraManager,
+};

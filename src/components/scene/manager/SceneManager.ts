@@ -12,17 +12,22 @@ import SceneMousemoveManagerInterface from './SceneMousemoveManagerInterface';
 import SceneParticlesManager from './SceneParticlesManager';
 import SceneParticlesManagerInterface from './SceneParticlesManagerInterface';
 
+import { CameraManager } from '../../camera';
+
 import sceneConfig from '../sceneConfig';
-import CameraFactory from '../../camera/index';
+import sceneEvents from "../sceneEvents";
+
+import eventBus from './../../event-bus';
 
 export default class SceneManager implements SceneManagerInterface {
     public sceneElement: THREE.Scene;
-    public camera;
     public renderer: THREE.WebGLRenderer;
 
     private sceneElements: SceneObjectModel[];
     private autoUpdate: boolean;
     private dimensions: { width: number, height: number };
+
+    private cameraManager: CameraManager;
 
     private mousemoveManager: SceneMousemoveManagerInterface;
     private particlesManager: SceneParticlesManagerInterface;
@@ -43,18 +48,22 @@ export default class SceneManager implements SceneManagerInterface {
 
         this.autoUpdate = autoUpdate;
 
-        this.camera = CameraFactory.create(
-            camera.type,
-            camera.fieldOfView,
-            this.dimensions.width / this.dimensions.height,
-            camera.nearPlane,
-            camera.farPlane).cameraElement;
+        this.cameraManager = new CameraManager(
+            {
+                type: camera.type,
+                fieldOfView: camera.fieldOfView,
+                aspectRatio: this.dimensions.width / this.dimensions.height,
+                nearPlane: camera.nearPlane,
+                farPlane: camera.farPlane
+            },
+            {
+                x: camera.position.x,
+                y: camera.position.y,
+                z: camera.position.z,
+            },
 
-        this.camera.position.x = camera.position && camera.position.x;
-        this.camera.position.y = camera.position && camera.position.y;
-        this.camera.position.z = camera.position && camera.position.z;
-
-        this.camera.lookAt(this.sceneElement.position);
+            this.sceneElement.position
+        );
 
         switch (renderer) {
             case 'webGL':
@@ -68,7 +77,7 @@ export default class SceneManager implements SceneManagerInterface {
         if (sceneConfig.reactToMouseMove) {
             this.mousemoveManager = new SceneMousemoveManager(
                 this.sceneElement,
-                this.camera,
+                this.cameraManager,
                 {
                     reactiveAreaSize: sceneConfig.reactToMouseMoveOptions.reactiveArea,
                     zoomThreshold: sceneConfig.reactToMouseMoveOptions.zoomThreshold
@@ -82,7 +91,7 @@ export default class SceneManager implements SceneManagerInterface {
         }
 
         if (sceneConfig.observeIntsections) {
-            this.intersectionObserver = new SceneIntersectionObserver(this.sceneElements, this.camera, this.renderer);
+            this.intersectionObserver = new SceneIntersectionObserver(this.sceneElements, this.cameraManager.getCamera(), this.renderer);
         }
 
         if (autoUpdate) {
@@ -141,9 +150,15 @@ export default class SceneManager implements SceneManagerInterface {
         return this.sceneElements;
     }
 
+    public async setCameraToStart(): Promise<any> {
+        eventBus.$emit(sceneEvents.DEACTIVATED);
+        await this.cameraManager.setToStart();
+        eventBus.$emit(sceneEvents.ACTIVATED);
+        return Promise.resolve();
+    }
+
     /**
-     * adds several window ev
-     * ent listener
+     * adds several window event listener
      */
     private addListener(): void {
         window.addEventListener('resize', () => {
@@ -173,7 +188,7 @@ export default class SceneManager implements SceneManagerInterface {
             this.particlesManager.onRender();
         }
 
-        this.renderer.render(this.sceneElement, this.camera);
+        this.renderer.render(this.sceneElement, this.cameraManager.getCamera());
     }
 
     /**
@@ -186,8 +201,6 @@ export default class SceneManager implements SceneManagerInterface {
             height: window.innerHeight
         };
 
-        this.camera.aspect = this.dimensions.width / this.dimensions.height;
-        this.camera.updateProjectionMatrix();
         this.renderer.setSize(this.dimensions.width, this.dimensions.height);
 
         if (!this.autoUpdate) {

@@ -1,3 +1,5 @@
 export default {
-    INTERSECTION: 'intersection'
+    INTERSECTION: 'intersection',
+    ACTIVATED: 'activated',
+    DEACTIVATED: 'deactivated',
 };

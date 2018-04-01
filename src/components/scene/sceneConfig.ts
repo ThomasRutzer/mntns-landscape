@@ -40,7 +40,7 @@ export default {
          * taking initial position in account
          * @type: number
          */
-        zoomThreshold: 100
+        zoomThreshold: 50
     },
 
     observeIntsections: true,

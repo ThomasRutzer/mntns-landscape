@@ -93,6 +93,18 @@ class GeneratorManager implements GeneratorManagerInterface {
         return foundMnt;
     }
 
+    /**
+     * sets scene manager camera to requested position.
+     * Currently, only string literals like "start" work,
+     * @todo make position object {x,y,z} work as well
+     * @param {string=start} position
+     */
+    public async setCamera(position: string| {x: number, y: number, z: number}) {
+        if (position === 'start') {
+            await this.sceneManager.setCameraToStart();
+        }
+    }
+
     private addFloor(): void {
         const mesh =  CustomMesh.planeMesh(
             generatorManagerConfig.floor.dimensions.width,
@@ -122,7 +134,6 @@ class GeneratorManager implements GeneratorManagerInterface {
         this.globalLight = LightFactory.create(generatorManagerConfig.globalLight.type, generatorManagerConfig.globalLight.primaryColor, generatorManagerConfig.globalLight.secondaryColor, generatorManagerConfig.globalLight.density);
         this.sceneManager.addElement(SceneObjectModel.create('globalLight', this.globalLight.lightElement));
     }
-
 
     private addShadowLight(): void {
         this.shadowLight = LightFactory.create(generatorManagerConfig.shadowLight.type, generatorManagerConfig.shadowLight.color, generatorManagerConfig.shadowLight.density, {castShadow: true});

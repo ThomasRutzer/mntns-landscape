@@ -3,7 +3,7 @@ import CameraFactoryInterface from './CameraFactoryInterface';
 import CameraFactoryTypes from './CameraFactoryTypes';
 
 class CameraFactory implements CameraFactoryInterface {
-    public cameraElement: THREE.Camera;
+    public cameraElement: THREE.Camera | THREE.PerspectiveCamera;
 
     static create(type, fieldOfView, aspectRatio, nearPlane, farPlane) {
         return new CameraFactory(type, fieldOfView, aspectRatio, nearPlane, farPlane);

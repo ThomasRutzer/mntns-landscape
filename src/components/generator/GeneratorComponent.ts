@@ -2,11 +2,8 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Watch, Emit } from 'vue-property-decorator';
 import GeneratorManager from './manager/GeneratorManager';
-import generatorEvents from './generatorEvents';
 import Scene from '../scene/manager/SceneManager';
 import { sceneEvents, SceneIntersectionModel } from './../scene';
-
-import EventBus from './../event-bus';
 
 @Component({
     template: require('./GeneratorComponent.html'),
@@ -23,9 +20,6 @@ export class GeneratorComponent extends Vue {
     @Prop()
     data: Object[];
 
-    @Prop({default: true})
-    activated: boolean;
-
     @Watch('data')
     async onDataChanged(val: Object[], oldVal: Object[]) {
         await this.generatorManager.clearAllMountains();
@@ -34,16 +28,9 @@ export class GeneratorComponent extends Vue {
         });
     }
 
-    @Watch('activated')
-    updateActivation() {
-        EventBus.$emit(generatorEvents.ACTIVATED, this.activated);
-    }
-
     mounted() {
         const sceneElement: Scene = (<any>this.$refs.sceneComponent).sceneManager;
         this.generatorManager = new GeneratorManager(sceneElement, this.data);
-
-        this.updateActivation();
     }
 
     /**
@@ -51,8 +38,6 @@ export class GeneratorComponent extends Vue {
      * @param { Object } data
      */
     onIntersection(data: SceneIntersectionModel) {
-        if (!this.activated) return;
-
         this.emitIntersections(data);
     }
 }
