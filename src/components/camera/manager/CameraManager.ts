@@ -6,11 +6,11 @@ import CameraManagerInterface from "./CameraManagerInteface";
 class CameraManager implements CameraManagerInterface {
     private camera;
     private startPosition: {x: number, y: number, z: number};
-    private lookAtPos: THREE.Vector3;
+    private lookAtPos: {x: number, y: number, z: number};
 
     constructor(cameraOptions: {type: string, fieldOfView: number, aspectRatio: number, nearPlane: number, farPlane: number},
                 position: { x: number, y: number, z: number },
-                lookAtPos:  THREE.Vector3
+                lookAtPos?:  {x: number, y: number, z: number}
                 ) {
 
         this.camera = CameraFactory.create(
@@ -34,7 +34,7 @@ class CameraManager implements CameraManagerInterface {
         return this.setPosition(this.startPosition, this.lookAtPos, true);
     }
 
-    public setPosition(position: {x: number, y: number, z: number}, lookAt?: THREE.Vector3, tween?: boolean): Promise<any>|null {
+    public setPosition(position: {x: number, y: number, z: number}, lookAt?: {x: number, y: number, z: number}, tween?: boolean): Promise<any>|null {
         const lookAtPos = lookAt || this.lookAtPos;
 
         if(!tween) {

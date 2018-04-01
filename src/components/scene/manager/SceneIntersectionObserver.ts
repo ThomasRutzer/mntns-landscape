@@ -19,12 +19,15 @@ class SceneIntersectionObserver {
     private camera: THREE.Camera;
     private renderer: THREE.Renderer;
 
-    constructor(sceneElements: SceneObjectModel[], camera: THREE.Camera, renderer: THREE.Renderer) {
-        this.sceneElements = sceneElements;
+    constructor(camera: THREE.Camera, renderer: THREE.Renderer) {
         this.camera = camera;
         this.renderer = renderer;
 
         this.addListener();
+    }
+
+    public addSceneElements(sceneElements: SceneObjectModel[]) {
+        this.sceneElements = sceneElements;
     }
 
     private addListener(): void {

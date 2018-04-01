@@ -12,7 +12,7 @@ import SceneMousemoveManagerInterface from './SceneMousemoveManagerInterface';
 import SceneParticlesManager from './SceneParticlesManager';
 import SceneParticlesManagerInterface from './SceneParticlesManagerInterface';
 
-import { CameraManager } from '../../camera';
+import { CameraManagerInterface } from './../../camera';
 
 import sceneConfig from '../sceneConfig';
 import sceneEvents from "../sceneEvents";
@@ -21,24 +21,27 @@ import eventBus from './../../event-bus';
 
 export default class SceneManager implements SceneManagerInterface {
     public sceneElement: THREE.Scene;
-    public renderer: THREE.WebGLRenderer;
+    public renderer: THREE.Renderer|THREE.WebGLRenderer;
 
     private sceneElements: SceneObjectModel[];
     private autoUpdate: boolean;
     private dimensions: { width: number, height: number };
 
-    private cameraManager: CameraManager;
+    private cameraManager: CameraManagerInterface;
 
     private mousemoveManager: SceneMousemoveManagerInterface;
     private particlesManager: SceneParticlesManagerInterface;
     private intersectionObserver: SceneIntersectionObserverInterface;
 
-    constructor(camera: { type: string, position: { x, y, z }, fieldOfView: number, nearPlane: number, farPlane: number },
-                renderer: string = sceneConfig.renderer,
-                autoUpdate: boolean = true) {
+    constructor(sceneElement: THREE.Scene,
+                cameraManager: CameraManagerInterface,
+                renderer: THREE.Renderer,
+                autoUpdate: boolean = true,
+                particlesManager?: SceneParticlesManagerInterface,
+                sceneIntersectionObserver?: SceneIntersectionObserverInterface
+    ) {
 
-        this.sceneElement = new THREE.Scene();
-        this.sceneElement.fog = new THREE.FogExp2(sceneConfig.fog.color, sceneConfig.fog.density);
+        this.sceneElement = sceneElement;
         this.sceneElements = [];
 
         this.dimensions = {
@@ -48,31 +51,10 @@ export default class SceneManager implements SceneManagerInterface {
 
         this.autoUpdate = autoUpdate;
 
-        this.cameraManager = new CameraManager(
-            {
-                type: camera.type,
-                fieldOfView: camera.fieldOfView,
-                aspectRatio: this.dimensions.width / this.dimensions.height,
-                nearPlane: camera.nearPlane,
-                farPlane: camera.farPlane
-            },
-            {
-                x: camera.position.x,
-                y: camera.position.y,
-                z: camera.position.z,
-            },
+        this.cameraManager = cameraManager;
 
-            this.sceneElement.position
-        );
-
-        switch (renderer) {
-            case 'webGL':
-                this.renderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
-                this.renderer.setClearColor(0x000000, 0);
-        }
-
+        this.renderer = renderer;
         this.renderer.setSize(this.dimensions.width, this.dimensions.height);
-        this.renderer.shadowMap.enabled = true;
 
         if (sceneConfig.reactToMouseMove) {
             this.mousemoveManager = new SceneMousemoveManager(
@@ -85,13 +67,14 @@ export default class SceneManager implements SceneManagerInterface {
             );
         }
 
-        if (sceneConfig.particles) {
-            this.particlesManager = new SceneParticlesManager(sceneConfig.particlesOptions.count, sceneConfig.particlesOptions.color);
+        if (particlesManager) {
+            this.particlesManager = particlesManager;
             this.sceneElement.add(this.particlesManager.particlesGroup);
         }
 
-        if (sceneConfig.observeIntsections) {
-            this.intersectionObserver = new SceneIntersectionObserver(this.sceneElements, this.cameraManager.getCamera(), this.renderer);
+        if (sceneIntersectionObserver) {
+            this.intersectionObserver = sceneIntersectionObserver;
+            this.intersectionObserver.addSceneElements(this.sceneElements);
         }
 
         if (autoUpdate) {
@@ -150,6 +133,11 @@ export default class SceneManager implements SceneManagerInterface {
         return this.sceneElements;
     }
 
+    /**
+     * tweens Camera back to start position.
+     * Scene is deactivated while tweening
+     * @return {Promise<any>}
+     */
     public async setCameraToStart(): Promise<any> {
         eventBus.$emit(sceneEvents.DEACTIVATED);
         await this.cameraManager.setToStart();

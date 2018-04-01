@@ -6,7 +6,7 @@ import EventBus from './../event-bus';
 import sceneEvents from './sceneEvents';
 import SceneIntersectionModel from './model/SceneIntersectionModel';
 import {Prop, Emit} from 'vue-property-decorator';
-import SceneManager from './manager/SceneManager';
+import { SceneManagerFactory } from './';
 
 @Component({
     template: require('./scene.component.html'),
@@ -25,7 +25,7 @@ export class SceneComponent extends Vue {
     private sceneManager;
 
     created() {
-        this.sceneManager = new SceneManager(this.camera);
+        this.sceneManager = SceneManagerFactory.create("main", this.camera);
     }
 
     mounted() {
