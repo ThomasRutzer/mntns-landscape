@@ -1,8 +1,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Watch, Emit } from 'vue-property-decorator';
-import GeneratorManager from './manager/GeneratorManager';
-import Scene from '../scene/manager/SceneManager';
+import { GeneratorManager, GeneratorManagerFactory } from './';
 import { sceneEvents, SceneIntersectionModel } from './../scene';
 
 @Component({
@@ -11,6 +10,7 @@ import { sceneEvents, SceneIntersectionModel } from './../scene';
 
 export class GeneratorComponent extends Vue {
     private generatorManager: GeneratorManager;
+    private sceneId: string = 'main';
 
     @Emit(sceneEvents.INTERSECTION)
     emitIntersections(data: SceneIntersectionModel): SceneIntersectionModel {
@@ -21,7 +21,7 @@ export class GeneratorComponent extends Vue {
     data: Object[];
 
     @Watch('data')
-    async onDataChanged(val: Object[], oldVal: Object[]) {
+    async onDataChanged() {
         await this.generatorManager.clearAllMountains();
         this.data.forEach((mountainData) => {
             this.generatorManager.addMountain(mountainData);
@@ -29,8 +29,7 @@ export class GeneratorComponent extends Vue {
     }
 
     mounted() {
-        const sceneElement: Scene = (<any>this.$refs.sceneComponent).sceneManager;
-        this.generatorManager = new GeneratorManager(sceneElement, this.data);
+        this.generatorManager = GeneratorManagerFactory.create(this.sceneId, this.data);
     }
 
     /**

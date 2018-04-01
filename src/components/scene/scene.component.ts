@@ -19,13 +19,16 @@ export class SceneComponent extends Vue {
         return data;
     }
 
+    @Prop()
+    sceneId: string;
+
     @Prop({ required: true})
     camera: { type: string, position: {x: number, y: number, z: number}, fieldOfView: number, nearPlane: number, farPlane: number };
 
     private sceneManager;
 
     created() {
-        this.sceneManager = SceneManagerFactory.create("main", this.camera);
+        this.sceneManager = SceneManagerFactory.create(this.sceneId, this.camera);
     }
 
     mounted() {

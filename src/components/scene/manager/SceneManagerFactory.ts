@@ -10,6 +10,9 @@ import SceneIntersectionObserver from '../intersection-observer/SceneIntersectio
 const instances = {};
 
 class SceneManagerFactory {
+    static getById(sceneId: string): SceneManager|null {
+        return instances[sceneId];
+    }
     static create(
         id: string,
         camera: { type: string, position: { x, y, z }, fieldOfView: number, nearPlane: number, farPlane: number },
