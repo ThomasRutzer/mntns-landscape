@@ -6,8 +6,8 @@ import SceneObjectModel from '../model/SceneObjectModel';
 import SceneIntersectionObserver from '../intersection-observer/SceneIntersectionObserver';
 import SceneIntersectionObserverInterface from '../intersection-observer/SceneIntersectionObserverInterface';
 
-import SceneMousemoveManager from './SceneMousemoveManager';
-import SceneMousemoveManagerInterface from './SceneMousemoveManagerInterface';
+import SceneMousemoveManager from '../mousemove-manager/SceneMousemoveManager';
+import SceneMousemoveManagerInterface from '../mousemove-manager/SceneMousemoveManagerInterface';
 
 import SceneParticlesManager from './SceneParticlesManager';
 import SceneParticlesManagerInterface from './SceneParticlesManagerInterface';
