@@ -4,8 +4,8 @@ import sceneConfig from './../sceneConfig';
 import { CameraManager } from '../../camera';
 import SceneParticlesManager from './SceneParticlesManager';
 import SceneParticlesManagerInterface from './SceneParticlesManagerInterface';
-import SceneIntersectionObserverInterface from './SceneIntersectionObserverInterface';
-import SceneIntersectionObserver from './SceneIntersectionObserver';
+import SceneIntersectionObserverInterface from '../intersection-observer/SceneIntersectionObserverInterface';
+import SceneIntersectionObserver from '../intersection-observer/SceneIntersectionObserver';
 
 const instances = {};
 

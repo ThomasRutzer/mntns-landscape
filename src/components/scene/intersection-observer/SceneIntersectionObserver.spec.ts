@@ -2,10 +2,10 @@ import * as THREE from 'three';
 import {stub} from 'sinon';
 import {expect} from 'chai';
 
-import eventBus from './../../event-bus';
+import eventBus from '../../event-bus';
 import SceneIntersectionObserver from './SceneIntersectionObserver';
-import SceneObjectModel from './../model/SceneObjectModel';
-import sceneEvents from './../sceneEvents';
+import SceneObjectModel from '../model/SceneObjectModel';
+import sceneEvents from '../sceneEvents';
 
 describe('SceneIntersectionObserver', () => {
     let manager;

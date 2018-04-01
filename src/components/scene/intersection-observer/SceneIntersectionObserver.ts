@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import EventBus from './../../event-bus';
+import EventBus from '../../event-bus';
 import sceneEvents from '../sceneEvents';
 import SceneObjectModel from '../model/SceneObjectModel';
 import SceneIntersectionModel from '../model/SceneIntersectionModel';

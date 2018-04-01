@@ -3,8 +3,8 @@ import * as THREE from 'three';
 import SceneManagerInterface from './SceneManagerInterface';
 import SceneObjectModel from '../model/SceneObjectModel';
 
-import SceneIntersectionObserver from './SceneIntersectionObserver';
-import SceneIntersectionObserverInterface from './SceneIntersectionObserverInterface';
+import SceneIntersectionObserver from '../intersection-observer/SceneIntersectionObserver';
+import SceneIntersectionObserverInterface from '../intersection-observer/SceneIntersectionObserverInterface';
 
 import SceneMousemoveManager from './SceneMousemoveManager';
 import SceneMousemoveManagerInterface from './SceneMousemoveManagerInterface';
