@@ -46,6 +46,7 @@
     "autoprefixer": "^7.1.2",
     "awesome-typescript-loader": "~3.2.3",
     "chai": "~4.1.1",
+    "chai-as-promised": "^7.1.1",
     "compression-webpack-plugin": "~1.0.0",
     "copy-webpack-plugin": "~4.0.1",
     "cross-env": "~5.0.5",
