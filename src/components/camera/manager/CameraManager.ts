@@ -34,7 +34,7 @@ class CameraManager implements CameraManagerInterface {
         return this.setPosition(this.startPosition, this.lookAtPos, true);
     }
 
-    public setPosition(position: {x: number, y: number, z: number}, lookAt?: {x: number, y: number, z: number}, tween?: boolean): Promise<any>|null {
+    public setPosition(position: {x: number, y: number, z: number}, lookAt?: {x: number, y: number, z: number}, tween?: boolean): Promise<any> {
         const lookAtPos = lookAt || this.lookAtPos;
 
         if(!tween) {
@@ -42,7 +42,7 @@ class CameraManager implements CameraManagerInterface {
             this.camera.position.y = position.y;
             this.camera.position.z = position.z;
             this.camera.lookAt(lookAtPos);
-            return null;
+            return Promise.resolve();
         }
 
         let returnPromiseResolve = new Function();
@@ -76,14 +76,8 @@ class CameraManager implements CameraManagerInterface {
     }
 
     private handleResize(): void {
-
-        const dimensions = {
-            width: window.innerWidth,
-            height: window.innerHeight
-        };
-
         if (<THREE.PerspectiveCamera>this.camera) {
-            this.camera.aspect = dimensions.width / dimensions.height;
+            this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
         }
     }
