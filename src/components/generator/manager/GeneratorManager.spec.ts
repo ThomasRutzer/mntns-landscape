@@ -1,19 +1,48 @@
 import {expect, should} from 'chai';
+import * as THREE from 'three';
 import GeneratorManager from './GeneratorManager';
 import SceneManager from '../../scene/manager/SceneManager';
+import CameraFactoryTypes from './../../camera/factory/CameraFactoryTypes';
+import CameraManager from './../../camera/manager/CameraManager';
 
 describe('GeneratorManager', () => {
     let manager: any = GeneratorManager.prototype;
+    let cameraManager = null;
+    let renderer = new THREE.WebGLRenderer();
 
     beforeEach(() => {
+        cameraManager = new CameraManager({
+                type: CameraFactoryTypes.PERSPECTIVE,
+                fieldOfView: 1,
+                aspectRatio: 1,
+                nearPlane: 1,
+                farPlane: 1,
+            },
+            {
+                x: 1,
+                y: 1,
+                z: 1
+            },
+            {
+                x: 1,
+                y: 1,
+                z: 1
+            }
+        );
+
         let data = [
             {id: "1", thickness: 50, height: 100},
             {id: "2", thickness: 30, height: 50},
             {id: "3", thickness: 50, height: 30}],
-            sceneManager = new SceneManager(
-                {type: 'perspective', fieldOfView: 60, nearPlane: 0.1, farPlane: 3000, position: {x: 0, y: 0, z: 150}},
-                'webGL',
-                true);
+
+            sceneManager =  new SceneManager(
+                new THREE.Scene(),
+                cameraManager,
+                renderer,
+                true,
+                undefined,
+                undefined
+            );
 
 
         manager = new GeneratorManager(sceneManager, data);
