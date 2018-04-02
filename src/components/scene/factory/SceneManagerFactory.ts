@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import SceneManager from './SceneManager';
-import sceneConfig from './../sceneConfig';
+import SceneManager from '../manager/SceneManager';
+import sceneConfig from '../sceneConfig';
 import { CameraManager } from '../../camera';
 import SceneParticlesManager from '../particles-manager/SceneParticlesManager';
 import SceneParticlesManagerInterface from '../particles-manager/SceneParticlesManagerInterface';
@@ -10,9 +10,10 @@ import SceneIntersectionObserver from '../intersection-observer/SceneIntersectio
 const instances = {};
 
 class SceneManagerFactory {
-    static getById(sceneId: string): SceneManager|null {
+    static getById(sceneId: string): SceneManager|undefined {
         return instances[sceneId];
     }
+
     static create(
         id: string,
         camera: { type: string, position: { x, y, z }, fieldOfView: number, nearPlane: number, farPlane: number },

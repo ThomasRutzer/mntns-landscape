@@ -6,7 +6,7 @@ import sceneConfig from './sceneConfig';
 
 import SceneIntersectionModel from './model/SceneIntersectionModel';
 
-import SceneManagerFactory from './manager/SceneManagerFactory';
+import SceneManagerFactory from './factory/SceneManagerFactory';
 
 Vue.component('scene', SceneComponent);
 
