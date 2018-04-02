@@ -3,13 +3,11 @@ import * as THREE from 'three';
 import SceneManagerInterface from './SceneManagerInterface';
 import SceneObjectModel from '../model/SceneObjectModel';
 
-import SceneIntersectionObserver from '../intersection-observer/SceneIntersectionObserver';
 import SceneIntersectionObserverInterface from '../intersection-observer/SceneIntersectionObserverInterface';
 
 import SceneMousemoveManager from '../mousemove-manager/SceneMousemoveManager';
 import SceneMousemoveManagerInterface from '../mousemove-manager/SceneMousemoveManagerInterface';
 
-import SceneParticlesManager from '../particles-manager/SceneParticlesManager';
 import SceneParticlesManagerInterface from '../particles-manager/SceneParticlesManagerInterface';
 
 import { CameraManagerInterface } from './../../camera';
@@ -168,11 +166,11 @@ export default class SceneManager implements SceneManagerInterface {
      * rendering of scene
      */
     private render(): void {
-        if (sceneConfig.reactToMouseMove) {
+        if (this.mousemoveManager) {
             this.mousemoveManager.onRender();
         }
 
-        if (sceneConfig.particles) {
+        if (this.particlesManager) {
             this.particlesManager.onRender();
         }
 
