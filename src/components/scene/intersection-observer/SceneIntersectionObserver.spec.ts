@@ -26,7 +26,8 @@ describe('SceneIntersectionObserver', () => {
             SceneObjectModel.create('3', new THREE.Mesh())
         ];
 
-        manager = new SceneIntersectionObserver(models, new THREE.PerspectiveCamera(), renderer)
+        manager = new SceneIntersectionObserver(new THREE.PerspectiveCamera(), renderer);
+        manager.addSceneElements(models);
     });
 
     describe('method broadcastChanges()', () => {
