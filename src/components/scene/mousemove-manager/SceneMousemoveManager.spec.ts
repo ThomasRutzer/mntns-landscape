@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import {stub} from 'sinon';
 import {expect} from 'chai';
 import SceneMousemoveManager from './SceneMousemoveManager';
+import CameraManager from '../../camera/manager/CameraManager';
+import CameraFactoryTypes from './../../camera/factory/CameraFactoryTypes';
 
 describe('SceneMousemoveManager', () => {
 
@@ -11,19 +13,29 @@ describe('SceneMousemoveManager', () => {
         windowStubWidth = stub(window, 'innerWidth').value(1000);
         windowStubHeight = stub(window, 'innerHeight').value(1000);
 
-        manager = new SceneMousemoveManager(new THREE.Scene(), new THREE.Camera(), {
+        const cameraManager = new CameraManager({
+                type: CameraFactoryTypes.PERSPECTIVE,
+                fieldOfView: 1,
+                aspectRatio: 1,
+                nearPlane: 1,
+                farPlane: 1,
+            },
+            {
+                x: 50,
+                y: 50,
+                z: 50
+            },
+            {
+                x: 0,
+                y: 0,
+                z: 0
+            }
+        );
+
+        manager = new SceneMousemoveManager(new THREE.Scene(), cameraManager, {
             reactiveAreaSize: 10,
             zoomThreshold: 10
         });
-
-        manager.camera.position.x = 50;
-        manager.camera.position.y = 50;
-        manager.camera.position.z = 50;
-
-        manager.options.cameraInitialPos.x = 50;
-        manager.options.cameraInitialPos.y = 50;
-        manager.options.cameraInitialPos.z = 50;
-
     });
 
     after(() => {
@@ -49,9 +61,9 @@ describe('SceneMousemoveManager', () => {
             manager.mouseCoords.y = 11;
             manager.checkCameraHorizontal();
 
-            expect(manager.camera.position.x).to.equal(50);
-            expect(manager.camera.position.y).to.equal(50);
-            expect(manager.camera.position.z).to.equal(50);
+            expect(manager.cameraManager.getPosition().x).to.equal(50);
+            expect(manager.cameraManager.getPosition().y).to.equal(50);
+            expect(manager.cameraManager.getPosition().z).to.equal(50);
         })
     });
 
@@ -73,9 +85,9 @@ describe('SceneMousemoveManager', () => {
             manager.mouseCoords.x = 11;
             manager.checkCameraVertical();
 
-            expect(manager.camera.position.x).to.equal(50);
-            expect(manager.camera.position.y).to.equal(50);
-            expect(manager.camera.position.z).to.equal(50);
+            expect(manager.cameraManager.getPosition().x).to.equal(50);
+            expect(manager.cameraManager.getPosition().y).to.equal(50);
+            expect(manager.cameraManager.getPosition().z).to.equal(50);
         })
     });
 

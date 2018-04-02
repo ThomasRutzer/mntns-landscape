@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import clone from 'lodash.clonedeep';
 
 import SceneMousemoveManagerInterface from './SceneMousemoveManagerInterface';
-import CameraManager from '../../camera';
 import CameraManagerInterface from "../../camera/manager/CameraManagerInteface";
 
 import eventBus from '../../event-bus';
