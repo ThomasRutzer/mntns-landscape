@@ -20,7 +20,7 @@ class SceneManagerFactory {
         rendererType: string = sceneConfig.renderer,
         autoUpdate: boolean = true
     ): SceneManager {
-        if(instances[id]) {
+        if (instances[id]) {
             return instances[id];
         }
 

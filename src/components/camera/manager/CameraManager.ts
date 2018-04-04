@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import CameraFactory from './../factory/CameraFactory';
 import TweenMax from 'gsap';
-import CameraManagerInterface from "./CameraManagerInteface";
+import CameraManagerInterface from './CameraManagerInteface';
 
 class CameraManager implements CameraManagerInterface {
     private camera;
@@ -37,7 +37,7 @@ class CameraManager implements CameraManagerInterface {
     public setPosition(position: {x: number, y: number, z: number}, lookAt?: {x: number, y: number, z: number}, tween?: boolean): Promise<any> {
         const lookAtPos = lookAt || this.lookAtPos;
 
-        if(!tween) {
+        if (!tween) {
             this.camera.position.x = position.x;
             this.camera.position.y = position.y;
             this.camera.position.z = position.z;

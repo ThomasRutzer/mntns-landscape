@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import clone from 'lodash.clonedeep';
 
 import SceneMousemoveManagerInterface from './SceneMousemoveManagerInterface';
-import CameraManagerInterface from "../../camera/manager/CameraManagerInteface";
+import CameraManagerInterface from '../../camera/manager/CameraManagerInteface';
 
 import eventBus from '../../event-bus';
 import sceneEvents from '../sceneEvents';
@@ -63,7 +63,7 @@ class SceneMousemoveManager implements SceneMousemoveManagerInterface {
         const x = this.checkCameraHorizontal();
         const z = this.checkCameraVertical();
 
-        this.cameraManager.setPosition({x, y: this.options.cameraInitialPos.y, z})
+        this.cameraManager.setPosition({x, y: this.options.cameraInitialPos.y, z});
     }
 
     private onDeactivate() {

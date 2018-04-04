@@ -13,7 +13,7 @@ import SceneParticlesManagerInterface from '../particles-manager/SceneParticlesM
 import { CameraManagerInterface } from './../../camera';
 
 import sceneConfig from '../sceneConfig';
-import sceneEvents from "../sceneEvents";
+import sceneEvents from '../sceneEvents';
 
 import eventBus from './../../event-bus';
 
