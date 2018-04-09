@@ -17,6 +17,9 @@ export class GeneratorComponent extends Vue {
         return data;
     }
 
+    @Prop({required: true})
+    id: string;
+
     @Prop()
     data: Object[];
 
@@ -29,7 +32,7 @@ export class GeneratorComponent extends Vue {
     }
 
     mounted() {
-        this.generatorManager = GeneratorManagerFactory.create(this.sceneId, this.data);
+        this.generatorManager = GeneratorManagerFactory.create(this.id, this.sceneId, this.data);
     }
 
     /**

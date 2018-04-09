@@ -2,8 +2,14 @@ import { SceneManagerFactory, sceneConfig } from '../../scene';
 import CameraFactoryTypes from './../../camera/factory/CameraFactoryTypes';
 import GeneratorManager from '../manager/GeneratorManager';
 
+const instances = {};
+
 class GeneratorManagerFactory {
-    static create(sceneId: string, mountainsData: Object[]): GeneratorManager {
+    static getById(generatorId: string) {
+        return instances[generatorId];
+    }
+
+    static create(generatorId: string, sceneId: string, mountainsData: Object[]): GeneratorManager {
         const existingSceneManager = SceneManagerFactory.getById(sceneId);
 
         // shall always create an instance
@@ -26,7 +32,8 @@ class GeneratorManagerFactory {
                 sceneConfig.renderer,
             );
 
-            return new GeneratorManager(sceneManager, mountainsData);
+            instances[generatorId] = new GeneratorManager(sceneManager, mountainsData);
+            return instances[generatorId];
         }
     }
 }
