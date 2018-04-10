@@ -15,24 +15,24 @@ describe('GeneratorManagerFactory', () => {
 
     it('caches instances by id', () => {
         const manager = GeneratorManagerFactory.create(
-            `generator-manager-1`,
+            `generator-manager-2`,
             data,
             'any',
         );
 
-        const manager1 = GeneratorManagerFactory.getById('generator-manager-1');
+        const manager1 = GeneratorManagerFactory.getById('generator-manager-2');
 
         expect(manager1).to.exist;
     });
 
     it('returns null, when no matching instance is found by id', () => {
         const manager = GeneratorManagerFactory.create(
-            `generator-manager-1`,
+            `generator-manager-3`,
             data,
             'any',
         );
 
-        const manager1 = GeneratorManagerFactory.getById('generator-manager-2');
+        const manager1 = GeneratorManagerFactory.getById('generator-manager-3');
 
         expect(manager1).to.equal(undefined);
     });
