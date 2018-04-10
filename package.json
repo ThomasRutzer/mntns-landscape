@@ -37,6 +37,8 @@
     "vue-property-decorator": "^6.0.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.2",
+    "@types/chai-as-promised": "^7.1.0",
     "@types/mocha": "~2.2.42",
     "@types/node": "~8.0.24",
     "@types/rx": "^4.1.1",
