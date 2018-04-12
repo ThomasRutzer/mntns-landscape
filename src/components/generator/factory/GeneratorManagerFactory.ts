@@ -6,19 +6,19 @@ const instances = {};
 
 class GeneratorManagerFactory {
     static getById(generatorId: string) {
+        return instances[generatorId];
+    }
+
+    static create(generatorId: string, mountainsData?: Object[]): GeneratorManager {
         if (instances[generatorId]) {
             return instances[generatorId];
         }
 
-        return GeneratorManagerFactory.create(generatorId);
-    }
-
-    static create(generatorId: string, mountainsData?: Object[], sceneId?: string, ): GeneratorManager {
-        const existingSceneManager = SceneManagerFactory.getById(sceneId);
+        const sceneManager = SceneManagerFactory.getById(generatorId);
 
         // shall always create an instance
-        if (existingSceneManager) {
-            return new GeneratorManager(existingSceneManager, mountainsData);
+        if (sceneManager) {
+            instances[generatorId] = new GeneratorManager(sceneManager, mountainsData);
         } else {
             const sceneManager = SceneManagerFactory.create(
                 generatorId,
@@ -37,8 +37,9 @@ class GeneratorManagerFactory {
             );
 
             instances[generatorId] = new GeneratorManager(sceneManager, mountainsData);
-            return instances[generatorId];
         }
+
+        return instances[generatorId];
     }
 }
 

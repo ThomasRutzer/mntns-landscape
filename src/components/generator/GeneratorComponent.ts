@@ -10,7 +10,6 @@ import { sceneEvents, SceneIntersectionModel } from './../scene';
 
 export class GeneratorComponent extends Vue {
     private generatorManager: GeneratorManager;
-    private sceneId: string = 'main';
 
     @Emit(sceneEvents.INTERSECTION)
     emitIntersections(data: SceneIntersectionModel): SceneIntersectionModel {

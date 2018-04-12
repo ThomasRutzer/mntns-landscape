@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import {Prop, Emit} from 'vue-property-decorator';
 
 import EventBus from './../event-bus';
 
 import sceneEvents from './sceneEvents';
 import SceneIntersectionModel from './model/SceneIntersectionModel';
-import {Prop, Emit} from 'vue-property-decorator';
 import { SceneManagerFactory } from './';
 
 @Component({

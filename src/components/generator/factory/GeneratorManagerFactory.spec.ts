@@ -9,7 +9,7 @@ describe('GeneratorManagerFactory', () => {
         ];
 
     it('returns an instance of a GeneratorManager', () => {
-        const manager = GeneratorManagerFactory.create('generator-manager-1', data, 'any');
+        const manager = GeneratorManagerFactory.create('generator-manager-1', data);
         expect(manager.constructor.name).to.equal('GeneratorManager');
     });
 
@@ -17,7 +17,6 @@ describe('GeneratorManagerFactory', () => {
         const manager = GeneratorManagerFactory.create(
             `generator-manager-2`,
             data,
-            'any',
         );
 
         const manager1 = GeneratorManagerFactory.getById('generator-manager-2');
@@ -29,7 +28,6 @@ describe('GeneratorManagerFactory', () => {
         const manager = GeneratorManagerFactory.create(
             `generator-manager-3`,
             data,
-            'any',
         );
 
         const manager1 = GeneratorManagerFactory.getById('generator-manager-3');
