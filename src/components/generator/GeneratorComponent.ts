@@ -10,6 +10,7 @@ import { sceneEvents, SceneIntersectionModel } from './../scene';
 
 export class GeneratorComponent extends Vue {
     private generatorManager: GeneratorManager;
+    private isMounted: boolean = false;
 
     @Emit(sceneEvents.INTERSECTION)
     emitIntersections(data: SceneIntersectionModel): SceneIntersectionModel {
@@ -23,7 +24,11 @@ export class GeneratorComponent extends Vue {
     data: Object[];
 
     @Watch('data')
-    async onDataChanged() {
+    async onDataChanged(val, oldVal) {
+        if (!this.isMounted) {
+            return Promise.resolve();
+        }
+
         await this.generatorManager.clearAllMountains();
         this.data.forEach((mountainData) => {
             this.generatorManager.addMountain(mountainData);
@@ -32,6 +37,11 @@ export class GeneratorComponent extends Vue {
 
     mounted() {
         this.generatorManager = GeneratorManagerFactory.create(this.generatorId, this.data);
+        this.isMounted = true;
+    }
+
+    async destroyed() {
+        await this.generatorManager.clearAllMountains();
     }
 
     /**
