@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import EventBus from '../../event-bus';
+import { toScreenPosition } from './../../3d-utils';
 import sceneEvents from '../sceneEvents';
 import SceneObjectModel from '../model/SceneObjectModel';
 import SceneIntersectionModel from '../model/SceneIntersectionModel';
@@ -31,7 +32,7 @@ class SceneIntersectionObserver {
     }
 
     private addListener(): void {
-
+        
         document.addEventListener('mousemove', (e) => {
             this.findIntersections({x: e.clientX, y: e.clientY}, 'mousemove');
         }, false);
@@ -77,6 +78,7 @@ class SceneIntersectionObserver {
             this.broadcastChanges(SceneIntersectionModel.create(
                 intersects[0].object.name.toString(),
                 intersects[0].object,
+                toScreenPosition(intersects[0].object, this.camera, this.renderer),
                 {
                     x: coords.x,
                     y: coords.y,
