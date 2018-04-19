@@ -88,7 +88,7 @@ export default class SceneManager implements SceneManagerInterface {
      * @param {SceneObjectModel} newElement
      */
     public addElement(newElement) {
-        if (newElement.constructor.name !== 'SceneObjectModel') {
+        if ( newElement instanceof SceneObjectModel === false ) {
             throw new Error(`Element with id: ${newElement.id} is not of type SceneObjectModel`);
         }
 
