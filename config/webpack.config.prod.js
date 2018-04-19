@@ -91,14 +91,14 @@ webpackConfig.plugins = [...webpackConfig.plugins,
       minifyURLs: true
     }
   }),
-  new UglifyJsPlugin({
-    include: /\.min\.js$/,
-    minimize: true
-  }),
-  new CompressionPlugin({
-    asset: '[path].gz[query]',
-    test: /\.min\.js$/
-  }),
+    new UglifyJsPlugin({
+        include: /\.js$/,
+        minimize: true
+    }),
+    new CompressionPlugin({
+        asset: '[path].gz[query]',
+        test: /\.js$/
+    }),
   new DefinePlugin({
     'process.env': env
   }),
