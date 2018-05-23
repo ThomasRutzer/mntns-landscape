@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import CameraFactory from './../factory/CameraFactory';
-import TweenMax from 'gsap';
+import TweenLite from 'gsap';
 import CameraManagerInterface from './CameraManagerInteface';
 
 class CameraManager implements CameraManagerInterface {
@@ -50,7 +50,7 @@ class CameraManager implements CameraManagerInterface {
             returnPromiseResolve = res;
         });
 
-        TweenMax.to(this.camera.position, 1, {
+        TweenLite.to(this.camera.position, 1, {
             x: position.x,
             y: position.y,
             z: position.z,

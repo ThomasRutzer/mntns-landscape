@@ -8,19 +8,16 @@ import SceneIntersectionModelInterface from './SceneIntersectionModelInferface';
 class SceneIntersectionModel implements SceneIntersectionModelInterface {
     public id: string;
     public object: THREE.Object3D;
-    public object2dPosition: {x: number, y: number};
     public event: { x: number, y: number, type: string};
 
     static create(id: string,
                   object: THREE.Object3D,
-                  object2dPosition: {x: number, y: number},
                   event: { x: number, y: number, type: string}) {
-        return new SceneIntersectionModel(id, object, object2dPosition, event);
+        return new SceneIntersectionModel(id, object, event);
     }
 
     constructor(id: string,
                 object: THREE.Object3D,
-                object2dPosition: {x: number, y: number},
                 event: { x: number, y: number, type: string}) {
         /**
          * id of intersected Object
@@ -34,13 +31,6 @@ class SceneIntersectionModel implements SceneIntersectionModelInterface {
          * detailed object definitions
          */
         this.object = object;
-
-        /**
-         * raycasted object position
-         * @type {{x: number; y: number}}
-         */
-        this.object2dPosition = object2dPosition;
-
 
         /**
          * event, which triggered interception

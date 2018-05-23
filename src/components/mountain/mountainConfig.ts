@@ -1,7 +1,7 @@
 const config = {
     parameters: {
         height: {
-            min: 10,
+            min: 50,
             max: 100,
             default: 50
         },

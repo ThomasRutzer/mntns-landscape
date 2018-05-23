@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import TweenMax from 'gsap';
+import TweenLite from 'gsap';
 
 import clone from 'lodash.clonedeep';
 import MountainInterface from './MountainInterface';
@@ -141,12 +141,12 @@ class Mountain implements MountainInterface {
                     allPromises.push(yAnimationPromise);
                     allPromises.push(xzAnimationPromise);
 
-                    TweenMax.to(vertice, 4, {
+                    TweenLite.to(vertice, 4, {
                         x:  this.data.geometryData.vertices[iterator].x,
                         z:  this.data.geometryData.vertices[iterator].z,
                         onUpdate: updateClb,
                         onComplete: xzAnimationCompleteClb});
-                    TweenMax.to(vertice, 6, {
+                    TweenLite.to(vertice, 6, {
                         y: this.data.geometryData.vertices[iterator].y,
                         onComplete: yAnimationCompleteClb});
                 });
@@ -241,7 +241,7 @@ class Mountain implements MountainInterface {
 
             allPromises.push(yAnimationPromise);
 
-            TweenMax.to(vertice, 0.8, {
+            TweenLite.to(vertice, 0.8, {
                 x:  0,
                 y:  0,
                 z:  0,

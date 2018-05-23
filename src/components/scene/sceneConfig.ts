@@ -40,8 +40,9 @@ export default {
          * taking initial position in account
          * @type: number
          */
-        zoomThreshold: 50
-    },
+        zoomThreshold: 100
+
+},
 
     observeIntsections: true,
 };
