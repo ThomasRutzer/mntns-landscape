@@ -1,12 +1,18 @@
 import * as THREE from 'three';
 import TweenLite from 'gsap';
+import * as ColorPropsPlugin from 'gsap/ColorPropsPlugin.js';
+
+// @ts-ignore
+TweenPlugin.activate([ColorPropsPlugin]);
 
 import clone from 'lodash.clonedeep';
 import MountainInterface from './MountainInterface';
 import MountainDataModel from './MountainDataModel';
 import MountainConfig from './mountainConfig';
 import * as mathUtils from './../math-utils';
-import { CustomMesh } from './../custom-mesh';
+import {CustomMesh} from './../custom-mesh';
+import SceneEvents from '../scene/sceneEvents';
+import EventBus from '../event-bus';
 
 class Mountain implements MountainInterface {
     public id: string;
@@ -21,6 +27,8 @@ class Mountain implements MountainInterface {
     private states: {
         isShrunk: boolean;
     };
+
+    private materialTween: TweenLite.Tween;
 
     private height: number;
     private thickness: number;
@@ -68,7 +76,7 @@ class Mountain implements MountainInterface {
         for (i = 0; i < this.verticalSegments; i++) {
             tx = 30 - i * 3;
             tz = mathUtils.rangeRandom(0, 2);
-            this.vectorPoints.push( new THREE.Vector3(tx, ty, tz) );
+            this.vectorPoints.push(new THREE.Vector3(tx, ty, tz));
             ty += this.segHeight;
         }
         this.vectorPoints.push(new THREE.Vector3(0, ty, 0));
@@ -83,6 +91,8 @@ class Mountain implements MountainInterface {
         this.data.geometryData = clone(this.mesh.geometry);
 
         this.grow();
+
+        EventBus.$on(SceneEvents.INTERSECTION, (e) => this.onIntersection(e));
     }
 
     /**
@@ -99,63 +109,65 @@ class Mountain implements MountainInterface {
 
         // store actual grow method
         let progressGrow = () => {
-                if (!animation) {
-                    const geom: any = this.mesh.geometry;
-
-                    geom.vertices.forEach((vector, iterator) => {
-                        vector.x = this.data.geometryData.vertices[iterator].x;
-                        vector.y = this.data.geometryData.vertices[iterator].y;
-                        vector.z = this.data.geometryData.vertices[iterator].z;
-                    });
-
-                    this.states.isShrunk = false;
-                    returnPromiseResolve();
-                }
-
-                // here will store Callback of each tween
-                // to have a neatly reminder,
-                // when all Tweens have finished
-                const allPromises: Promise<any> | any = [];
-
-                // each tweens update callback
-                const updateClb = () => {
-                    let geom: any = this.mesh.geometry;
-                    geom.verticesNeedUpdate = true;
-                };
-
+            if (!animation) {
                 const geom: any = this.mesh.geometry;
 
-                geom.vertices.forEach((vertice, iterator) => {
-                    // workaround for current native Promise,
-                    // to resolve it later
-                    let yAnimationCompleteClb = new Function();
-                    const yAnimationPromise = new Promise( (res) => {
-                        yAnimationCompleteClb = res;
-                    });
-
-                    let xzAnimationCompleteClb = new Function();
-                    const xzAnimationPromise = new Promise( (res) => {
-                        xzAnimationCompleteClb = res;
-                    });
-
-                    allPromises.push(yAnimationPromise);
-                    allPromises.push(xzAnimationPromise);
-
-                    TweenLite.to(vertice, 4, {
-                        x:  this.data.geometryData.vertices[iterator].x,
-                        z:  this.data.geometryData.vertices[iterator].z,
-                        onUpdate: updateClb,
-                        onComplete: xzAnimationCompleteClb});
-                    TweenLite.to(vertice, 6, {
-                        y: this.data.geometryData.vertices[iterator].y,
-                        onComplete: yAnimationCompleteClb});
+                geom.vertices.forEach((vector, iterator) => {
+                    vector.x = this.data.geometryData.vertices[iterator].x;
+                    vector.y = this.data.geometryData.vertices[iterator].y;
+                    vector.z = this.data.geometryData.vertices[iterator].z;
                 });
 
-                Promise.all(allPromises).then(() => {
-                    this.states.isShrunk = false;
-                    returnPromiseResolve();
-                });
+                this.states.isShrunk = false;
+                returnPromiseResolve();
+            }
+
+            // here will store Callback of each tween
+            // to have a neatly reminder,
+            // when all Tweens have finished
+            const allPromises: Promise<any> | any = [];
+
+            // each tweens update callback
+            const updateClb = () => {
+                let geom: any = this.mesh.geometry;
+                geom.verticesNeedUpdate = true;
             };
+
+            const geom: any = this.mesh.geometry;
+
+            geom.vertices.forEach((vertice, iterator) => {
+                // workaround for current native Promise,
+                // to resolve it later
+                let yAnimationCompleteClb = new Function();
+                const yAnimationPromise = new Promise((res) => {
+                    yAnimationCompleteClb = res;
+                });
+
+                let xzAnimationCompleteClb = new Function();
+                const xzAnimationPromise = new Promise((res) => {
+                    xzAnimationCompleteClb = res;
+                });
+
+                allPromises.push(yAnimationPromise);
+                allPromises.push(xzAnimationPromise);
+
+                TweenLite.to(vertice, 4, {
+                    x: this.data.geometryData.vertices[iterator].x,
+                    z: this.data.geometryData.vertices[iterator].z,
+                    onUpdate: updateClb,
+                    onComplete: xzAnimationCompleteClb
+                });
+                TweenLite.to(vertice, 6, {
+                    y: this.data.geometryData.vertices[iterator].y,
+                    onComplete: yAnimationCompleteClb
+                });
+            });
+
+            Promise.all(allPromises).then(() => {
+                this.states.isShrunk = false;
+                returnPromiseResolve();
+            });
+        };
 
         // let´s check if we need
         // shrink first
@@ -235,16 +247,16 @@ class Mountain implements MountainInterface {
             // workaround for current native Promise,
             // to resolve it later
             let yAnimationCompleteClb = new Function();
-            const yAnimationPromise = new Promise( (res) => {
+            const yAnimationPromise = new Promise((res) => {
                 yAnimationCompleteClb = res;
             });
 
             allPromises.push(yAnimationPromise);
 
             TweenLite.to(vertice, 0.8, {
-                x:  0,
-                y:  0,
-                z:  0,
+                x: 0,
+                y: 0,
+                z: 0,
                 onUpdate: updateClb,
                 onComplete: yAnimationCompleteClb
             });
@@ -259,5 +271,37 @@ class Mountain implements MountainInterface {
         return returnPromise;
     }
 
+    private onIntersection(eventData) {
+        if (this.id === eventData.id) {
+            if (this.materialTween) {
+                return;
+            } else {
+                let o = {color: MountainConfig.appearance.color};
+                this.materialTween = TweenLite.to(
+                    o,
+                    1,
+                    {
+                        colorProps: {color: MountainConfig.appearance.focusColor},
+                        onUpdate: () => {
+                            // @ts-ignore
+                            this.mesh.material.color.set(o.color);
+                        },
+                        onReverseComplete: () => {
+                            this.materialTween.kill();
+                            this.materialTween = null;
+                        }
+                    }
+                );
+            }
+        }
+        else {
+            if (this.materialTween) {
+                this.materialTween.reverse();
+            } else {
+                return;
+            }
+        }
+    }
 }
+
 export default Mountain;

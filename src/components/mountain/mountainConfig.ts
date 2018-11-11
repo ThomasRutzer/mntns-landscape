@@ -38,7 +38,8 @@ const config = {
     },
 
     appearance: {
-        color: '#2e2d2d'
+        color: '#2e2d2d',
+        focusColor: '#6f1bc0'
     }
 };
 

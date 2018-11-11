@@ -3,8 +3,10 @@ import {spy, assert} from 'sinon';
 import Mountain from './Mountain';
 import MountainDataModel from './MountainDataModel';
 import config from './mountainConfig';
+import eventBus from './../event-bus/event-bus';
+import sceneEvents from './../scene/sceneEvents';
 
-describe('Mountain', () => {
+describe.only('Mountain', () => {
     describe('static method create()', () => {
         it('to return a new Mountain', () => {
             const mnt = new Mountain("id", 1, 1);
@@ -90,4 +92,13 @@ describe('Mountain', () => {
             expect((<any>mnt).states.isShrunk).to.be.true;
         });
     });
+
+    describe('method onIntersection()', () => {
+        it('starts a tween when id matches', () => {
+            let mnt: Mountain = new Mountain("id", 1, 1);
+            eventBus.$emit(sceneEvents.INTERSECTION, { id: 'id' });
+
+            expect((<any>mnt).materialTween).not.to.be.undefined;
+        });
+    })
 });
