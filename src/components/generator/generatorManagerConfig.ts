@@ -5,18 +5,18 @@ export default {
     layout: {
         position: {
             x: {
-                min: -50,
-                max: 50
+                min: -100,
+                max: 100
             },
 
             y: {
-                min: 0,
-                max: 0
+                min: -30,
+                max: -30
             },
 
             z: {
-                min: -50,
-                max: 50
+                min: -100,
+                max: 100
             }
         }
     },
@@ -30,7 +30,7 @@ export default {
         },
 
         // value for random heights
-        randomShift: 10,
+        randomShift: 20,
     },
 
     shadowLight: {
@@ -40,14 +40,14 @@ export default {
             z: 100
         },
         type: 'directional',
-        color: '#fff',
+        color: '#f8f8f8',
         density: 0.6
     },
 
     globalLight: {
         type: 'global',
-        secondaryColor: '#fff',
-        primaryColor: '#fff',
+        secondaryColor: '#f8f8f8',
+        primaryColor: '#f8f8f8',
         density: 0.9
     }
 };
