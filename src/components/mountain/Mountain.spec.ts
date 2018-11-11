@@ -6,7 +6,7 @@ import config from './mountainConfig';
 import eventBus from './../event-bus/event-bus';
 import sceneEvents from './../scene/sceneEvents';
 
-describe.only('Mountain', () => {
+describe('Mountain', () => {
     describe('static method create()', () => {
         it('to return a new Mountain', () => {
             const mnt = new Mountain("id", 1, 1);
