@@ -7,3 +7,4 @@ src/**/*.map
 *.log
 .idea/dictionaries/Thomas.xml
 .idea/
+dist/
