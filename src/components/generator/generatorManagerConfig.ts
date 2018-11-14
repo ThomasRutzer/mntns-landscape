@@ -1,17 +1,17 @@
 export default {
     // random z-shifting range
-    shiftX: [1, 400],
+    shiftX: [1, 200],
 
     layout: {
         position: {
             x: {
-                min: -100,
-                max: 100
+                min: -200,
+                max: 200
             },
 
             y: {
-                min: -30,
-                max: -30
+                min: 0,
+                max: 0
             },
 
             z: {

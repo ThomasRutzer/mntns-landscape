@@ -1,15 +1,15 @@
 const config = {
     parameters: {
         height: {
-            min: 50,
-            max: 100,
+            min: 1,
+            max: 120,
             default: 50
         },
 
         thickness: {
-            min: 5,
-            max: 40,
-            default: 10
+            min: 1,
+            max: 2,
+            default: 2
         },
 
         verticalSegments: {
@@ -39,7 +39,7 @@ const config = {
 
     appearance: {
         color: '#2e2d2d',
-        focusColor: '#6f1bc0'
+        focusColor: '#3F3E3E'
     }
 };
 
