@@ -1,4 +1,10 @@
 import Vue from 'vue';
+import TweenLite from 'gsap';
+import * as ColorPropsPlugin from 'gsap/ColorPropsPlugin.js';
+
+// register all GSAP plugins globally
+// @ts-ignore
+TweenPlugin.activate([ColorPropsPlugin]);
 
 import './components/scene';
 import './components/generator';

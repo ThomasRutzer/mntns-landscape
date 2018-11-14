@@ -18,12 +18,23 @@ class SceneIntersectionObserver {
     private sceneElements: SceneObjectModel[];
     private camera: THREE.Camera;
     private renderer: THREE.Renderer;
+    private disabled: boolean;
 
     constructor(camera: THREE.Camera, renderer: THREE.Renderer) {
         this.camera = camera;
         this.renderer = renderer;
 
         this.addListener();
+
+        EventBus.$on(sceneEvents.DISABLED, () => {
+            // when disabled, reset last intersection
+           this.broadcastChanges(new SceneIntersectionModel(null, null, null));
+           this.disabled = true;
+        });
+
+        EventBus.$on(sceneEvents.ENABLED, () => {
+            this.disabled = false;
+        });
     }
 
     public addSceneElements(sceneElements: SceneObjectModel[]) {
@@ -31,7 +42,7 @@ class SceneIntersectionObserver {
     }
 
     private addListener(): void {
-        
+
         document.addEventListener('mousemove', (e) => {
             this.findIntersections({x: e.clientX, y: e.clientY}, 'mousemove');
         }, false);
@@ -58,6 +69,8 @@ class SceneIntersectionObserver {
      * @param { String } eventType
      */
     private findIntersections(coords: { x: number, y: number }, eventType: string): void {
+        if (this.disabled) return;
+
         unprojectedCoords.x = ( coords.x / this.renderer.domElement.clientWidth ) * 2 - 1;
         unprojectedCoords.y = -( coords.y / this.renderer.domElement.clientHeight ) * 2 + 1;
 

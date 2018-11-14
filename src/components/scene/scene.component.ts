@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {Prop, Emit} from 'vue-property-decorator';
+import {Prop, Emit, Watch} from 'vue-property-decorator';
 
 import EventBus from './../event-bus';
 
@@ -22,10 +22,22 @@ export class SceneComponent extends Vue {
     @Prop()
     sceneId: string;
 
+    @Prop()
+    disabled: boolean;
+
     @Prop({ required: true})
     camera: { type: string, position: {x: number, y: number, z: number}, fieldOfView: number, nearPlane: number, farPlane: number };
 
     private sceneManager;
+
+    @Watch('disabled')
+    onDisabledUpdate(val, oldVal) {
+        if (val === true) {
+            EventBus.$emit(sceneEvents.DISABLED);
+        } else {
+            EventBus.$emit(sceneEvents.ENABLED);
+        }
+    }
 
     created() {
         this.sceneManager = SceneManagerFactory.create(this.sceneId, this.camera);
@@ -40,6 +52,8 @@ export class SceneComponent extends Vue {
         EventBus.$on(sceneEvents.INTERSECTION, (data: SceneIntersectionModel) => {
             this.intersections(data);
         });
+
+        this.onDisabledUpdate(this.disabled, null);
     }
 }
 

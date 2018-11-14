@@ -23,6 +23,9 @@ export class GeneratorComponent extends Vue {
     @Prop()
     data: Object[];
 
+    @Prop()
+    disabled: boolean;
+
     @Watch('data')
     async onDataChanged(val, oldVal) {
         if (!this.isMounted) {

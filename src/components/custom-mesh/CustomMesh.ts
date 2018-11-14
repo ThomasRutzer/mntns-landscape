@@ -33,12 +33,12 @@ class CustomMesh {
 
     static planeMesh( w, d, s, color): THREE.Mesh {
         let mat = new THREE.MeshLambertMaterial({
-            color: color
+            color
         });
 
         let geom = new THREE.PlaneGeometry( w, d, s, s );
         CustomMesh.flatshadeGeometry(geom);
-        return  new THREE.Mesh(geom, mat);
+        return new THREE.Mesh(geom, mat);
     }
 }
 

@@ -6,6 +6,7 @@ import eventBus from '../../event-bus';
 import SceneIntersectionObserver from './SceneIntersectionObserver';
 import SceneObjectModel from '../model/SceneObjectModel';
 import sceneEvents from '../sceneEvents';
+import SceneIntersectionModel from "../model/SceneIntersectionModel";
 
 describe('SceneIntersectionObserver', () => {
     let manager;
@@ -30,6 +31,36 @@ describe('SceneIntersectionObserver', () => {
         manager.addSceneElements(models);
     });
 
+    describe('status disabled', () => {
+        it('does not broadcast any changes after disabled', () => {
+            let broadcastCount = 0;
+
+            eventBus.$emit(sceneEvents.DISABLED);
+            eventBus.$on(sceneEvents.INTERSECTION, () => {
+                broadcastCount++;
+            });
+
+            <any>manager.findIntersections({x: 1, y: 1}, 'any');
+
+            expect(broadcastCount).to.equal(0);
+        });
+
+        it('broadcast an null intersection when turned disabled', () => {
+            let broadcastCount = 0;
+            let broadCastData: SceneIntersectionModel;
+
+            eventBus.$on(sceneEvents.INTERSECTION, (data) => {
+                broadcastCount++;
+                broadCastData = data;
+            });
+            eventBus.$emit(sceneEvents.DISABLED);
+
+            expect(broadcastCount).to.equal(1);
+            expect(broadCastData.id).to.be.null;
+        });
+
+    });
+
     describe('method broadcastChanges()', () => {
         it('uses eventBus to emit intersection event', () => {
             let intersectionCount = 0;
@@ -39,7 +70,7 @@ describe('SceneIntersectionObserver', () => {
 
             <any>manager.broadcastChanges({});
 
-            expect(intersectionCount).to.equal(1)
+            expect(intersectionCount).to.equal(1);
         });
     });
 });
