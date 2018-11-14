@@ -1,10 +1,5 @@
 import * as THREE from 'three';
 import TweenLite from 'gsap';
-import * as ColorPropsPlugin from 'gsap/ColorPropsPlugin.js';
-
-// @ts-ignore
-TweenPlugin.activate([ColorPropsPlugin]);
-
 import clone from 'lodash.clonedeep';
 import MountainInterface from './MountainInterface';
 import MountainDataModel from './MountainDataModel';
@@ -60,7 +55,7 @@ class Mountain implements MountainInterface {
 
         // this could all be parameters
         this.height = this.data.parameters.height;
-        this.thickness = MountainConfig.parameters.thickness.default;
+        this.thickness = this.data.parameters.thickness;
         this.color = MountainConfig.appearance.color;
         this.verticalSegments = MountainConfig.parameters.verticalSegments.default;
         this.radiusSegments = mathUtils.rangeRandomInt(MountainConfig.parameters.radiusSegments.min, MountainConfig.parameters.radiusSegments.max);
@@ -155,11 +150,15 @@ class Mountain implements MountainInterface {
                     x: this.data.geometryData.vertices[iterator].x,
                     z: this.data.geometryData.vertices[iterator].z,
                     onUpdate: updateClb,
-                    onComplete: xzAnimationCompleteClb
+                    onComplete: xzAnimationCompleteClb,
+                    // @ts-ignore Cannot find name 'Power2'.
+                    ease: Power2.easeInOut
                 });
                 TweenLite.to(vertice, 6, {
                     y: this.data.geometryData.vertices[iterator].y,
-                    onComplete: yAnimationCompleteClb
+                    onComplete: yAnimationCompleteClb,
+                    // @ts-ignore Cannot find name 'Power2'.
+                    ease: Power2.easeInOut,
                 });
             });
 
@@ -258,7 +257,9 @@ class Mountain implements MountainInterface {
                 y: 0,
                 z: 0,
                 onUpdate: updateClb,
-                onComplete: yAnimationCompleteClb
+                onComplete: yAnimationCompleteClb,
+                // @ts-ignore Cannot find name 'Power2'.
+                ease: Power2.easeInOut
             });
         });
 
