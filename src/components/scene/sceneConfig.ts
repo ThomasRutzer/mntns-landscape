@@ -15,7 +15,7 @@ export default {
          * amount of particles
          * @type Number
          */
-        count: 1024,
+        count: 2056,
 
         /**
          * each particles color
