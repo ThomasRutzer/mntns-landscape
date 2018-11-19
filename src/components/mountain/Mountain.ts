@@ -8,6 +8,12 @@ import * as mathUtils from './../math-utils';
 import {CustomMesh} from './../custom-mesh';
 import SceneEvents from '../scene/sceneEvents';
 import EventBus from '../event-bus';
+import * as ColorPropsPlugin from 'gsap/ColorPropsPlugin.js';
+import * as EasePlugin from 'gsap/EasePack.js';
+
+// register all GSAP plugins
+// @ts-ignore
+TweenPlugin.activate([ColorPropsPlugin, EasePlugin]);
 
 class Mountain implements MountainInterface {
     public id: string;
@@ -259,7 +265,7 @@ class Mountain implements MountainInterface {
                 onUpdate: updateClb,
                 onComplete: yAnimationCompleteClb,
                 // @ts-ignore Cannot find name 'Power2'.
-                ease: Power2.easeInOut
+                ease: Power0.easeOut
             });
         });
 
