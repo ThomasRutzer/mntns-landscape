@@ -21,8 +21,8 @@ export class GeneratorComponent extends Vue {
     }
 
     @Emit(generatorEvents.CREATED)
-    emitCreated() {
-        return this.mountainsSceneObjects;
+    emitCreated(data: SceneObjectModel[]) {
+        return data;
     }
 
     @Prop({required: true})
@@ -57,7 +57,7 @@ export class GeneratorComponent extends Vue {
         await this.generatorManager.clearAllMountains();
         this.mountainsSceneObjects = [];
 		this.mountainsSceneObjects = this.generatorManager.createMountains(this.data).sceneObjects;
-        this.emitCreated();
+        this.emitCreated(this.mountainsSceneObjects);
     }
 
     /**
