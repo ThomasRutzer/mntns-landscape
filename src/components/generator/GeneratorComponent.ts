@@ -56,7 +56,7 @@ export class GeneratorComponent extends Vue {
     private async createFromData() {
         await this.generatorManager.clearAllMountains();
         this.mountainsSceneObjects = [];
-        this.mountainsSceneObjects = this.generatorManager.createMountains().sceneObjects;
+		this.mountainsSceneObjects = this.generatorManager.createMountains(this.data).sceneObjects;
         this.emitCreated();
     }
 

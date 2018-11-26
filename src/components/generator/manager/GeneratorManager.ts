@@ -112,9 +112,10 @@ class GeneratorManager implements GeneratorManagerInterface {
     /**
 	* creates mountains from Array
 	*/
-    public createMountains(): { sceneObjects: SceneObjectModel[] }  {
+    public createMountains(mountainsData: Object[] = []): { sceneObjects: SceneObjectModel[] }  {
         let mountainSceneObjects: SceneObjectModel[] = [];
-
+		this.mountainsData = mountainsData;
+		
         this.mountainsData.forEach((mountainData) => {
             mountainSceneObjects.push(this.addMountain(mountainData).sceneObject);
         });
