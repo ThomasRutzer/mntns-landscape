@@ -16,6 +16,7 @@ import sceneConfig from '../sceneConfig';
 import sceneEvents from '../sceneEvents';
 
 import eventBus from './../../event-bus';
+import SceneObjectModelInterface from '../model/SceneObjectModelInferface';
 
 export default class SceneManager implements SceneManagerInterface {
     public sceneElement: THREE.Scene;
@@ -87,7 +88,7 @@ export default class SceneManager implements SceneManagerInterface {
     /**
      * @param {SceneObjectModel} newElement
      */
-    public addElement(newElement) {
+    public addElement(newElement: SceneObjectModelInterface): void {
         if ( newElement instanceof SceneObjectModel === false ) {
             throw new Error(`Element with id: ${newElement.id} is not of type SceneObjectModel`);
         }
@@ -105,6 +106,7 @@ export default class SceneManager implements SceneManagerInterface {
             newElement.object.position.x = newElement.position.x;
             newElement.object.position.y = newElement.position.y;
             newElement.object.position.z = newElement.position.z;
+            newElement.screenPosition = this.toScreenPosition(newElement.object, this.cameraManager.getCamera());
 
             this.sceneElement.add(newElement.object);
             this.sceneElements.push(newElement);
@@ -194,4 +196,24 @@ export default class SceneManager implements SceneManagerInterface {
         }
     }
 
+    private toScreenPosition(obj, camera): { x: number, y: number } {
+        const vector = new THREE.Vector3();
+
+        // @ts-ignore
+        const widthHalf = 0.5 * this.renderer.context.canvas.width;
+        // @ts-ignore
+        const heightHalf = 0.5 * this.renderer.context.canvas.height;
+
+        obj.updateMatrixWorld();
+        vector.setFromMatrixPosition(obj.matrixWorld);
+        vector.project(camera);
+
+        vector.x = ( vector.x * widthHalf ) + widthHalf;
+        vector.y = - ( vector.y * heightHalf ) + heightHalf;
+
+        return {
+            x: Math.round(vector.x),
+            y: Math.round(vector.y)
+        };
+    }
 }
