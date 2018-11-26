@@ -3,6 +3,8 @@ import Component from 'vue-class-component';
 import { Prop, Watch, Emit } from 'vue-property-decorator';
 import { GeneratorManager, GeneratorManagerFactory } from './';
 import { sceneEvents, SceneIntersectionModel } from './../scene';
+import SceneObjectModel from '../scene/model/SceneObjectModel';
+import generatorEvents from './generatorEvents';
 
 @Component({
     template: require('./GeneratorComponent.html'),
@@ -11,10 +13,16 @@ import { sceneEvents, SceneIntersectionModel } from './../scene';
 export class GeneratorComponent extends Vue {
     private generatorManager: GeneratorManager;
     private isMounted: boolean = false;
+    private mountainsSceneObjects: SceneObjectModel[] = [];
 
     @Emit(sceneEvents.INTERSECTION)
     emitIntersections(data: SceneIntersectionModel): SceneIntersectionModel {
         return data;
+    }
+
+    @Emit(generatorEvents.CREATED)
+    emitCreated() {
+        return this.mountainsSceneObjects;
     }
 
     @Prop({required: true})
@@ -27,19 +35,17 @@ export class GeneratorComponent extends Vue {
     disabled: boolean;
 
     @Watch('data')
-    async onDataChanged(val, oldVal) {
+    async onDataChanged() {
         if (!this.isMounted) {
             return Promise.resolve();
         }
 
-        await this.generatorManager.clearAllMountains();
-        this.data.forEach((mountainData) => {
-            this.generatorManager.addMountain(mountainData);
-        });
+        return this.createFromData();
     }
 
     mounted() {
         this.generatorManager = GeneratorManagerFactory.create(this.generatorId, this.data);
+        this.createFromData();
         this.isMounted = true;
     }
 
@@ -47,11 +53,18 @@ export class GeneratorComponent extends Vue {
         await this.generatorManager.clearAllMountains();
     }
 
+    private async createFromData() {
+        await this.generatorManager.clearAllMountains();
+        this.mountainsSceneObjects = [];
+        this.mountainsSceneObjects = this.generatorManager.createMountains().sceneObjects;
+        this.emitCreated();
+    }
+
     /**
      * callback for intersection event
      * @param { Object } data
      */
-    onIntersection(data: SceneIntersectionModel) {
+    private onIntersection(data: SceneIntersectionModel) {
         this.emitIntersections(data);
     }
 }

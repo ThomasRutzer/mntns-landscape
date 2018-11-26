@@ -1,21 +1,21 @@
 import { inBetween, rangeRandom } from './../../math-utils';
 import LightFactory from './../../light';
 import SceneObjectModel from './../../scene/model/SceneObjectModel';
-import SceneManager from '../../scene/manager/SceneManager';
 import { MountainFactory, Mountain } from './../../mountain';
 import generatorManagerConfig from '../generatorManagerConfig';
 import CustomMesh from './../../custom-mesh';
 import GeneratorManagerInterface from './GeneratorManagerInterface';
+import SceneManagerInterface from '../../scene/manager/SceneManagerInterface';
 
 class GeneratorManager implements GeneratorManagerInterface {
-    private sceneManager: SceneManager;
+    private sceneManager: SceneManagerInterface;
     private mountainsData;
     private mountains: Mountain[];
 
     private globalLight;
     private shadowLight;
 
-    constructor(sceneManager: SceneManager, mountainsData: Object[] = []) {
+    constructor(sceneManager: SceneManagerInterface, mountainsData: Object[] = []) {
         this.sceneManager = sceneManager;
         this.mountainsData = mountainsData;
         this.mountains = [];
@@ -23,30 +23,34 @@ class GeneratorManager implements GeneratorManagerInterface {
         this.addGlobalLight();
         this.addShadowLight();
         this.addFloor();
-        this.createMountains();
     }
 
     /**
      * @param data -> data to construct Mountain with
      */
-    public addMountain(data: any): void {
+    public addMountain(data: any): { sceneObject: SceneObjectModel } {
         const mountain = MountainFactory.create(data.id, data.height, data.thickness);
         const pos = {
             x: inBetween(data.x, generatorManagerConfig.layout.position.x.min, generatorManagerConfig.layout.position.x.max),
             z: inBetween(data.z, generatorManagerConfig.layout.position.z.min, generatorManagerConfig.layout.position.z.max)
         };
 
-        this.sceneManager.addElement(SceneObjectModel.create(
+        const object = SceneObjectModel.create(
             data.id,
             mountain.mesh,
-           {
+            {
                 x: pos.x,
                 z: pos.z,
                 y: 0
             }
-        ));
+        );
 
+        this.sceneManager.addElement(object);
         this.mountains.push(mountain);
+
+        return {
+            sceneObject: object
+        };
     }
 
     /**
@@ -105,6 +109,21 @@ class GeneratorManager implements GeneratorManagerInterface {
         }
     }
 
+    /**
+	* creates mountains from Array
+	*/
+    public createMountains(): { sceneObjects: SceneObjectModel[] }  {
+        let mountainSceneObjects: SceneObjectModel[] = [];
+
+        this.mountainsData.forEach((mountainData) => {
+            mountainSceneObjects.push(this.addMountain(mountainData).sceneObject);
+        });
+
+        return {
+            sceneObjects: mountainSceneObjects
+        };
+    }
+
     private addFloor(): void {
         const mesh =  CustomMesh.planeMesh(
             generatorManagerConfig.floor.dimensions.width,
@@ -143,15 +162,7 @@ class GeneratorManager implements GeneratorManagerInterface {
             z: generatorManagerConfig.shadowLight.position.z
         }));
     }
-
-    /**
-     * creates mountains from Array
-     */
-    private createMountains(): void {
-        this.mountainsData.forEach((mountainData) => {
-            this.addMountain(mountainData);
-        });
-    }
 }
+
 
 export default GeneratorManager;

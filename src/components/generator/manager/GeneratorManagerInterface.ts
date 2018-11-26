@@ -1,7 +1,9 @@
 import Mountain from '../../mountain/Mountain';
+import SceneObjectModel from '../../scene/model/SceneObjectModel';
 
 interface GeneratorManagerInterface {
-    addMountain(data: any);
+	createMountains(): { sceneObjects: SceneObjectModel[] }
+    addMountain(data: any): { sceneObject: SceneObjectModel };
     clearAllMountains();
     clearMountain(mountainId: string);
     findMountainById(id: string): Mountain | null,
