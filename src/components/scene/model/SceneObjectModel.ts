@@ -4,9 +4,6 @@ import SceneObjectModelInterface from './SceneObjectModelInferface';
 export default class SceneObjectModel implements SceneObjectModelInterface {
     public id: String;
     public position: {x: number, y: number, z: number};
-    public screenPosition?: {x: number, y: number} = {
-        x: null, y: null
-    };
     public object: THREE.Object3D;
 
     /**

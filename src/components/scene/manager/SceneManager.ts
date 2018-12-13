@@ -106,7 +106,6 @@ export default class SceneManager implements SceneManagerInterface {
             newElement.object.position.x = newElement.position.x;
             newElement.object.position.y = newElement.position.y;
             newElement.object.position.z = newElement.position.z;
-            newElement.screenPosition = this.toScreenPosition(newElement.object, this.cameraManager.getCamera());
 
             this.sceneElement.add(newElement.object);
             this.sceneElements.push(newElement);
@@ -194,26 +193,5 @@ export default class SceneManager implements SceneManagerInterface {
         if (!this.autoUpdate) {
             this.render();
         }
-    }
-
-    private toScreenPosition(obj, camera): { x: number, y: number } {
-        const vector = new THREE.Vector3();
-
-        // @ts-ignore
-        const widthHalf = 0.5 * this.renderer.context.canvas.width;
-        // @ts-ignore
-        const heightHalf = 0.5 * this.renderer.context.canvas.height;
-
-        obj.updateMatrixWorld();
-        vector.setFromMatrixPosition(obj.matrixWorld);
-        vector.project(camera);
-
-        vector.x = ( vector.x * widthHalf ) + widthHalf;
-        vector.y = - ( vector.y * heightHalf ) + heightHalf;
-
-        return {
-            x: Math.round(vector.x),
-            y: Math.round(vector.y)
-        };
     }
 }

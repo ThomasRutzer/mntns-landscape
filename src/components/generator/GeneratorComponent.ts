@@ -4,7 +4,6 @@ import { Prop, Watch, Emit } from 'vue-property-decorator';
 import { GeneratorManager, GeneratorManagerFactory } from './';
 import { sceneEvents, SceneIntersectionModel } from './../scene';
 import SceneObjectModel from '../scene/model/SceneObjectModel';
-import generatorEvents from './generatorEvents';
 
 @Component({
     template: require('./GeneratorComponent.html'),
@@ -17,11 +16,6 @@ export class GeneratorComponent extends Vue {
 
     @Emit(sceneEvents.INTERSECTION)
     emitIntersections(data: SceneIntersectionModel): SceneIntersectionModel {
-        return data;
-    }
-
-    @Emit(generatorEvents.CREATED)
-    emitCreated(data: SceneObjectModel[]) {
         return data;
     }
 
@@ -56,8 +50,7 @@ export class GeneratorComponent extends Vue {
     private async createFromData() {
         await this.generatorManager.clearAllMountains();
         this.mountainsSceneObjects = [];
-		this.mountainsSceneObjects = this.generatorManager.createMountains(this.data).sceneObjects;
-        this.emitCreated(this.mountainsSceneObjects);
+        this.mountainsSceneObjects = this.generatorManager.createMountains(this.data).sceneObjects;
     }
 
     /**
