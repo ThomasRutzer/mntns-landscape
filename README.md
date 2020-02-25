@@ -1,6 +1,6 @@
 # mnts
 
-> mnts is an experiment to build a data-driven ThreeJS landscape. See [Demo](https://thomasrutzer.github.io/mntns/dist/index.html "Demo")
+> mnts is an experiment to build a data-driven ThreeJS landscape. See [Demo](https://thomasrutzer.github.io/mntns-landscape/dist/index.html)
 
 
 ## Build Setup
