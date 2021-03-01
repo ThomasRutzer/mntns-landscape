@@ -31,7 +31,7 @@
     "lodash.clone": "^4.5.0",
     "lodash.clonedeep": "^4.5.0",
     "reflect-metadata": "^0.1.10",
-    "three": "0.73",
+    "three": "0.125",
     "vue": "~2.5.13",
     "vue-class-component": "^6.2.0",
     "vue-property-decorator": "^6.0.0"
